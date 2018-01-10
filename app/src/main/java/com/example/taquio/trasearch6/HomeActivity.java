@@ -1,9 +1,11 @@
 package com.example.taquio.trasearch6;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +18,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -24,6 +28,8 @@ public class HomeActivity extends AppCompatActivity
 
     Button btn_logout;
     FirebaseAuth mAuth;
+    private static final String TAG = HomeActivity.class.getSimpleName();
+    private static final  int errorInt = 9001;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +66,8 @@ public class HomeActivity extends AppCompatActivity
                 updateUI(null);
             }
         });
+
+
     }
 
     private void updateUI(FirebaseUser user) {
@@ -88,11 +96,38 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    public boolean isServicesOK()
+    {
+        Log.d(TAG,"isServicesOK: checking google services version");
+
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(HomeActivity.this);
+
+        if(available == ConnectionResult.SUCCESS)
+        {
+            Log.d(TAG,"isServicesOK: Google Play Services is successful");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available))
+        {
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(HomeActivity.this,available,errorInt);
+            Log.d(TAG,"isServicesOK: error is resolvable");
+            dialog.show();
+        }
+        else
+        {
+            Toast.makeText(HomeActivity.this,"We can't Map request",Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
     public void mapClicked (View view)
     {
-        Intent startActivityIntent = new Intent(HomeActivity.this, MapsActivity.class);
-        startActivity(startActivityIntent);
-        HomeActivity.this.finish();
+        if(isServicesOK())
+        {
+            Intent startActivityIntent = new Intent(HomeActivity.this, MapsActivity.class);
+            startActivity(startActivityIntent);
+            HomeActivity.this.finish();
+        }
     }
 
     @Override
