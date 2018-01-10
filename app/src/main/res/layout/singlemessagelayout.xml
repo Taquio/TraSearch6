@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="100dp"
+    android:layout_margin="10dp"
+    android:background="@drawable/messageshape">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#008000"
+        android:text="Edmar"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:id="@+id/usernamaetext"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:id="@+id/messagetext"
+        android:text="Hello World"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"
+        android:textColor="#000"
+        android:layout_marginRight="15dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9:15"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:textStyle="italic"
+        android:id="@+id/messageTime"/>
+
+</LinearLayout>
