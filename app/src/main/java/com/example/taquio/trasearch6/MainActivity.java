@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -16,12 +17,16 @@ public class MainActivity extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 5000;
     private FirebaseAuth mAuth;
 
+    private ViewPager viewPager;
+    private SliderAdapter sliderAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //loadSlidingViewPager();
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
@@ -40,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
+    }
+
+    private void loadSlidingViewPager() {
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        sliderAdapter = new SliderAdapter(this);
+        viewPager.setAdapter(sliderAdapter);
     }
 
     private void updateUI(FirebaseUser user){

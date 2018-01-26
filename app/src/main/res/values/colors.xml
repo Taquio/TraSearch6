@@ -2,9 +2,16 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#4CAF50</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
     <color name="colorMild">#9d9c9c</color>
     <color name="colorDivider">#eae6e6</color>
+    <color name="colorStart">#68FFF6</color>
+    <color name="colorEnd">#03D1C5</color>
+    <color name="colorBackgroundProfile">#00CCFF</color>
+    <color name="colorLink">#1976D2</color>
+    <color name="colorBackgroundItem">#d6d6c2</color>
+    <color name="colorDirtyGreen">#E8F5E9</color>
+
 </resources>

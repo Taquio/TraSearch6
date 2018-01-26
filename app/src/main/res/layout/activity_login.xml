@@ -5,29 +5,89 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.taquio.trasearch6.RegisterActivity"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@color/colorDirtyGreen">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:id="@+id/Lfield_email"
-        android:inputType="textEmailAddress"/>
+    <android.support.v7.widget.CardView
+        android:layout_width="350dp"
+        android:layout_height="550dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        app:cardElevation="12dp"
+        >
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:id="@+id/Lfield_password"
-        android:layout_below="@+id/Lfield_email"
-        android:inputType="textPassword"/>
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/white1"
+            >
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/Lbtn_submit"
-        android:text="Submit"
-        android:layout_below="@+id/Lfield_password"/>
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="@string/appHeader"
+                android:textSize="35sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlack"
+                android:textColorHighlight="@color/colorWhite"
+                android:paddingLeft="57sp"
+            />
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_grid_24dp"
+                />
+
+            <EditText
+                android:id="@+id/Lfield_email"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:textAlignment="center"
+                android:inputType="textEmailAddress"
+                />
+
+            <EditText
+                android:id="@+id/Lfield_password"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/Lfield_email"
+                android:hint="Password"
+                android:inputType="textPassword" />
+
+            <Button
+                android:id="@+id/Lbtn_submit"
+                android:layout_marginTop="30dp"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/Lfield_password"
+                android:background="@drawable/buttonstyleselector"
+                android:text="Login"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@color/colorWhite"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No account yet?"
+                android:layout_marginTop="10dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"/>
+            <View
+                android:layout_width="100dp"
+                android:layout_height="1dp"
+                android:background="@color/colorAccent" />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
 
 
 </RelativeLayout>
