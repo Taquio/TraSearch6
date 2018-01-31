@@ -27,6 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
 
+    String email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,15 +36,22 @@ public class RegisterActivity extends AppCompatActivity {
         refIDs();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
 
+
+        if(getIntent().hasExtra("emailPass"))
+        {
+            email = getIntent().getStringExtra("emailPass");
+            field_email.setText(email);
+        }
+
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: Submit button clicked");
-                String email = field_email.getText().toString();
+
                 final String password = field_password.getText().toString();
                 final String username = field_username.getText().toString();
                 final String name = field_name.getText().toString();
-
+                email = field_email.getText().toString();
                 if(hasRegError())
                 {
                     Log.d(TAG, "onClick: Has Error");
@@ -51,12 +59,6 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 else
                 {
-
-                    if(getIntent().hasExtra("email"))
-                    {
-                        email = getIntent().getStringExtra("email");
-                        field_email.setText(email);
-                    }
 
                     Log.d(TAG, "onClick: No Error");
                     field_password.setError(null);

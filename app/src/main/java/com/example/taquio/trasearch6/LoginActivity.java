@@ -68,25 +68,34 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = Lfield_email.getText().toString(),password = Lfield_password.getText().toString();
 
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "signInWithEmail:success");
+                if(hasRegError())
+                {
+                    Log.d(TAG, "onClick: Has Error");
+                    Toast.makeText(LoginActivity.this,"Error",Toast.LENGTH_SHORT).show();
+                }
 
-                                    checkUserExists();
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
+                else
+                {
+                    mAuth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        Log.d(TAG, "signInWithEmail:success");
 
+                                        checkUserExists();
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                                Toast.LENGTH_SHORT).show();
+
+                                    }
+                                    //..
                                 }
-                                //..
-                            }
-                        });
+                            });
+                }
             }
         });
     }
@@ -114,7 +123,28 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private boolean hasRegError()
+    {
+        final String email = Lfield_email.getText().toString(),
+                password = Lfield_password.getText().toString();
+        boolean flag = true;
 
+        if(email.length()<=0)
+        {
+            Lfield_email.setError("Please input a valid Email Address");
+        }
+        else if(password.length()<8)
+        {
+            Lfield_password.setError("Password must be more than 8 characters");
+        }
+        else
+        {
+            flag=false;
+        }
+
+        return flag;
+
+    }
 
     private void refIDs(){
         Lbtn_submit = findViewById(R.id.Lbtn_submit);
