@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,9 +26,10 @@ public class LoginActivity extends AppCompatActivity {
 
     Button Lbtn_submit;
     EditText Lfield_email,Lfield_password;
+    TextView noAccountYet;
     FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
-    private static final String TAG = LoginActivity.class.getSimpleName();
+    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,28 @@ public class LoginActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate: start login");
         refIDs();
+
+        noAccountYet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String email = Lfield_email.getText().toString();
+
+                Intent startActivityIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+
+                if(email.length()<=0)
+                {
+                    startActivity(startActivityIntent);
+                    LoginActivity.this.finish();
+                }
+                else
+                {
+                    Log.d(TAG, "onClick: Passing: "+email+" to Reg Act");
+                    startActivityIntent.putExtra("emailPass",email);
+                    startActivity(startActivityIntent);
+                    LoginActivity.this.finish();
+                }
+            }
+        });
 
         mAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -96,5 +120,7 @@ public class LoginActivity extends AppCompatActivity {
         Lbtn_submit = findViewById(R.id.Lbtn_submit);
         Lfield_email = findViewById(R.id.Lfield_email);
         Lfield_password = findViewById(R.id.Lfield_password);
+        noAccountYet = findViewById(R.id.noAccountYet);
+
     }
 }
