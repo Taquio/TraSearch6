@@ -44,14 +44,14 @@ public class SliderAdapter extends PagerAdapter{
             "Chat to communicate.",
     };
     //list of background
-    public int[] list_backgroundcolor = {
-            R.drawable.white
-//            Color.rgb(252,252,252),
-//            Color.rgb(252,252,252),
-//            Color.rgb(252,252,252),
-//            Color.rgb(252,252,252),
-//            Color.rgb(252,252,252)
-    };
+//    public int[] list_backgroundcolor = {
+//            R.drawable.white
+////            Color.rgb(252,252,252),
+////            Color.rgb(252,252,252),
+////            Color.rgb(252,252,252),
+////            Color.rgb(252,252,252),
+////            Color.rgb(252,252,252)
+//    };
 
     public SliderAdapter (Context context){
         this.context = context;
@@ -76,7 +76,6 @@ public class SliderAdapter extends PagerAdapter{
         ImageView imgslide = (ImageView) view.findViewById(R.id.slideimg);
         TextView txttitle = (TextView) view.findViewById(R.id.txttitle);
         TextView txtdesc = (TextView) view.findViewById(R.id.txtdesc);
-        layout.setBackgroundColor(list_backgroundcolor[position]);
         imgslide.setImageResource(list_images[position]);
         txttitle.setText(list_titles[position]);
         txtdesc.setText(list_desc[position]);

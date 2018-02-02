@@ -17,7 +17,7 @@
         app:cardElevation="12dp">
 
         <LinearLayout
-            android:layout_width="350dp"
+            android:layout_width="320dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
@@ -26,7 +26,7 @@
             <TextView
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:text="@string/appHeader"
+                android:text="@string/appheader"
                 android:textSize="35sp"
                 android:textStyle="bold"
                 android:textColor="@color/colorBlack"
@@ -38,7 +38,7 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_grid_24dp"
+                android:src="@drawable/trasearchicon"
                 />
 
             <EditText

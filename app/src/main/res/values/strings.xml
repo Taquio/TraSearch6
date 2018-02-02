@@ -46,6 +46,12 @@
     <string name="title_activity_maps">Map</string>
 
     <!--App NAME Header-->
-    <string name="appHeader">TraSearch</string>
+    <string name="appheader">TraSearch</string>
+
+    <!--Introduction and Advantages-->
+    <string name="app_intro">Welcome!
+    We are TraSearch. Your gateway to Solid Waste Management.
+        To enjoy more of our services we encourage you to Register.
+    </string>
 
 </resources>
