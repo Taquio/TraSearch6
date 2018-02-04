@@ -1,167 +1,35 @@
 {
   "project_info": {
-    "project_number": "666909726733",
-    "firebase_url": "https://trasearch-f0bdc.firebaseio.com",
-    "project_id": "trasearch-f0bdc",
-    "storage_bucket": "trasearch-f0bdc.appspot.com"
+    "project_number": "688805933146",
+    "firebase_url": "https://trasearch-d51e0.firebaseio.com",
+    "project_id": "trasearch-d51e0",
+    "storage_bucket": "trasearch-d51e0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:666909726733:android:a8bca380310be591",
-        "android_client_info": {
-          "package_name": "com.example.taquio.trasearch"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "666909726733-56ehgraako1a9cjavuc44qbitvh5go4c.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.taquio.trasearch",
-            "certificate_hash": "717f0657a19fab32a89707320e0e11156363af9c"
-          }
-        },
-        {
-          "client_id": "666909726733-tlu47ti4jutrohh5tufen6bnod5h4fiq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDsmBY1SoAsdUjcoKx0H115SO8HqtIdLk0"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "666909726733-tlu47ti4jutrohh5tufen6bnod5h4fiq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:666909726733:android:60a15780776329f7",
-        "android_client_info": {
-          "package_name": "com.example.taquio.trasearchver3"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "666909726733-dvmo5fntqu7f3s5rdds9itbdokra8fmf.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.taquio.trasearchver3",
-            "certificate_hash": "8c98a09174ad3b09e48ccaaf48845acefaf0afe9"
-          }
-        },
-        {
-          "client_id": "666909726733-tlu47ti4jutrohh5tufen6bnod5h4fiq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDsmBY1SoAsdUjcoKx0H115SO8HqtIdLk0"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "666909726733-tlu47ti4jutrohh5tufen6bnod5h4fiq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:666909726733:android:11a80484388936d0",
-        "android_client_info": {
-          "package_name": "com.example.taquio.trasearchver5"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "666909726733-uhpdce4j43j03ab90lr6lvgedelp4sjv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.taquio.trasearchver5",
-            "certificate_hash": "8c98a09174ad3b09e48ccaaf48845acefaf0afe9"
-          }
-        },
-        {
-          "client_id": "666909726733-tlu47ti4jutrohh5tufen6bnod5h4fiq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDsmBY1SoAsdUjcoKx0H115SO8HqtIdLk0"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "666909726733-tlu47ti4jutrohh5tufen6bnod5h4fiq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:666909726733:android:60934ac4973c03be",
+        "mobilesdk_app_id": "1:688805933146:android:60934ac4973c03be",
         "android_client_info": {
           "package_name": "com.example.taquio.trasearch6"
         }
       },
       "oauth_client": [
         {
-          "client_id": "666909726733-20k1sn670nhj9s5m1jmto790upuu6ksg.apps.googleusercontent.com",
+          "client_id": "688805933146-kpa4rt0jraf9qopdj4fusmd0277701db.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.taquio.trasearch6",
-            "certificate_hash": "8c98a09174ad3b09e48ccaaf48845acefaf0afe9"
+            "certificate_hash": "8a0f8841634068c39c6abfd3195a2276e9949810"
           }
         },
         {
-          "client_id": "666909726733-tlu47ti4jutrohh5tufen6bnod5h4fiq.apps.googleusercontent.com",
+          "client_id": "688805933146-g0bh42l0ldo9k6ed6a27866rg22lqgui.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDsmBY1SoAsdUjcoKx0H115SO8HqtIdLk0"
+          "current_key": "AIzaSyBCeFCiqyOcWgzVzYfTyuv0KvYAuXpw1-4"
         }
       ],
       "services": {
@@ -172,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "666909726733-tlu47ti4jutrohh5tufen6bnod5h4fiq.apps.googleusercontent.com",
+              "client_id": "688805933146-g0bh42l0ldo9k6ed6a27866rg22lqgui.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
