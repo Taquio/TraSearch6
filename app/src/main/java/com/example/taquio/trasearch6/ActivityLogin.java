@@ -16,6 +16,6 @@ public class ActivityLogin extends AppCompatActivity {
         setContentView(R.layout.activity_log);
 
         username = (EditText) findViewById(R.id.loginEt2);
-        //123
+
     }
 }
