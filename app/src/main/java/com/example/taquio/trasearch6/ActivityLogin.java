@@ -15,7 +15,8 @@ public class ActivityLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log);
 
-        username = (EditText) findViewById(R.id.loginEt2);
+//        username = (EditText) findViewById(R.id.loginEt2);
+        //
 
     }
 }

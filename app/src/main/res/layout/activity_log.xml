@@ -7,178 +7,177 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.taquio.trasearch6.RegisterActivity">
 
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/loginRel1"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="150dp"-->
-        <!--android:background="@color/blue"
-        >-->
+    <RelativeLayout
+        android:id="@+id/loginRel1"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@color/blue">
 
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="65dp"-->
-            <!--android:layout_marginLeft="30dp"-->
-            <!--android:layout_marginRight="30dp">-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="65dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
 
 
-            <!--<EditText-->
-                <!--android:id="@+id/loginEt3"-->
-                <!--android:layout_width="250dp"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:hint="Search for tutorials"-->
-                <!--android:paddingLeft="20dp"-->
-                <!--android:textSize="17dp"-->
-                <!--android:background="@drawable/backgroundborder4"/>-->
+            <EditText
+                android:id="@+id/loginEt3"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:hint="Search for tutorials"
+                android:paddingLeft="20dp"
+                android:textSize="17dp"
+                android:background="@drawable/backgroundborder4"/>
 
-            <!--<ImageView-->
-                <!--android:id="@+id/loginSearch"-->
-                <!--android:layout_toRightOf="@id/loginEt3"-->
-                <!--android:layout_width="55dp"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:layout_marginLeft="2dp"-->
-                <!--android:background="@drawable/backgroundborder5"-->
-                <!--android:src="@drawable/magnify"-->
-                <!--android:padding="5dp"/>-->
-        <!--</RelativeLayout>-->
+            <ImageView
+                android:id="@+id/loginSearch"
+                android:layout_toRightOf="@id/loginEt3"
+                android:layout_width="55dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="2dp"
+                android:background="@drawable/backgroundborder5"
+                android:src="@drawable/magnify"
+                android:padding="5dp"/>
+        </RelativeLayout>
 
-    <!--</RelativeLayout>-->
+    </RelativeLayout>
 
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/loginRel3"-->
-        <!--android:layout_below="@+id/loginRel1"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:padding="15dp"-->
-        <!--android:background="@color/blue">-->
+    <RelativeLayout
+        android:id="@+id/loginRel3"
+        android:layout_below="@+id/loginRel1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp"
+        android:background="@color/blue">
 
-        <!--<android.support.v7.widget.CardView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--app:cardCornerRadius="15dp"-->
-            <!--app:cardElevation="0dp">-->
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="0dp">
 
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="100dp"-->
-                <!--android:orientation="vertical"-->
-                <!--android:background="@color/white2">-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="vertical"
+                android:background="@color/white2">
 
-                <!--<ImageView-->
-                    <!--android:layout_marginTop="10dp"-->
-                    <!--android:layout_width="200dp"-->
-                    <!--android:layout_height="100dp"-->
-                    <!--android:layout_gravity="center_horizontal"-->
-                    <!--android:src="@drawable/ts" />-->
+                <ImageView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="200dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ts" />
 
-            <!--</LinearLayout>-->
-            <!--<RelativeLayout-->
-                <!--android:id="@+id/loginRel4"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="130dp"-->
-                <!--android:layout_marginLeft="20dp"-->
-                <!--android:layout_marginRight="20dp">-->
+            </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/loginRel4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="130dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
 
-                <!--<ImageView-->
-                    <!--android:id="@+id/loginImg1"-->
-                    <!--android:layout_width="45dp"-->
-                    <!--android:layout_height="40dp"-->
-                    <!--android:padding="5dp"-->
-                    <!--android:paddingLeft="20dp"-->
-                    <!--android:src="@drawable/user"-->
-                    <!--android:background="@drawable/backgroundborder2"/>-->
+                <ImageView
+                    android:id="@+id/loginImg1"
+                    android:layout_width="45dp"
+                    android:layout_height="40dp"
+                    android:padding="5dp"
+                    android:paddingLeft="20dp"
+                    android:src="@drawable/user"
+                    android:background="@drawable/backgroundborder2"/>
 
-                <!--<EditText-->
-                    <!--android:id="@+id/loginEt2"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="40dp"-->
-                    <!--android:layout_toRightOf="@id/loginImg1"-->
-                    <!--android:background="@drawable/backgroundborder"-->
-                    <!--android:hint="Enter Username"-->
-                    <!--android:paddingLeft="15dp"-->
-                    <!--android:textSize="17dp"-->
-                    <!--android:layout_marginLeft="2dp"/>-->
+                <EditText
+                    android:id="@+id/loginEt2"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_toRightOf="@id/loginImg1"
+                    android:background="@drawable/backgroundborder"
+                    android:hint="Enter Username"
+                    android:paddingLeft="15dp"
+                    android:textSize="17dp"
+                    android:layout_marginLeft="2dp"/>
 
-            <!--</RelativeLayout>-->
+            </RelativeLayout>
 
-            <!--<RelativeLayout-->
+            <RelativeLayout
 
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="190dp"-->
-                <!--android:layout_marginLeft="20dp"-->
-                <!--android:layout_marginRight="20dp">-->
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="190dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
 
-                <!--<ImageView-->
-                    <!--android:id="@+id/loginImg2"-->
-                    <!--android:layout_width="45dp"-->
-                    <!--android:layout_height="40dp"-->
-                    <!--android:padding="5dp"-->
-                    <!--android:src="@drawable/password"-->
-                    <!--android:background="@drawable/backgroundborder2"/>-->
+                <ImageView
+                    android:id="@+id/loginImg2"
+                    android:layout_width="45dp"
+                    android:layout_height="40dp"
+                    android:padding="5dp"
+                    android:src="@drawable/password"
+                    android:background="@drawable/backgroundborder2"/>
 
-                <!--<EditText-->
-                    <!--android:id="@+id/loginEt4"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="40dp"-->
-                    <!--android:layout_toRightOf="@id/loginImg2"-->
-                    <!--android:background="@drawable/backgroundborder"-->
-                    <!--android:hint="Enter Password"-->
-                    <!--android:paddingLeft="15dp"-->
-                    <!--android:textSize="17dp"-->
-                    <!--android:inputType="textPassword"-->
-                    <!--android:layout_marginLeft="2dp"/>-->
+                <EditText
+                    android:id="@+id/loginEt4"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_toRightOf="@id/loginImg2"
+                    android:background="@drawable/backgroundborder"
+                    android:hint="Enter Password"
+                    android:paddingLeft="15dp"
+                    android:textSize="17dp"
+                    android:inputType="textPassword"
+                    android:layout_marginLeft="2dp"/>
 
-            <!--</RelativeLayout>-->
+            </RelativeLayout>
 
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="250dp"-->
-                <!--&gt;-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="250dp"
+                >
 
-                <!--<Button-->
-                    <!--android:id="@+id/loginBtn"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Sign In"-->
-                    <!--android:textSize="15dp"-->
-                    <!--android:background="@drawable/buttondesign"-->
-                    <!--android:layout_marginLeft="50dp"-->
-                    <!--android:layout_marginRight="50dp"-->
-                    <!--android:stateListAnimator="@null"/>-->
+                <Button
+                    android:id="@+id/loginBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sign In"
+                    android:textSize="15dp"
+                    android:background="@drawable/buttondesign"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:stateListAnimator="@null"/>
 
-            <!--</RelativeLayout>-->
+            </RelativeLayout>
 
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="310dp">-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="310dp">
 
-                <!--<Button-->
-                    <!--android:id="@+id/loginBtn2"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginTop="5dp"-->
-                    <!--android:text="Create Account"-->
-                    <!--android:background="@drawable/buttondesign"-->
-                    <!--android:layout_marginLeft="50dp"-->
-                    <!--android:layout_marginRight="50dp"-->
-                    <!--android:stateListAnimator="@null"/>-->
+                <Button
+                    android:id="@+id/loginBtn2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Create Account"
+                    android:background="@drawable/buttondesign"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:stateListAnimator="@null"/>
 
-                <!--<TextView-->
-                    <!--android:id="@+id/loginTx2"-->
-                    <!--android:layout_marginTop="5dp"-->
-                    <!--android:layout_below="@+id/loginBtn2"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Forgot Password?"-->
-                    <!--android:gravity="center"/>-->
+                <TextView
+                    android:id="@+id/loginTx2"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/loginBtn2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Forgot Password?"
+                    android:gravity="center"/>
 
-            <!--</RelativeLayout>-->
-        <!--</android.support.v7.widget.CardView>-->
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
 
-    <!--</RelativeLayout>-->
+    </RelativeLayout>
 
 </RelativeLayout>
