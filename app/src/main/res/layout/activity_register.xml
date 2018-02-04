@@ -49,12 +49,27 @@
                     android:textColorHighlight="@color/colorWhite"
                     android:paddingLeft="78sp"
                     />
-
-                <ImageView
+                <RelativeLayout
                     android:layout_width="170dp"
                     android:layout_height="170dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/trasearchicon"/>
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:layout_width="170dp"
+                        android:layout_height="170dp"
+                        android:src="@drawable/trasearchicon"
+                        android:id="@+id/register_image"/>
+
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentBottom="true"
+                        android:src="@drawable/ic_camera_alt_black_24dp"
+                        android:id="@+id/register_chooseImage"/>
+
+                </RelativeLayout>
+
 
                 <EditText
                     android:layout_width="300dp"
