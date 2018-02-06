@@ -21,7 +21,7 @@ public class SliderAdapter extends PagerAdapter{
 
     //list of images
     public int[] list_images = {
-            0,
+            R.drawable.trasearchicon,
             R.drawable.search,
             R.drawable.camera,
             R.drawable.navigation,
@@ -43,15 +43,6 @@ public class SliderAdapter extends PagerAdapter{
             "Maps lends a hand.",
             "Chat to communicate.",
     };
-    //list of background
-//    public int[] list_backgroundcolor = {
-//            R.drawable.white
-////            Color.rgb(252,252,252),
-////            Color.rgb(252,252,252),
-////            Color.rgb(252,252,252),
-////            Color.rgb(252,252,252),
-////            Color.rgb(252,252,252)
-//    };
 
     public SliderAdapter (Context context){
         this.context = context;
@@ -60,11 +51,6 @@ public class SliderAdapter extends PagerAdapter{
     @Override
     public int getCount() {
         return list_titles.length;
-    }
-
-    @Override
-    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((LinearLayout)object);
     }
 
     @NonNull
@@ -81,6 +67,11 @@ public class SliderAdapter extends PagerAdapter{
         txtdesc.setText(list_desc[position]);
         container.addView(view);
         return  view;
+    }
+
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        container.removeView((LinearLayout)object);
     }
 
     @Override

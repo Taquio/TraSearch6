@@ -4,7 +4,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="@drawable/white">
+    android:backgroundTint="@color/colorBlack">
     <ImageView
         android:id="@+id/slideimg"
         android:layout_width="200dp"
@@ -16,6 +16,7 @@
         android:text="Title Here"
         android:id="@+id/txttitle"
         android:textSize="30sp"
+        android:textColor="@color/colorWhite"
         android:textStyle="bold"/>
     <TextView
         android:layout_width="wrap_content"
@@ -23,7 +24,8 @@
         android:text="Description Here"
         android:textAlignment="center"
         android:layout_marginTop="35dp"
-        android:textSize="17sp"
+        android:textSize="20sp"
+        android:textColor="@color/colorWhite"
         android:id="@+id/txtdesc"/>
 
 </LinearLayout>

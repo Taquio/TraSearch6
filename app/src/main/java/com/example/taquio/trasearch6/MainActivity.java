@@ -19,132 +19,127 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final int SPLASH_DISPLAY_LENGTH = 5000;
+    //firebase authoration
     private FirebaseAuth mAuth;
-
+    //for onboard slider
     private ViewPager viewPager;
     private SliderAdapter sliderAdapter;
     private TextView[] mDots;
     private LinearLayout mDotLayout;
-
     private Button mNextBtn;
     private Button mBackBtn;
-
     private int mCurrentPage;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        loadSlidingViewPager();
-
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.hide();
         }
 
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run(){
-                Intent startActivityIntent = new Intent(MainActivity.this, AppStart.class);
-                startActivity(startActivityIntent);
-                MainActivity.this.finish();
-            }
-        }, SPLASH_DISPLAY_LENGTH);
+//Onboarding Slider with button
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        sliderAdapter = new SliderAdapter(this);
+        viewPager.setAdapter(sliderAdapter);
+        addDotsIndicator(0);
+        viewPager.addOnPageChangeListener(viewListener);
+        loadSlidingViewPager();
+
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         mAuth = FirebaseAuth.getInstance();
+    }
 
+    //for the Next and Back button
+    private void loadSlidingViewPager() {
 
+        mNextBtn = findViewById(R.id.nextBtn);
+        mNextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //        condition to load main activity
+                if(mNextBtn.getText().toString() == "Finish") {
+                    Intent startActivityIntent = new Intent(MainActivity.this, AppStart.class);
+                    startActivity(startActivityIntent);
+                    MainActivity.this.finish();
+
+                }else
+                    viewPager.setCurrentItem(mCurrentPage + 1);
+            }
+        });
+        mBackBtn = findViewById(R.id.prevBtn);
+        mBackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(mCurrentPage - 1);
+            }
+        });
     }
 
     //for the dots in the sliding intro
-//    private void addDotsIndicator(int position)
-//    {
-//        mDotLayout = (LinearLayout) findViewById(R.id.mDotsLayout);
-//        mDots = new TextView[5];
-//        mDotLayout.removeAllViews();
-//        for(int i = 0; i < mDots.length; i++)
-//        {
-//            mDots[i] = new TextView(this);
-//            mDots[i].setText(Html.fromHtml("&#8226;"));
-//            mDots[i].setTextSize(35);
-//            mDots[i].setTextColor(getResources().getColor(R.color.colorAccent));
-//
-//            mDotLayout.addView(mDots[i]);
-//        }
-//        if(mDots.length > 0)
-//        {
-//            mDots[position].setTextColor(getResources().getColor(R.color.colorWhite));
-//        }
-//    }
-//    ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
-//        @Override
-//        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//        }
-//
-//        @Override
-//        public void onPageSelected(int position) {
-//            addDotsIndicator(position);
-//            mCurrentPage = position;
-//
-//            if(position == 0)
-//            {
-//                mNextBtn.setEnabled(true);
-//                mBackBtn.setEnabled(false);
-//                mBackBtn.setVisibility(View.INVISIBLE);
-//
-//                mNextBtn.setText("Next");
-//                mBackBtn.setText("");
-//            }else if(position == mDots.length -1){
-//                mNextBtn.setEnabled(true);
-//                mBackBtn.setEnabled(true);
-//                mBackBtn.setVisibility(View.VISIBLE);
-//
-//                mNextBtn.setText("Finish");
-//                mBackBtn.setText("Back");
-//            }else{
-//                mNextBtn.setEnabled(true);
-//                mBackBtn.setEnabled(true);
-//                mBackBtn.setVisibility(View.VISIBLE);
-//
-//                mNextBtn.setText("Next");
-//                mBackBtn.setText("Back");
-//            }
-//        }
-//
-//        @Override
-//        public void onPageScrollStateChanged(int state) {
-//
-//        }
-//    };
-//    //for the sliding intro
-//    private void loadSlidingViewPager() {
-//        viewPager = (ViewPager) findViewById(R.id.viewpager);
-//        sliderAdapter = new SliderAdapter(this);
-//        viewPager.setAdapter(sliderAdapter);
-//
-//        addDotsIndicator(0);
-//        viewPager.addOnPageChangeListener(viewListener);
-//
-//        mNextBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                viewPager.setCurrentItem(mCurrentPage + 1);
-//            }
-//        });
-//
-//        mBackBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                viewPager.setCurrentItem(mCurrentPage - 1);
-//            }
-//        });
-//    }
+    private void addDotsIndicator(int position)
+    {
+        mDotLayout = (LinearLayout) findViewById(R.id.mDotsLayout);
+        mDots = new TextView[5];
+        mDotLayout.removeAllViews();
+        for(int i = 0; i < mDots.length; i++)
+        {
+            mDots[i] = new TextView(this);
+            mDots[i].setText(Html.fromHtml("&#8226;"));
+            mDots[i].setTextSize(35);
+            mDots[i].setTextColor(getResources().getColor(R.color.colorAccent));
+
+            mDotLayout.addView(mDots[i]);
+        }
+        if(mDots.length > 0)
+        {
+            mDots[position].setTextColor(getResources().getColor(R.color.colorWhite));
+        }
+    }
+    ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int i, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int i) {
+
+            addDotsIndicator(i);
+            mCurrentPage = i;
+
+            if(i == 0)
+            {
+                mNextBtn.setEnabled(true);
+                mBackBtn.setEnabled(false);
+                mBackBtn.setVisibility(View.INVISIBLE);
+
+                mNextBtn.setText("Next");
+                mBackBtn.setText("");
+            }else if(i == mDots.length -1){
+                mNextBtn.setEnabled(true);
+                mBackBtn.setEnabled(true);
+                mBackBtn.setVisibility(View.VISIBLE);
+
+                mNextBtn.setText("Finish");
+                mBackBtn.setText("Back");
+            }else{
+                mNextBtn.setEnabled(true);
+                mBackBtn.setEnabled(true);
+                mBackBtn.setVisibility(View.VISIBLE);
+
+                mNextBtn.setText("Next");
+                mBackBtn.setText("Back");
+            }        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 
     private void updateUI(FirebaseUser user){
         if(user!=null)
