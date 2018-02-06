@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private final int SPLASH_DISPLAY_LENGTH = 5000;
+    private final int SPLASH_DISPLAY_LENGTH = 3000;
     LinearLayout layouttop, layoutbuttom;
     Animation uptodown,downtoup;
 
@@ -19,9 +19,10 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        refId();
 //        animation
-//        layouttop.setAnimation(uptodown);
-//        layoutbuttom.setAnimation(downtoup);
+        layouttop.setAnimation(uptodown);
+        layoutbuttom.setAnimation(downtoup);
 
         //splash screen
         new Handler().postDelayed(new Runnable(){

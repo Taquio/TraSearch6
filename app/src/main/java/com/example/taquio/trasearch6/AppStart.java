@@ -46,7 +46,6 @@ public class AppStart extends AppCompatActivity {
             public void onClick(View v) {
                 Intent startActivityIntent = new Intent(AppStart.this, RegisterActivity.class);
                 startActivity(startActivityIntent);
-                AppStart.this.finish();
             }
         });
 
@@ -55,7 +54,6 @@ public class AppStart extends AppCompatActivity {
             public void onClick(View v) {
                 Intent startActivityIntent = new Intent(AppStart.this, LoginActivity.class);
                 startActivity(startActivityIntent);
-                AppStart.this.finish();
             }
         });
 
