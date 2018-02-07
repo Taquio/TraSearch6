@@ -12,12 +12,15 @@
     <color name="colorBackgroundProfile">#00CCFF</color>
     <color name="colorLink">#1976D2</color>
     <color name="colorBackgroundItem">#d6d6c2</color>
-    <color name="colorDirtyGreen">#E8F5E9</color>
+    <color name="colorDirtyGreen">#E8F5E9</color>r>
     <color name="editText">#dadada</color>
     <color name="softBlack">#262828</color>
     <color name="blue">#00aced</color>
-    <color name="green">#82c99a</color>
+    <color name="green"> </color>
     <color name="white">#ffffff</color>
     <color name="white2">#c0deed</color>
+    <color name="grey">#bfbfbf</color>
+    <color name="black">#000000</color>
+    <color name="link_blue">#4d94ff</color>
 
 </resources>
