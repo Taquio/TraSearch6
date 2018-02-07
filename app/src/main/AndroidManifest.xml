@@ -39,13 +39,14 @@
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AppStart" />
+        <!--<activity android:name=".AppStart" />-->
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".ActivityLogin" />
         <activity android:name=".chatActivity" />
         <activity android:name=".UserProfileActivity" />
         <activity android:name=".BusinessProfileActivity" />
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
+        <!--<activity android:name=".LoginActivity"/>-->
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

@@ -25,11 +25,11 @@ import com.google.firebase.database.ValueEventListener;
 public class chatActivity extends AppCompatActivity {
 
     private EditText editMessage;
-    private DatabaseReference databaseReference,databaseUsers;
+    private DatabaseReference databaseReference;
     private RecyclerView mMessageList;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseUser mCurrentUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,9 @@ public class chatActivity extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         mMessageList.setLayoutManager(linearLayoutManager);
 
+
+
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -55,12 +58,13 @@ public class chatActivity extends AppCompatActivity {
             }
         };
 
+
     }
 
     public void sendButtonClicked (View view)
     {
-        mCurrentUser = mAuth.getCurrentUser();
-        databaseUsers = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
+        FirebaseUser mCurrentUser = mAuth.getCurrentUser();
+        DatabaseReference databaseUsers = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
         final String messageValue = editMessage.getText().toString().trim();
         if(!TextUtils.isEmpty(messageValue))
         {
@@ -96,24 +100,6 @@ public class chatActivity extends AppCompatActivity {
 
     }
 
-    public static class MessageHolder extends RecyclerView.ViewHolder{
-        View mView ;
-        public MessageHolder(View itemView) {
-            super(itemView);
-            mView = itemView;
-        }
-        public void setContent(String content)
-        {
-            TextView messageContent = mView.findViewById(R.id.messagetext);
-            messageContent.setText(content);
-        }
-        public void setUserName(String userName)
-        {
-            TextView messageUserName = mView.findViewById(R.id.usernamaetext);
-            messageUserName.setText(userName);
-        }
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -131,5 +117,23 @@ public class chatActivity extends AppCompatActivity {
             }
         };
         mMessageList.setAdapter(FBRA);
+    }
+
+    public static class MessageHolder extends RecyclerView.ViewHolder{
+        View mView ;
+        public MessageHolder(View itemView) {
+            super(itemView);
+            mView = itemView;
+        }
+        public void setContent(String content)
+        {
+            TextView messageContent = mView.findViewById(R.id.messagetext);
+            messageContent.setText(content);
+        }
+        public void setUserName(String userName)
+        {
+            TextView messageUserName = mView.findViewById(R.id.usernamaetext);
+            messageUserName.setText(userName);
+        }
     }
 }
