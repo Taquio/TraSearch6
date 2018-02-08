@@ -7,14 +7,13 @@ import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.taquio.trasearch6.Camera.CameraActivity;
+import com.example.taquio.trasearch6.HomeActivity2;
+import com.example.taquio.trasearch6.MapsActivity;
+import com.example.taquio.trasearch6.Messages.MessagesActivity;
+import com.example.taquio.trasearch6.Profile.ProfileActivity;
+import com.example.taquio.trasearch6.R;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-
-import officialsuzuen.google.com.trasearch.Camera.CameraActivity;
-import officialsuzuen.google.com.trasearch.Home.HomeActivity;
-import officialsuzuen.google.com.trasearch.Messages.MessagesActivity;
-import officialsuzuen.google.com.trasearch.Nearby.NearbyActivity;
-import officialsuzuen.google.com.trasearch.Profile.ProfileActivity;
-import officialsuzuen.google.com.trasearch.R;
 
 /**
  * Created by Del Mar on 2/7/2018.
@@ -39,7 +38,7 @@ public class BottomNavigationViewHelper {
                 switch (item.getItemId()) {
 
                     case R.id.ic_home:
-                        Intent intent1 = new Intent(context, HomeActivity.class);
+                        Intent intent1 = new Intent(context, HomeActivity2.class);
                         context.startActivity(intent1);
                         break;
                     case R.id.ic_messages:
@@ -51,7 +50,7 @@ public class BottomNavigationViewHelper {
                         context.startActivity(intent3);
                         break;
                     case R.id.ic_nearby:
-                        Intent intent4 = new Intent(context, NearbyActivity.class);
+                        Intent intent4 = new Intent(context, MapsActivity.class);
                         context.startActivity(intent4);
                         break;
                     case R.id.ic_profile:
