@@ -13,24 +13,40 @@
 
     </android.support.v7.widget.RecyclerView>
 
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
-        
-        <EditText
-            android:id="@+id/editMessage"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"/>
-        <Button
-            android:layout_width="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="sendButtonClicked"
-            android:text="Send"/>
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <EditText
+                android:id="@+id/editMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="90"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:onClick="sendButtonClicked"
+                android:text="Send"/>
+
+        </LinearLayout>
+
+        <include
+            layout="@layout/layout_bottom_navigation_view"/>
     </LinearLayout>
 
-    <include
-        layout="@layout/layout_bottom_navigation_view"/>
+
+
 </RelativeLayout>
