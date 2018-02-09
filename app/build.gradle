@@ -31,7 +31,7 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:11.8.0'
     compile 'com.google.firebase:firebase-auth:11.8.0'
     compile 'com.google.firebase:firebase-database:11.8.0'
-    compile 'com.firebaseui:firebase-ui-database:0.4.4' //dont update!
+    compile 'com.firebaseui:firebase-ui-database:0.4.4' //don't update!
     compile 'com.firebase:firebase-client-android:2.5.2'
     compile 'com.google.firebase:firebase-messaging:11.8.0'
 

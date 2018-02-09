@@ -10,9 +10,9 @@ import android.view.MenuItem;
 import com.example.taquio.trasearch6.Camera.CameraActivity;
 import com.example.taquio.trasearch6.HomeActivity2;
 import com.example.taquio.trasearch6.MapsActivity;
-import com.example.taquio.trasearch6.Messages.MessagesActivity;
 import com.example.taquio.trasearch6.Profile.ProfileActivity;
 import com.example.taquio.trasearch6.R;
+import com.example.taquio.trasearch6.chatActivity;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 /**
@@ -23,7 +23,7 @@ public class BottomNavigationViewHelper {
     private static final String TAG = "BottomNavigationViewHel";
 
     public static void setupBottomNavigationView(BottomNavigationViewEx bottomNavigationViewEx) {
-        Log.d(TAG, "setupBottomNavigationView: Setting up BottomNavigationView");
+        Log.d(TAG, "setupBottomNavigationView: Setting up BottomNavigationView (Main)");
         bottomNavigationViewEx.enableAnimation(false);
         bottomNavigationViewEx.enableItemShiftingMode(false);
         bottomNavigationViewEx.enableShiftingMode(false);
@@ -42,7 +42,7 @@ public class BottomNavigationViewHelper {
                         context.startActivity(intent1);
                         break;
                     case R.id.ic_messages:
-                        Intent intent2 = new Intent(context, MessagesActivity.class);
+                        Intent intent2 = new Intent(context, chatActivity.class );
                         context.startActivity(intent2);
                         break;
                     case R.id.ic_camera:
@@ -50,6 +50,7 @@ public class BottomNavigationViewHelper {
                         context.startActivity(intent3);
                         break;
                     case R.id.ic_nearby:
+                        Log.d(TAG, "onNavigationItemSelected: Nearby selected");
                         Intent intent4 = new Intent(context, MapsActivity.class);
                         context.startActivity(intent4);
                         break;

@@ -41,12 +41,11 @@
         <activity android:name=".chatActivity" />
         <activity android:name=".UserProfileActivity" />
         <activity android:name=".BusinessProfileActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".Messages.MessagesActivity"/>
+        <activity android:name=".MainActivity" />>
         <activity android:name=".Camera.CameraActivity"/>
-        <activity android:name=".Nearby.NearbyActivity"/>
         <activity android:name=".Profile.ProfileActivity"
             android:theme="@style/AppTheme2"/>
+        <activity android:name=".Nearby.NearbyActivity"/>
         <!-- <activity android:name=".LoginActivity"/> -->
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

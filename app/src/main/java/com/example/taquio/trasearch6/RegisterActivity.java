@@ -98,7 +98,7 @@ public class RegisterActivity extends AppCompatActivity {
                     progressDialog.setTitle("Registering");
                     addUser(email,pass);
                     progressDialog.dismiss();
-                    startActivity(new Intent(RegisterActivity.this,HomeActivity.class));
+                    startActivity(new Intent(RegisterActivity.this,HomeActivity2.class));
                 }
 //                else
 //                {
@@ -329,7 +329,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
             Toast.makeText(RegisterActivity.this,"Welcome",Toast.LENGTH_SHORT).show();
-            Intent startActivityIntent = new Intent(RegisterActivity.this, HomeActivity.class);
+            Intent startActivityIntent = new Intent(RegisterActivity.this, HomeActivity2.class);
             startActivity(startActivityIntent);
             RegisterActivity.this.finish();
         }
