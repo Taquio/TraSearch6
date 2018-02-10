@@ -4,75 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/white1"
+    android:background="@color/colorAccent"
     android:orientation="vertical"
     tools:context="com.example.taquio.trasearch6.SplashActivity">
 
     <LinearLayout
         android:id="@+id/layouttop"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginTop="150dp"
         >
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="120dp"
-            android:src="@drawable/trasearchicon"/>
-
+            android:src="@drawable/ts_splash"/>
     </LinearLayout>
-    <android.support.v7.widget.CardView
-        android:id="@+id/layoutend"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="@dimen/_30sdp"
-        app:cardElevation="12dp"
-        >
-        <LinearLayout
-            android:id="@+id/layoutbuttom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="#000000"
-            android:orientation="vertical"
-
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="WE ARE:"
-                android:textAlignment="center"
-                android:textColor="#FFFFFF"
-                android:textSize="30dp"
-                android:textStyle="bold"/>
-            <!--<View-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="7dp"-->
-                <!--android:background="#80FFFFF"/>-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="#FFFFFF"
-                android:orientation="horizontal"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="75dp"
-                    android:text="Tra"
-                    android:textColor="@color/blue"
-                    android:textSize="50sp"
-                    android:textStyle="bold"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Search"
-                    android:textColor="@color/green"
-                    android:textSize="50sp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
 </LinearLayout>

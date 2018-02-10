@@ -20,7 +20,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/trasearchicon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
@@ -29,6 +29,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBZrEEp8_8eKhNrsGTOGUnldeIq_h2mXXY" />
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
 
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -45,7 +47,7 @@
         <activity android:name=".chatActivity" />
         <activity android:name=".UserProfileActivity" />
         <activity android:name=".BusinessProfileActivity" />
-        <activity android:name=".MainActivity" />>
+        <activity android:name=".MainActivity" />
         <activity android:name=".Camera.CameraActivity"/>
         <activity android:name=".Profile.ProfileActivity"
             android:theme="@style/AppTheme2"/>
