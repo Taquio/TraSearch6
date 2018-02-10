@@ -21,12 +21,13 @@
             android:orientation="horizontal"
             android:id="@+id/linearLayout2">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/ivprofilepic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:background="@drawable/man"
-                />
+                app:civ_border_width="5dp"
+                app:civ_border_color="@android:color/holo_green_light"/>
             <TextView
                 android:id="@+id/txtusername"
                 android:layout_width="wrap_content"
@@ -51,6 +52,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginBottom="15dp">
+
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -119,25 +121,44 @@
         android:layout_height="1dp"
         android:background="@color/colorDivider" />
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type your NEW Name! here!"
+        android:textColor="#000"
+        android:textAlignment="center"
+        android:id="@+id/field_changeName"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBackgroundItem"
-        android:layout_marginTop="5dp">
+        android:orientation="horizontal"
+        android:weightSum="150">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvpost"
+        <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:id="@+id/logout2"
+            android:layout_weight="50"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change Name"
+            android:id="@+id/chgn_name"
+            android:layout_weight="50"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change Image"
+            android:id="@+id/chgn_image"
+            android:layout_weight="50"/>
     </LinearLayout>
 
-    <LinearLayout
+    <include
+        layout="@layout/layout_bottom_navigation_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </LinearLayout>
+        android:layout_height="50dp"
+        android:layout_weight="20"/>
     <!--<android.support.design.widget.TabLayout-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->

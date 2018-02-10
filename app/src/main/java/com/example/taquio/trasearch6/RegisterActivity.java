@@ -98,7 +98,6 @@ public class RegisterActivity extends AppCompatActivity {
                     progressDialog.setTitle("Registering");
                     addUser(email,pass);
                     progressDialog.dismiss();
-                    startActivity(new Intent(RegisterActivity.this,HomeActivity2.class));
                 }
 //                else
 //                {
@@ -313,18 +312,17 @@ public class RegisterActivity extends AppCompatActivity {
 
 
             final String username = field_username.getText().toString();
-            final String name = field_username.getText().toString();
+            final String name = field_username.getText().toString().toUpperCase();
             email = field_email.getText().toString();
 
             final String user_id=mAuth.getCurrentUser().getUid();
             final DatabaseReference current_user_db = databaseReference.child(user_id);
 
-
             current_user_db.child("Email").setValue(email);
             current_user_db.child("Name").setValue(name);
             current_user_db.child("UserName").setValue(username);
 //                                current_user_db.child("userImage").setValue(filePath+"");
-
+            startActivity(new Intent(RegisterActivity.this,HomeActivity2.class));
             Log.d(TAG, "updateUI: Done Adding details, staring Home");
 
 

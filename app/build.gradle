@@ -94,9 +94,14 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:11.8.0'
     //firebase storage
     implementation 'com.google.firebase:firebase-storage:11.8.0'
+    compile 'com.google.firebase:firebase-core:11.8.0'
+
 
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    //image cropper
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.6.+'
 
 }
 apply plugin: 'com.google.gms.google-services'
