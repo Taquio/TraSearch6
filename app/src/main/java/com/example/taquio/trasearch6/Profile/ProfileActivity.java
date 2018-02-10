@@ -1,5 +1,6 @@
 package com.example.taquio.trasearch6.Profile;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -36,6 +37,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -51,7 +53,7 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "ProfileActivity";
     private static final int ACTIVITY_NUM = 4;
     private Context mContext = ProfileActivity.this;
-    private ProgressBar mProgressbar;
+    private ProgressDialog progressDialog;
 
     private DatabaseReference mUserDatabase;
     private FirebaseUser mCurrentUser;
@@ -95,6 +97,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                 txtusername.setText(dataSnapshot.child("Name").getValue().toString());
                 txtemail.setText(dataSnapshot.child("Email").getValue().toString());
+                Picasso.with(ProfileActivity.this).load(dataSnapshot.child("Image").getValue().toString())
+                        .into(ivprofilepic);
             }
 
             @Override
@@ -137,20 +141,37 @@ public class ProfileActivity extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
+                progressDialog = new ProgressDialog(ProfileActivity.this);
+                progressDialog.setTitle("Uploading Image...");
+                progressDialog.setMessage("Please wait while we upload the your beautiful image");
+                progressDialog.show();
+                progressDialog.setCanceledOnTouchOutside(false);
 
-                ivprofilepic.setImageURI(resultUri);
-
-                StorageReference filePath = mImageStorage.child("image_profile").child(mCurrentUser.getUid()).child(random()+".jpg");
+                StorageReference filePath = mImageStorage.child("image_profile").child(mCurrentUser.getUid()+".jpg");
                 filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if(task.isSuccessful())
                         {
-                            Toast.makeText(ProfileActivity.this,"Uploaded Successfully",Toast.LENGTH_SHORT).show();
+                            final String download_url = task.getResult().getDownloadUrl().toString();
+                            mUserDatabase.child("Image").setValue(download_url).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful())
+                                    {
+                                        progressDialog.dismiss();
+                                    }
+                                    else
+                                        Toast.makeText(ProfileActivity.this,"Failed to retrive image",Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
+
+                                }
+                            });
                         }
                         else
                         {
                             Toast.makeText(ProfileActivity.this,"Upload Failed",Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
 
                         }
                     }

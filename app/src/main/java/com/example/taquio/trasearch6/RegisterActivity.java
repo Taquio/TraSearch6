@@ -321,6 +321,7 @@ public class RegisterActivity extends AppCompatActivity {
             current_user_db.child("Email").setValue(email);
             current_user_db.child("Name").setValue(name);
             current_user_db.child("UserName").setValue(username);
+            current_user_db.child("Image").setValue("https://cdn1.iconfinder.com/data/icons/mix-color-4/502/Untitled-1-512.png");
 //                                current_user_db.child("userImage").setValue(filePath+"");
             startActivity(new Intent(RegisterActivity.this,HomeActivity2.class));
             Log.d(TAG, "updateUI: Done Adding details, staring Home");

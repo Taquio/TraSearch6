@@ -103,5 +103,8 @@ dependencies {
     //image cropper
     compile 'com.theartofdev.edmodo:android-image-cropper:2.6.+'
 
+    //picasso
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
 }
 apply plugin: 'com.google.gms.google-services'
