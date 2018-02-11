@@ -16,11 +16,13 @@
     <color name="editText">#dadada</color>
     <color name="softBlack">#262828</color>
     <color name="blue">#00aced</color>
-    <color name="green"> </color>
+    <color name="green">#eac086</color>
     <color name="white">#ffffff</color>
     <color name="white2">#c0deed</color>
     <color name="grey">#bfbfbf</color>
     <color name="black">#000000</color>
     <color name="link_blue">#4d94ff</color>
+    <color name="transparent">#00000000</color>
+
 
 </resources>
