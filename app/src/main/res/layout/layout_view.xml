@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_grey_border_bottom">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/linearLayout1"
+                android:background="@drawable/blue_green_border_bottom"
+                android:weightSum="100">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="35"
+                    android:layout_height="match_parent">
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="30"
+                    android:gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="150dp"
+                        android:layout_height="100dp"
+                        android:id="@+id/vProfile_image"
+                        app:civ_border_color="@color/black"
+                        app:civ_border_width="1.5dp"
+                        android:src="@drawable/profileuser"
+                        android:layout_centerVertical="true"/>
+
+                    <ImageButton
+                        android:layout_width="55dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:src="@drawable/chattt"
+                        android:background="@color/transparent"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="35"
+                    android:layout_height="match_parent">
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/linearLayout1"
+                android:background="@drawable/green_black_border_bottom"
+                android:padding="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/img1"
+                        android:layout_width="35dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/et_name"
+                        android:layout_marginRight="15dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vProfile_Name"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:text="Sean" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/img2"
+                        android:layout_width="35dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/et_email"
+                        android:layout_marginRight="15dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vProfile_email"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:text="officialsuzuen@gmail.com" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/img3"
+                        android:layout_width="35dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/et_phone"
+                        android:layout_marginRight="15dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vProfile_number"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:text="09280239038"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relativeLayout2">
+
+            <GridView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/gridView"
+                android:numColumns="3"
+                android:verticalSpacing="1dp"
+                android:horizontalSpacing="1dp"
+                android:gravity="center"
+                android:stretchMode="columnWidth">
+
+            </GridView>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</merge>

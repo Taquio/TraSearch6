@@ -25,6 +25,7 @@ import com.example.taquio.trasearch6.ActivityLogin;
 import com.example.taquio.trasearch6.R;
 import com.example.taquio.trasearch6.Users;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
+import com.example.taquio.trasearch6.ViewProfile;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -256,13 +257,17 @@ public class ProfileActivity extends AppCompatActivity {
                 mAllUsersDatabase
         ) {
             @Override
-            protected void populateViewHolder(UsersViewHolder viewHolder, Users model, int position) {
+            protected void populateViewHolder(UsersViewHolder viewHolder, Users model, final int position) {
                 viewHolder.setName(model.getName());
                 viewHolder.setEmail(model.getEmail());
                 viewHolder.setProfileImage(model.getImage(),ProfileActivity.this);
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    String User_id = getRef(position).getKey();
                     @Override
                     public void onClick(View v) {
+                        startActivity(new Intent(ProfileActivity.this, ViewProfile.class)
+                        .putExtra("user_id",User_id));
+
                     }
                 });
             }

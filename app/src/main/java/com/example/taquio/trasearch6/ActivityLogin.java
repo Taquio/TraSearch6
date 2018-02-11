@@ -183,13 +183,12 @@ public class ActivityLogin extends AppCompatActivity {
     {
         btn_login = findViewById(R.id.btn_login);
         btn_register = findViewById(R.id.noAccountYet);
-        btn_search = findViewById(R.id.imV_search);
+
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
 
         Lfield_email = findViewById(R.id.Lfield_email);
-        traSearch_bar = findViewById(R.id.traSearch_bar);
         Lfield_password = findViewById(R.id.Lfield_password);
     }
 
