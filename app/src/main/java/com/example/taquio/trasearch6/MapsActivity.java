@@ -3,6 +3,9 @@ package com.example.taquio.trasearch6;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,146 +16,236 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.GeofencingApi;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.SettingsApi;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
-    private static final String TAG = "MapsActivity";
-    private static final int ACTIVITY_NUM = 3;
+import static com.google.android.gms.location.LocationServices.FusedLocationApi;
+
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+//    implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener
+
+    private static final String TAG = MapsActivity.class.getSimpleName();
     private final int locationReqestCode = 1234;
     private GoogleMap mMap;
-    private Context mContext = MapsActivity.this;
+    private GoogleApiClient mApiClient;
+    private SeekBar seekBar;
     //vars
     private Boolean mLocationGranted = false;
+    private static final int ACTIVITY_NUM = 4;
+    private Context mContext = MapsActivity.this;
+    private Circle circle;
+    private Marker marker;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         Log.d(TAG, "onCreate: Map Started");
+        mapInit();
         setupBottomNavigationView();
-        getLocation();
     }
-
-
-
     private void mapInit() {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
     }
 
-    private void getDeviceLocation() {
-        FusedLocationProviderClient mfusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        try {
-            if (mLocationGranted) {
-                Task location = mfusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "location Success");
-                            Location currentLocation = (Location) task.getResult();
-                            moveCamera(new LatLng(currentLocation.getLongitude(), currentLocation.getLatitude()), 15);
-
-                        } else {
-                            Log.d(TAG, "Cant find location");
-                            Toast.makeText(MapsActivity.this, "Unable to get your location", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        } catch (SecurityException e) {
-            Log.d(TAG, "location failed: " + e.getMessage());
-        }
-    }
-
-    private void moveCamera(LatLng latLng, float zoom) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-    }
-
-
-    private void getLocation() {
-        String[] permission = {Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
-
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                mLocationGranted = true;
-                Toast.makeText(MapsActivity.this, "here", Toast.LENGTH_SHORT).show();
-                mapInit();
-            } else {
-                ActivityCompat.requestPermissions(this, permission, locationReqestCode);
-            }
-
-        } else {
-            ActivityCompat.requestPermissions(this, permission, locationReqestCode);
-        }
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        mLocationGranted = false;
-
-        switch (requestCode) {
-            case locationReqestCode: {
-                if (grantResults.length > 0) {
-
-                    for (int i = 0; i < grantResults.length;i++) {
-                        if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                            mLocationGranted = false;
-                            return;
-                        }
-                    }
-                    mLocationGranted = true;
-                    mapInit();
-                }
-            }
-        }
-    }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
-        if (mLocationGranted) {
-            getDeviceLocation();
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+        if(mMap != null){
+//            change info window values when dragged
+            mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                @Override
+                public void onMarkerDragStart(Marker marker) {
+
+                }
+
+                @Override
+                public void onMarkerDrag(Marker marker) {
+
+                }
+
+                @Override
+                public void onMarkerDragEnd(Marker marker) {
+
+                    Geocoder gc = new Geocoder(MapsActivity.this);
+                    LatLng ll = marker.getPosition();
+                    double lat = ll.latitude,
+                        lng = ll.longitude;
+                    List<Address> list = null;
+                    try {
+                        list = gc.getFromLocation(lat, lng, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Address address = (Address) list.get(0);
+                    String addressStr = "";
+                    addressStr += address.getAddressLine(0) + ", ";
+                    addressStr += address.getAddressLine(1) + ", ";
+                    addressStr += address.getAddressLine(2);
+                    marker.setTitle(""+addressStr);
+                    marker.showInfoWindow();
+                }
+            });
+
+//            adds info window to the marker
+            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                @Override
+                public View getInfoWindow(Marker marker) {
+                    return null;
+                }
+
+                @Override
+                public View getInfoContents(Marker marker) {
+                    View v = getLayoutInflater().inflate(R.layout.map_info_window, null);
+//                    reference the fields
+                    TextView address = v.findViewById(R.id.mapaddress);
+                    TextView lat = v.findViewById(R.id.maplatitude);
+                    TextView lng = v.findViewById(R.id.maplongitude);
+                    TextView snip = v.findViewById(R.id.mapsnippet);
+//                    set the values to the map_info_window
+                    LatLng ll = marker.getPosition();
+                    address.setText(marker.getTitle());
+                    lat.setText("Latitude: " +ll.latitude);
+                    lng.setText("Longitude: " +ll.longitude);
+                    snip.setText(marker.getSnippet());
+
+                    return v;
+                }
+            });
         }
+
+        mMap.setMyLocationEnabled(true);
+
+        mApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        mApiClient.connect();
+    }
+
+    LocationRequest locationReq;
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        locationReq = LocationRequest.create();
+        locationReq.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(mApiClient,locationReq,this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+// get your place through GPS and put marker
+    @Override
+    public void onLocationChanged(Location location) {
+        LatLng ll;
+        double lat = location.getLatitude(),
+                lng = location.getLongitude();
+        if(location == null)
+        {
+            Toast.makeText(this, "Can't get current location",Toast.LENGTH_LONG).show();
+        }else{
+            ll = new LatLng(lat,lng);
+//            Know the place name
+            Geocoder myLocation = new Geocoder(this, Locale.getDefault());
+            List<Address> myList = null;
+            try {
+                myList = myLocation.getFromLocation(lat,lng,1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Address address = (Address) myList.get(0);
+            String addressStr = "";
+            addressStr += address.getAddressLine(0) + ", ";
+            addressStr += address.getAddressLine(1) + ", ";
+            addressStr += address.getAddressLine(2);
+//          Camera zoom
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll,15);
+            mMap.animateCamera(update);
+//          Name of Place
+            Toast.makeText(this, ""+addressStr, Toast.LENGTH_LONG).show();
+//            marker
+            setMarker(lat, lng, addressStr);
+        }
+
+    }
+//    creating marker
+    private void setMarker(double lat, double lng, String addressStr) {
+        if(marker != null)
+        {
+            marker.remove();
+        }
+        MarkerOptions markerOptions = new MarkerOptions()
+                .title(addressStr)
+                .draggable(true)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .snippet("I am here")
+                .position(new LatLng(lat,lng));
+        marker = mMap.addMarker(markerOptions);
+
+        circle = drawCircle(new LatLng(lat,lng));
+    }
+//    creating circle
+    private Circle drawCircle(LatLng latLng) {
+        CircleOptions options = new CircleOptions()
+                .center(latLng)
+                .radius(5000)
+                .fillColor(0x33FF0000)
+                .strokeColor(Color.GREEN)
+                .strokeWidth(3);
+        return mMap.addCircle(options);
     }
 
     private void setupBottomNavigationView() {
-        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView (Nearby)");
+        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
         BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
         BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
@@ -160,4 +253,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
+
+
 }

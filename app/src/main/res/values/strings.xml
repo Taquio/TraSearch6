@@ -48,10 +48,11 @@
     <!--App NAME Header-->
     <string name="appheader">TraSearch</string>
 
-    <!--Introduction and Advantages-->
-    <string name="app_intro">Welcome!
-    We are TraSearch. Your gateway to Solid Waste Management.
-        To enjoy more of our services we encourage you to Register.
-    </string>
+    <!--map type menu string valuew-->
+    <string name="map_type_none">None</string>
+    <string name="map_type_normal">Normal</string>
+    <string name="map_type_terrain">Terrain</string>
+    <string name="map_type_satellite">Satellite</string>
+    <string name="map_type_hybrid">Hybrid</string>
 
 </resources>
