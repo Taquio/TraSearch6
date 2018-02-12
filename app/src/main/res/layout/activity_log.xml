@@ -103,6 +103,7 @@
                 android:background="@drawable/backgroundborder"
                 android:hint="Enter Username"
                 android:inputType="textEmailAddress"
+
                 />
 
         </LinearLayout>
