@@ -24,10 +24,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
@@ -318,19 +321,34 @@ public class RegisterActivity extends AppCompatActivity {
             final String user_id=mAuth.getCurrentUser().getUid();
             final DatabaseReference current_user_db = databaseReference.child(user_id);
 
-            current_user_db.child("Email").setValue(email);
-            current_user_db.child("Name").setValue(name);
-            current_user_db.child("UserName").setValue(username);
-            current_user_db.child("Image").setValue("https://cdn1.iconfinder.com/data/icons/mix-color-4/502/Untitled-1-512.png");
-//                                current_user_db.child("userImage").setValue(filePath+"");
-            startActivity(new Intent(RegisterActivity.this,HomeActivity2.class));
-            Log.d(TAG, "updateUI: Done Adding details, staring Home");
+//            current_user_db.child("Email").setValue(email);
+//            current_user_db.child("Name").setValue(name);
+//            current_user_db.child("UserName").setValue(username);
+//            current_user_db.child("Image").setValue("https://cdn1.iconfinder.com/data/icons/mix-color-4/502/Untitled-1-512.png");
+////                                current_user_db.child("userImage").setValue(filePath+"");
+            String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+            Map userDetails = new HashMap();
+
+            userDetails.put("Email",email);
+            userDetails.put("Name",name);
+            userDetails.put("UserName",username);
+            userDetails.put("Image","https://cdn1.iconfinder.com/data/icons/mix-color-4/502/Untitled-1-512.png");
+            userDetails.put("device_token",deviceToken);
 
 
-            Toast.makeText(RegisterActivity.this,"Welcome",Toast.LENGTH_SHORT).show();
-            Intent startActivityIntent = new Intent(RegisterActivity.this, HomeActivity2.class);
-            startActivity(startActivityIntent);
-            RegisterActivity.this.finish();
+            current_user_db.setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful())
+                    {
+                        Toast.makeText(RegisterActivity.this,"Welcome",Toast.LENGTH_SHORT).show();
+                        Intent startActivityIntent = new Intent(RegisterActivity.this, HomeActivity2.class);
+                        startActivity(startActivityIntent);
+                        finish();
+                    }
+                }
+            });
         }
        else
         {
