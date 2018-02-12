@@ -91,7 +91,8 @@
                 android:layout_marginRight="3dp"
                 android:padding="5dp"
                 android:layout_gravity="center"
-                android:background="@drawable/border2"/>
+                android:background="@drawable/border2"
+                />
 
             <EditText
                 android:id="@+id/Lfield_email"
