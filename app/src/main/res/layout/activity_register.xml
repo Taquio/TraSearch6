@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blue"
@@ -28,8 +26,8 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ts"
-                    android:background="@color/white2"/>
+                    android:background="@color/white2"
+                    android:src="@drawable/ts"/>
 
             </LinearLayout>
 
@@ -42,10 +40,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Create an account"
-                    android:textStyle="bold"
                     android:gravity="center"
-                    android:textSize="20sp"/>
+                    android:text="Create an account"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 
@@ -66,23 +64,24 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/user"
                     android:layout_gravity="center"
-                    android:background="@drawable/border2"
                     android:layout_marginRight="3dp"
                     android:layout_weight="20"
+                    android:background="@drawable/border2"
                     android:padding="5dp"
+                    android:src="@drawable/user"
                     />
 
                 <EditText
                     android:id="@+id/field_username"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:hint="Choose a username"
-                    android:paddingLeft="15dp"
                     android:layout_gravity="center"
+                    android:layout_weight="70"
                     android:background="@drawable/backgroundborder"
-                    android:layout_weight="70"/>
+                    android:hint="Choose a username"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -111,22 +110,23 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/final_name"
-                    android:background="@drawable/border2"
                     android:layout_marginRight="3dp"
                     android:layout_weight="20"
+                    android:background="@drawable/border2"
                     android:padding="5dp"
+                    android:src="@drawable/final_name"
                     />
 
                 <EditText
-                    android:id="@+id/registerEt2"
+                    android:id="@+id/field_name"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:hint="Enter your name"
                     android:layout_gravity="center"
-                    android:paddingLeft="15dp"
+                    android:layout_weight="70"
                     android:background="@drawable/backgroundborder"
-                    android:layout_weight="70"/>
+                    android:hint="Enter your name"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="15dp"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -152,23 +152,24 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/final_password"
                     android:layout_gravity="center"
-                    android:background="@drawable/border2"
                     android:layout_marginRight="3dp"
                     android:layout_weight="20"
+                    android:background="@drawable/border2"
                     android:padding="5dp"
+                    android:src="@drawable/final_password"
                     />
 
                 <EditText
                     android:id="@+id/field_password"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:hint="Choose a password"
                     android:layout_gravity="center"
-                    android:paddingLeft="15dp"
+                    android:layout_weight="70"
                     android:background="@drawable/backgroundborder"
-                    android:layout_weight="70"/>
+                    android:hint="Choose a password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="15dp"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -194,23 +195,24 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/final_password"
                     android:layout_gravity="center"
-                    android:background="@drawable/border2"
                     android:layout_marginRight="3dp"
                     android:layout_weight="20"
+                    android:background="@drawable/border2"
                     android:padding="5dp"
+                    android:src="@drawable/final_password"
                     />
 
                 <EditText
                     android:id="@+id/field_cPassword"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:hint="Confirm your password"
                     android:layout_gravity="center"
-                    android:paddingLeft="15dp"
+                    android:layout_weight="70"
                     android:background="@drawable/backgroundborder"
-                    android:layout_weight="70"/>
+                    android:hint="Confirm your password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="15dp"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -236,23 +238,24 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/final_email"
                     android:layout_gravity="center"
-                    android:background="@drawable/border2"
                     android:layout_marginRight="3dp"
                     android:layout_weight="20"
+                    android:background="@drawable/border2"
                     android:padding="5dp"
+                    android:src="@drawable/final_email"
                     />
 
                 <EditText
                     android:id="@+id/field_email"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:hint="Enter your email address"
                     android:layout_gravity="center"
-                    android:paddingLeft="15dp"
+                    android:layout_weight="70"
                     android:background="@drawable/backgroundborder"
-                    android:layout_weight="70"/>
+                    android:hint="Enter your email address"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="15dp"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -278,23 +281,24 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/final_phone"
                     android:layout_gravity="center"
-                    android:background="@drawable/border2"
                     android:layout_marginRight="3dp"
                     android:layout_weight="20"
+                    android:background="@drawable/border2"
                     android:padding="5dp"
+                    android:src="@drawable/final_phone"
                     />
 
                 <EditText
-                    android:id="@+id/registerEt6"
+                    android:id="@+id/field_phonenumber"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:hint="Enter your mobile no."
                     android:layout_gravity="center"
-                    android:paddingLeft="15dp"
+                    android:layout_weight="70"
                     android:background="@drawable/backgroundborder"
-                    android:layout_weight="70"/>
+                    android:hint="Enter your mobile no."
+                    android:inputType="number"
+                    android:paddingLeft="15dp"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -349,14 +353,14 @@
                 </RelativeLayout>
 
                 <TextView
-                    android:layout_marginTop="5dp"
                     android:id="@+id/registerTx1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="13sp"
+                    android:layout_marginTop="5dp"
                     android:layout_weight="80"
+                    android:gravity="center"
                     android:text="RETURN TO LOGIN"
-                    android:gravity="center"/>
+                    android:textSize="13sp"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
