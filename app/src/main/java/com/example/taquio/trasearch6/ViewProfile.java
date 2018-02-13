@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,7 +29,7 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ViewProfile extends AppCompatActivity {
-
+    private static final String TAG = "ViewProfile";
     TextView name,email,phoneNo;
     CircleImageView image;
     ProgressDialog mProgressDialog;
@@ -72,21 +73,28 @@ public class ViewProfile extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 name.setText(dataSnapshot.child("Name").getValue().toString());
                 email.setText(dataSnapshot.child("Email").getValue().toString());
-//                phoneNo.setText(dataSnapshot.child("Phone").getValue().toString());
+                phoneNo.setText(dataSnapshot.child("PhoneNumber").getValue().toString());
                 Picasso.with(ViewProfile.this).load(dataSnapshot.child("Image").getValue().toString())
                         .into(image);
+
                 mFriendRequestDatabase
                         .child(mCurrent_user.getUid())
-                        .addValueEventListener(new ValueEventListener() {
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         if(dataSnapshot.hasChild(user_id))
                         {
-                            String req_type = dataSnapshot.child(user_id).child("request_type").getValue().toString();
+                            Log.d(TAG, "onDataChange: user found in FriendRequest Database");
+                            String req_type = dataSnapshot.
+                                    child(user_id)
+                                    .child("request_type")
+                                    .getValue()
+                                    .toString();
 
                             if(req_type.equals("recieved"))
                             {
+                                Log.d(TAG, "onDataChange: Request type: Recieved");
                                 mfriend_status = 2;
                                 sendRequest.setText("Accept Friend Request");
                                 declineRequest.setVisibility(View.VISIBLE);
@@ -94,6 +102,7 @@ public class ViewProfile extends AppCompatActivity {
                             }
                             else if(req_type.equals("sent"))
                             {
+                                Log.d(TAG, "onDataChange: Request type: Sent");
                                 mfriend_status = 1;
                                 sendRequest.setText("Cancel Friend Request");
                                 declineRequest.setVisibility(View.INVISIBLE);
@@ -102,7 +111,8 @@ public class ViewProfile extends AppCompatActivity {
                             mProgressDialog.dismiss();
 
                         }else{
-                            mFriendDatabase.child(mCurrent_user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            mFriendDatabase.child(mCurrent_user.getUid())
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if(dataSnapshot.hasChild(user_id))
@@ -114,7 +124,6 @@ public class ViewProfile extends AppCompatActivity {
                                         declineRequest.setEnabled(false);
                                     }
                                     mProgressDialog.dismiss();
-
                                 }
 
                                 @Override
@@ -141,18 +150,16 @@ public class ViewProfile extends AppCompatActivity {
             }
         });
 
-        declineRequest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 sendRequest.setEnabled(false);
+                //mFriend_status cheat codes:
+                // 0 = not friends
+                // 1 = req send
+                // 2 = req recv
+                // 3 = friends
 
                 if(mfriend_status == 0)
                 {
@@ -267,12 +274,21 @@ public class ViewProfile extends AppCompatActivity {
                                                         public void onComplete(@NonNull Task<Void> task) {
                                                             if(task.isSuccessful())
                                                             {
-                                                                sendRequest.setEnabled(true);
-                                                                mfriend_status = 3;
-                                                                sendRequest.setText("Unfriend this Person");
-                                                                declineRequest.setVisibility(View.INVISIBLE);
-                                                                declineRequest.setEnabled(false);
-                                                                Toast.makeText(ViewProfile.this,"Friend Request Cancelled",Toast.LENGTH_SHORT).show();
+                                                                mFriendRequestDatabase
+                                                                        .child(mCurrent_user.getUid())
+                                                                        .child(user_id)
+                                                                        .removeValue()
+                                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                                sendRequest.setEnabled(true);
+                                                                                mfriend_status = 3;
+                                                                                sendRequest.setText("Unfriend this Person");
+                                                                                declineRequest.setVisibility(View.INVISIBLE);
+                                                                                declineRequest.setEnabled(false);
+                                                                                Toast.makeText(ViewProfile.this,"Friend Request Cancelled",Toast.LENGTH_SHORT).show();
+                                                                            }
+                                                                        });
                                                             }
                                                         }
                                                     });
@@ -283,6 +299,43 @@ public class ViewProfile extends AppCompatActivity {
                         }
                     });
                 }
+            }
+        });
+
+        declineRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: Decline Friend Request Clicked");
+                mFriendRequestDatabase
+                        .child(mCurrent_user.getUid())
+                        .child(user_id)
+                        .removeValue()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful())
+                                {
+                                    Log.d(TAG, "onComplete: Successfuly deleted yourReq to her/his in Database");
+                                    mFriendDatabase
+                                            .child(user_id)
+                                            .child(mCurrent_user.getUid())
+                                            .removeValue()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if(task.isSuccessful())
+                                                    {
+                                                        Log.d(TAG, "onComplete: Successfuly deleted her/his to yourReq in Database");
+                                                        sendRequest.setText("Send Friend Request");
+                                                        declineRequest.setVisibility(View.INVISIBLE);
+                                                        declineRequest.setEnabled(false);
+                                                        mfriend_status = 0;
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        });
             }
         });
 

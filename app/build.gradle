@@ -5,7 +5,7 @@ android {
     defaultConfig {
         applicationId "com.example.taquio.trasearch6"
         minSdkVersion 16
-        targetSdkVersion 19
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -115,6 +115,8 @@ dependencies {
 
     //SiliCompresor
     compile 'id.zelory:compressor:2.1.0'
+
+    compile 'com.android.support:multidex:1.0.2'
 
 }
 apply plugin: 'com.google.gms.google-services'

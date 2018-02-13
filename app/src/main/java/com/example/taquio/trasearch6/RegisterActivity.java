@@ -97,14 +97,27 @@ public class RegisterActivity extends AppCompatActivity {
                     checkUserName.child("Users").child("UserName").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            field_username.setError("Username already exist");
-                            regProgress.dismiss();
+                            if(dataSnapshot.hasChild(field_username
+                                    .getText()
+                                    .toString()))
+                            {
+                                field_username.setError("Username already exist");
+                                regProgress.dismiss();
+                            }
+                            else
+                            {
+                                addUser(field_email
+                                .getText()
+                                .toString(),field_password
+                                .getText()
+                                .toString());
+                                regProgress.dismiss();
+                            }
                         }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-                            addUser(email,pass);
-                            regProgress.dismiss();
+
                         }
                     });
                 }

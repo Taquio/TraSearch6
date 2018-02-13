@@ -51,7 +51,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
@@ -77,20 +76,6 @@ public class ProfileActivity extends AppCompatActivity {
     private CircleImageView ivprofilepic;
     private RecyclerView allUser;
 
-    public static String random()
-    {
-        Random generator = new Random();
-        StringBuilder randomStringBuilder = new StringBuilder();
-        int randomeLength = generator.nextInt(12);
-        char tempChar;
-        for(int i = 0;i<randomeLength;i++)
-        {
-            tempChar = (char) (generator.nextInt(96)+32);
-            randomStringBuilder.append(tempChar);
-        }
-        return randomStringBuilder.toString();
-    }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +98,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-//        mProgressbar = findViewById(R.id);
         setupBottomNavigationView();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         String uid = mCurrentUser.getUid();
@@ -147,7 +131,6 @@ public class ProfileActivity extends AppCompatActivity {
 
                             }
                         });
-
             }
 
             @Override
@@ -159,17 +142,14 @@ public class ProfileActivity extends AppCompatActivity {
         chgn_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUserDatabase.child("Name").setValue(field_changeName.getText().toString().toUpperCase());
+                mUserDatabase.child("Name")
+                        .setValue(field_changeName.getText().toString().toUpperCase());
             }
         });
 
         chgn_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent galleryIntent = new Intent();
-//                galleryIntent.setType("image/*");
-//                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(Intent.createChooser(galleryIntent,"Select Image"),1);
                 CropImage.activity()
                         .setGuidelines(CropImageView.Guidelines.ON)
                         .setCropShape(CropImageView.CropShape.OVAL)
@@ -179,7 +159,6 @@ public class ProfileActivity extends AppCompatActivity {
                         .setBorderCornerColor(Color.GREEN)
                         .setFixAspectRatio(true)
                         .start(ProfileActivity.this);
-
             }
         });
     }
@@ -254,7 +233,6 @@ public class ProfileActivity extends AppCompatActivity {
                         {
                             Toast.makeText(ProfileActivity.this,"Error Uploading Profile Picture",Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
-
                         }
                     }
                 });
@@ -318,20 +296,6 @@ public class ProfileActivity extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
-//        setupToolBar();
-//    }
-//
-//    private void setupToolBar() {
-//        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.profileToolBar);
-//        setSupportActionBar(toolbar);
-//        ImageView profMenu = findViewById(R.id.profileMenu);
-//        profMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(mContext, AccountSettingsActivity.class));
-//            }
-//        });
-//    }
 
     public static class UsersViewHolder extends RecyclerView.ViewHolder
     {
