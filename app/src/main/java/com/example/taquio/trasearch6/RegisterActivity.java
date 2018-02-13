@@ -1,7 +1,6 @@
 package com.example.taquio.trasearch6;
 
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -11,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,24 +20,33 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
     String email;
+    ProgressDialog regProgress;
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
-    private EditText field_email,field_password,field_username,field_cPassword;
+    private EditText field_email
+            ,field_password
+            ,field_username
+            ,field_cPassword
+            ,field_name
+            ,field_phonenumber;
     private Button btn_submit;
 //    private ImageButton chooseImage;
     private ImageView userProfileImage;
     private Uri filePath;
-    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +55,6 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         refIDs();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
-        storageReference = FirebaseStorage.getInstance().getReference();
 
         if(getIntent().hasExtra("emailPass"))
         {
@@ -56,163 +62,67 @@ public class RegisterActivity extends AppCompatActivity {
             field_email.setText(email);
         }
 
-//        chooseImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                takePicture.setType("userImage/*");
-//                takePicture.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(Intent.createChooser(takePicture,"Select Picture"),0);
-//            }
-//        });
-
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: Submit button clicked");
 
-                final ProgressDialog progressDialog = new ProgressDialog(RegisterActivity.this);
-                progressDialog.setTitle("Registering...");
-                progressDialog.show();
+                regProgress = new ProgressDialog(RegisterActivity.this);
+                regProgress.setTitle("Registering");
+                regProgress.setMessage("Please wait while we verify your data");
+                regProgress.show();
                 
-                String pass = field_password.getText().toString(),
+                final String pass = field_password.getText().toString(),
                         cPass = field_cPassword.getText().toString();
 
                 if(hasRegError())
                 {
                     Log.d(TAG, "onClick: Has Error");
                     Toast.makeText(RegisterActivity.this,"Please check your Registration Details",Toast.LENGTH_SHORT).show();
-                    progressDialog.dismiss();
+                    regProgress.dismiss();
                 }
                 
                 else if (!(pass.equals(cPass)))
                 {
                     field_password.setError("Password didn't match");
                     field_cPassword.setError("Password didn't match");
-                    progressDialog.dismiss();
+                    regProgress.dismiss();
                 }
                 else
                 {
                     email = field_email.getText().toString();
                     Log.d(TAG, "onClick: Registering User");
-                    progressDialog.setTitle("Registering");
-                    addUser(email,pass);
-                    progressDialog.dismiss();
+                    DatabaseReference checkUserName = FirebaseDatabase.getInstance().getReference();
+
+                    checkUserName.child("Users").child("UserName").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.hasChild(field_username
+                                    .getText()
+                                    .toString()))
+                            {
+                                field_username.setError("Username already exist");
+                                regProgress.dismiss();
+                            }
+                            else
+                            {
+                                addUser(field_email
+                                .getText()
+                                .toString(),field_password
+                                .getText()
+                                .toString());
+                                regProgress.dismiss();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
-//                else
-//                {
-//
-//                    Log.d(TAG, "onClick: No Error");
-//                    field_password.setError(null);
-//
-//
-//                    if(filePath==null)
-//                    {
-//                        progressDialog.dismiss();
-//
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-//                        // Add the buttons
-//                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                // User clicked OK button
-//                                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                                takePicture.setType("userImage/*");
-//                                takePicture.setAction(Intent.ACTION_GET_CONTENT);
-//                                startActivityForResult(Intent.createChooser(takePicture,"Select Picture"),0);
-//
-//                            }
-//                        });
-//                        builder.setNegativeButton("Later", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                // User cancelled the dialog
-//                                email = field_email.getText().toString();
-//                                final String password = field_password.getText().toString();
-//
-//                                addUser(email,password);
-//
-//                            }
-//                        }).setTitle("No Image Detected")
-//                                .setMessage("Do you want to add your profile picture?");
-//                        // Set other dialog properties
-//
-//
-//                        // Create the AlertDialog
-//                        AlertDialog dialog = builder.create();
-//                        dialog.show();
-//
-//                    }
-//                    else{
-//                        Log.d(TAG, "onComplete: Adding User Details");
-//
-//                        progressDialog.setTitle("Image is Uploading...");
-//                        StorageReference storageReference2nd = storageReference
-//                                .child("userImage/" + System.currentTimeMillis() + "." + GetFileExtension(filePath));
-//                        storageReference2nd.putFile(filePath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-//                                // Getting image name from EditText and store into string variable.
-//
-//                                // Hiding the progressDialog after done uploading.
-//                                progressDialog.dismiss();
-//                                email = field_email.getText().toString();
-//                                final String password = field_password.getText().toString();
-//
-//                                addUser(email,password);
-//
-//                                final String user_id=mAuth.getCurrentUser().getUid();
-//                                final DatabaseReference current_user_db = databaseReference.child(user_id);
-//
-//                                final String username = field_username.getText().toString();
-//                                final String name = field_username.getText().toString();
-//
-//
-//
-//
-//                                current_user_db.child("Email").setValue(email);
-//                                current_user_db.child("Name").setValue(name);
-//                                current_user_db.child("UserName").setValue(username);
-//                                current_user_db.child("userImage").setValue(filePath+"");
-//
-//                                FirebaseUser user = mAuth.getCurrentUser();
-//                                updateUI(user);
-//                                // Showing toast message after done uploading.
-//                                Toast.makeText(getApplicationContext(), "Image Uploaded Successfully ", Toast.LENGTH_LONG).show();
-//
-//                                Toast.makeText(RegisterActivity.this, "Register Successful", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }).addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                // Hiding the progressDialog.
-//                                progressDialog.dismiss();
-//
-//                                // Showing exception error message.
-//                                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-//                            }
-//                        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-//                            @Override
-//                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-//                                // Setting progressDialog Title.
-//                                progressDialog.setTitle("Image is Uploading...");
-//                            }
-//                        });
-//                        progressDialog.dismiss();
-//                    }
-//
-//                }
             }
         });
-    }
-
-    // Creating Method to get the selected image file Extension from File Path URI.
-    public String GetFileExtension(Uri uri) {
-
-        ContentResolver contentResolver = getContentResolver();
-
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-
-        // Returning the file Extension.
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)) ;
     }
 
     public void addUser(String email,String password)
@@ -234,6 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(RegisterActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            regProgress.dismiss();
                             updateUI(null);
                         }
                     }
@@ -244,21 +155,6 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-//        if (requestCode == 0) {
-//
-//            if (resultCode == RESULT_OK) {
-//                if (data != null) {
-//                    // Get the URI of the selected file
-//                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-//                    userProfileImage.setImageBitmap(photo);
-//                }
-//                else
-//                {
-//                    Toast.makeText(RegisterActivity.this,"No Picture",Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        }
 
         filePath = data.getData();
         try {
@@ -312,25 +208,36 @@ public class RegisterActivity extends AppCompatActivity {
 
 
             final String username = field_username.getText().toString();
-            final String name = field_username.getText().toString().toUpperCase();
+            final String name = field_name.getText().toString().toUpperCase();
             email = field_email.getText().toString();
-
+            final String phonenumber = field_phonenumber.getText().toString();
             final String user_id=mAuth.getCurrentUser().getUid();
             final DatabaseReference current_user_db = databaseReference.child(user_id);
 
-            current_user_db.child("Email").setValue(email);
-            current_user_db.child("Name").setValue(name);
-            current_user_db.child("UserName").setValue(username);
-            current_user_db.child("Image").setValue("https://cdn1.iconfinder.com/data/icons/mix-color-4/502/Untitled-1-512.png");
-//                                current_user_db.child("userImage").setValue(filePath+"");
-            startActivity(new Intent(RegisterActivity.this,HomeActivity2.class));
-            Log.d(TAG, "updateUI: Done Adding details, staring Home");
+            String deviceToken = FirebaseInstanceId.getInstance().getToken();
+            Map userDetails = new HashMap();
+            userDetails.put("Email",email);
+            userDetails.put("Name",name);
+            userDetails.put("UserName",username);
+            userDetails.put("Image","https://cdn1.iconfinder.com/data/icons/mix-color-4/502/Untitled-1-512.png");
+            userDetails.put("device_token",deviceToken);
+            userDetails.put("PhoneNumber",phonenumber);
 
 
-            Toast.makeText(RegisterActivity.this,"Welcome",Toast.LENGTH_SHORT).show();
-            Intent startActivityIntent = new Intent(RegisterActivity.this, HomeActivity2.class);
-            startActivity(startActivityIntent);
-            RegisterActivity.this.finish();
+            current_user_db.setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful())
+                    {
+                        regProgress.dismiss();
+                        Toast.makeText(RegisterActivity.this,"Welcome",Toast.LENGTH_SHORT).show();
+                        Intent startActivityIntent = new Intent(RegisterActivity.this, HomeActivity2.class);
+                        startActivity(startActivityIntent);
+                        finish();
+                    }
+                }
+            });
+
         }
        else
         {
@@ -348,6 +255,8 @@ public class RegisterActivity extends AppCompatActivity {
 //        chooseImage = findViewById(R.id.register_chooseImage);
 //        userProfileImage = findViewById(R.id.register_image);
         field_cPassword = findViewById(R.id.field_cPassword);
+        field_name = findViewById(R.id.field_name);
+        field_phonenumber = findViewById(R.id.field_phonenumber);
 
     }
 }

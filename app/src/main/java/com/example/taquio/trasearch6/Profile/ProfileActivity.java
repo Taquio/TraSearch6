@@ -25,6 +25,7 @@ import com.example.taquio.trasearch6.ActivityLogin;
 import com.example.taquio.trasearch6.R;
 import com.example.taquio.trasearch6.Users;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
+import com.example.taquio.trasearch6.ViewProfile;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,12 +35,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -49,7 +51,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
@@ -97,22 +98,39 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-//        mProgressbar = findViewById(R.id);
         setupBottomNavigationView();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         String uid = mCurrentUser.getUid();
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+        mUserDatabase.keepSynced(true);
+
 
         mUserDatabase.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(final DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onDataChange: Has data");
 
                 txtusername.setText(dataSnapshot.child("Name").getValue().toString());
                 txtemail.setText(dataSnapshot.child("Email").getValue().toString());
                 Picasso.with(ProfileActivity.this).load(dataSnapshot.child("Image").getValue().toString())
+                        .networkPolicy(NetworkPolicy.OFFLINE)
                         .placeholder(R.drawable.man)
-                        .into(ivprofilepic);
+                        .into(ivprofilepic, new Callback() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onError() {
+                                Picasso.with(ProfileActivity.this)
+                                        .load(dataSnapshot
+                                                .child("Image").getValue().toString())
+                                        .placeholder(R.drawable.man)
+                                        .into(ivprofilepic);
+
+                            }
+                        });
             }
 
             @Override
@@ -124,17 +142,14 @@ public class ProfileActivity extends AppCompatActivity {
         chgn_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUserDatabase.child("Name").setValue(field_changeName.getText().toString().toUpperCase());
+                mUserDatabase.child("Name")
+                        .setValue(field_changeName.getText().toString().toUpperCase());
             }
         });
 
         chgn_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent galleryIntent = new Intent();
-//                galleryIntent.setType("image/*");
-//                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(Intent.createChooser(galleryIntent,"Select Image"),1);
                 CropImage.activity()
                         .setGuidelines(CropImageView.Guidelines.ON)
                         .setCropShape(CropImageView.CropShape.OVAL)
@@ -144,7 +159,6 @@ public class ProfileActivity extends AppCompatActivity {
                         .setBorderCornerColor(Color.GREEN)
                         .setFixAspectRatio(true)
                         .start(ProfileActivity.this);
-
             }
         });
     }
@@ -219,7 +233,6 @@ public class ProfileActivity extends AppCompatActivity {
                         {
                             Toast.makeText(ProfileActivity.this,"Error Uploading Profile Picture",Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
-
                         }
                     }
                 });
@@ -232,20 +245,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    public static String random()
-    {
-        Random generator = new Random();
-        StringBuilder randomStringBuilder = new StringBuilder();
-        int randomeLength = generator.nextInt(12);
-        char tempChar;
-        for(int i = 0;i<randomeLength;i++)
-        {
-            tempChar = (char) (generator.nextInt(96)+32);
-            randomStringBuilder.append(tempChar);
-        }
-        return randomStringBuilder.toString();
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -256,19 +255,46 @@ public class ProfileActivity extends AppCompatActivity {
                 mAllUsersDatabase
         ) {
             @Override
-            protected void populateViewHolder(UsersViewHolder viewHolder, Users model, int position) {
+            protected void populateViewHolder(UsersViewHolder viewHolder, Users model, final int position) {
                 viewHolder.setName(model.getName());
                 viewHolder.setEmail(model.getEmail());
                 viewHolder.setProfileImage(model.getImage(),ProfileActivity.this);
+                final String User_id = getRef(position).getKey();
+
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        startActivity(new Intent(ProfileActivity.this, ViewProfile.class)
+                        .putExtra("user_id",User_id));
                     }
                 });
             }
         };
         allUser.setAdapter(firebaseRecyclerAdapter);
 
+    }
+
+    private void refIDs()
+    {
+        txtemail = findViewById(R.id.txtemail);
+        txtusername = findViewById(R.id.txtusername);
+        chgn_name = findViewById(R.id.chgn_name);
+        field_changeName = findViewById(R.id.field_changeName);
+        chgn_image = findViewById(R.id.chgn_image);
+        ivprofilepic = findViewById(R.id.ivprofilepic);
+        allUser = findViewById(R.id.allUsers);
+            allUser.setHasFixedSize(true);
+            allUser.setLayoutManager(new LinearLayoutManager(ProfileActivity.this));
+    }
+
+    private void setupBottomNavigationView() {
+        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
+        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
+        Menu menu = bottomNavigationViewEx.getMenu();
+        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
+        menuItem.setChecked(true);
     }
 
     public static class UsersViewHolder extends RecyclerView.ViewHolder
@@ -297,42 +323,5 @@ public class ProfileActivity extends AppCompatActivity {
                     .into(mImageHolder);
 
         }
-    }
-
-    private void refIDs()
-    {
-        txtemail = findViewById(R.id.txtemail);
-        txtusername = findViewById(R.id.txtusername);
-        chgn_name = findViewById(R.id.chgn_name);
-        field_changeName = findViewById(R.id.field_changeName);
-        chgn_image = findViewById(R.id.chgn_image);
-        ivprofilepic = findViewById(R.id.ivprofilepic);
-        allUser = findViewById(R.id.allUsers);
-            allUser.setHasFixedSize(true);
-            allUser.setLayoutManager(new LinearLayoutManager(ProfileActivity.this));
-    }
-//        setupToolBar();
-//    }
-//
-//    private void setupToolBar() {
-//        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.profileToolBar);
-//        setSupportActionBar(toolbar);
-//        ImageView profMenu = findViewById(R.id.profileMenu);
-//        profMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(mContext, AccountSettingsActivity.class));
-//            }
-//        });
-//    }
-
-    private void setupBottomNavigationView() {
-        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
-        BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
-        Menu menu = bottomNavigationViewEx.getMenu();
-        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-        menuItem.setChecked(true);
     }
 }

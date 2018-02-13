@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 /**
  * Created by Del Mar on 2/4/2018.
@@ -96,10 +97,26 @@ public class ActivityLogin extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        // Sign in success, update UI with the signed-in user's information
-                                        Log.d(TAG, "signInWithEmail:success");
+                                        String current_userID = mAuth.getCurrentUser().getUid();
+                                        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+                                        databaseReference
+                                                .child(current_userID)
+                                                .child("device_token")
+                                                .setValue(deviceToken)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful())
+                                                {
+                                                    Log.d(TAG, "signInWithEmail:success");
+                                                    checkUserExists();
+                                                }else{
 
-                                        checkUserExists();
+                                                }
+                                            }
+                                        });
+                                        // Sign in success, update UI with the signed-in user's information
+
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -183,13 +200,12 @@ public class ActivityLogin extends AppCompatActivity {
     {
         btn_login = findViewById(R.id.btn_login);
         btn_register = findViewById(R.id.noAccountYet);
-        btn_search = findViewById(R.id.imV_search);
+
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
 
         Lfield_email = findViewById(R.id.Lfield_email);
-        traSearch_bar = findViewById(R.id.traSearch_bar);
         Lfield_password = findViewById(R.id.Lfield_password);
     }
 

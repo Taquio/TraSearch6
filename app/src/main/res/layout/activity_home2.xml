@@ -33,6 +33,7 @@
             android:layout_below="@+id/relatLayout2">
 
             <include layout="@layout/layout_center_viewpager"/>
+            <include layout="@layout/floating_button"/>
         </RelativeLayout>
 
         <include layout="@layout/layout_bottom_navigation_view"/>
