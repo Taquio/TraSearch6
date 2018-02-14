@@ -26,7 +26,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:11.8.0'
     implementation 'com.facebook.android:facebook-login:4.30.0'
     implementation 'com.google.android.gms:play-services-auth:11.8.0'
-    implementation 'com.paypal.sdk:paypal-android-sdk:2.15.3'
+    implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
@@ -39,7 +39,8 @@ dependencies {
     compile 'com.firebase:firebase-client-android:2.5.2'
     compile 'com.google.firebase:firebase-messaging:11.8.0'
 
-
+    //paypall
+    compile 'com.paypal.sdk:paypal-android-sdk:2.16.0'
 
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.android.support:support-v4:27.0.2'
@@ -62,7 +63,7 @@ dependencies {
     compile 'com.pusher:pusher-java-client:1.5.0'
 
     //okhttp
-    compile 'com.squareup.okhttp3:okhttp:3.7.0'
+    compile 'com.squareup.okhttp3:okhttp:3.9.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
     //event bus
@@ -107,7 +108,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     //image cropper
-    compile 'com.theartofdev.edmodo:android-image-cropper:2.6.+'
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.6.0'
 
     //picasso
     compile 'com.squareup.picasso:picasso:2.5.2'

@@ -39,13 +39,14 @@ public class ViewProfile extends AppCompatActivity {
     private DatabaseReference mUsersDatabase
             ,mFriendRequestDatabase
             ,mFriendDatabase
-            ,mNotificatioonDatabase;
+            ,mNotificatioonDatabase
+            ,mRootRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
-
+        Log.d(TAG, "onCreate: View Profile started");
         //mFriend_status cheat codes:
         // 0 = not friends
         // 1 = req send
@@ -67,10 +68,12 @@ public class ViewProfile extends AppCompatActivity {
         mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("friends");
         mCurrent_user = FirebaseAuth.getInstance().getCurrentUser();
         mNotificatioonDatabase = FirebaseDatabase.getInstance().getReference().child("Notifications");
+        mRootRef = FirebaseDatabase.getInstance().getReference();
 
         mUsersDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange: Check Database");
                 name.setText(dataSnapshot.child("Name").getValue().toString());
                 email.setText(dataSnapshot.child("Email").getValue().toString());
                 phoneNo.setText(dataSnapshot.child("PhoneNumber").getValue().toString());
@@ -92,9 +95,9 @@ public class ViewProfile extends AppCompatActivity {
                                     .getValue()
                                     .toString();
 
-                            if(req_type.equals("recieved"))
+                            if(req_type.equals("received"))
                             {
-                                Log.d(TAG, "onDataChange: Request type: Recieved");
+                                Log.d(TAG, "onDataChange: Request type: Received");
                                 mfriend_status = 2;
                                 sendRequest.setText("Accept Friend Request");
                                 declineRequest.setVisibility(View.VISIBLE);
@@ -163,50 +166,27 @@ public class ViewProfile extends AppCompatActivity {
 
                 if(mfriend_status == 0)
                 {
-                    mFriendRequestDatabase
-                            .child(mCurrent_user.getUid())
-                            .child(user_id)
-                            .child("request_type")
-                            .setValue("sent").addOnCompleteListener(new OnCompleteListener<Void>() {
+                    DatabaseReference newNotificationref = mRootRef.child("Notifications").child(user_id).push();
+                    String newNotificationID = newNotificationref.getKey();
+
+                    Map notificationData = new HashMap();
+                    notificationData.put("from", mCurrent_user.getUid());
+                    notificationData.put("type","request");
+
+                    Map requestMap = new HashMap();
+                    requestMap.put("friend_request/"+mCurrent_user.getUid()+"/"+user_id+"request_type","sent");
+                    requestMap.put("friend_request/"+user_id+"/"+mCurrent_user.getUid()+"request_type","received");
+                    requestMap.put("Notifications/"+user_id+"/"+newNotificationID,notificationData);
+
+                    mRootRef.updateChildren(requestMap, new DatabaseReference.CompletionListener() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful())
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            if(databaseError!=null)
                             {
-                                mFriendRequestDatabase
-                                        .child(user_id)
-                                        .child(mCurrent_user.getUid())
-                                        .child("request_type")
-                                        .setValue("recieved").addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isSuccessful())
-                                        {
-                                            Map notificationData = new HashMap();
-                                            notificationData.put("from", mCurrent_user.getUid());
-                                            notificationData.put("type","request");
-
-
-                                            mNotificatioonDatabase.child(user_id).push().setValue(notificationData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if(task.isSuccessful())
-                                                    {
-
-                                                    }
-                                                }
-                                            });
-
-                                            sendRequest.setEnabled(true);
-                                            mfriend_status = 1;
-                                            sendRequest.setText("Cancel Friend Request");
-                                            declineRequest.setVisibility(View.INVISIBLE);
-                                            declineRequest.setEnabled(false);
-                                            Toast.makeText(ViewProfile.this,"Friend Request sent",Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                            }else{
-                                Toast.makeText(ViewProfile.this,"Failed to send Request",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ViewProfile.this
+                                        ,"There was some Error in sending request"
+                                        ,Toast.LENGTH_SHORT)
+                                        .show();
                             }
                         }
                     });
