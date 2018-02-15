@@ -1,9 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:weightSum="100">
+    android:layout_height="match_parent">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -14,24 +11,25 @@
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         android:elevation="10dp"
-        android:background="@drawable/search_background"
-        android:id="@+id/relLayout">
+        android:background="#ffff"
+        android:id="@+id/relLayout1">
+
         <ImageView
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:id="@+id/ic_magnify"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/ic_search"
-            />
-        <EditText
-            android:layout_width="270dp"
+            android:src="@drawable/ic_search"/>
+
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/ic_magnify"
             android:layout_centerVertical="true"
@@ -39,28 +37,46 @@
             android:textColor="#000"
             android:id="@+id/input_search"
             android:background="@null"
-            android:imeOptions="actionSearch"
-            android:singleLine="true"
-            android:hint="Search"/>
+            android:hint="Enter Address, City or Zip Code"
+            android:imeOptions="actionSearch"/>
+
+
     </RelativeLayout>
 
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_below="@id/relLayout1"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:layout_below="@id/relLayout"
-        android:id="@+id/placepicker"
         android:scaleType="centerCrop"
-        android:layout_marginLeft="15dp"
-        android:background="@color/white"
+        android:id="@+id/ic_gps"
+        android:src="@drawable/ic_gps"/>
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/place_picker"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:scaleType="centerCrop"
+        android:layout_below="@+id/relLayout1"
         android:src="@drawable/ic_map"/>
 
-    <!--<com.google.android.gms.maps.MapView-->
-        <!--android:id="@+id/mapView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginTop="149dp" />-->
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/place_picker"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:scaleType="centerCrop"
+        android:id="@+id/place_info"
+        android:src="@drawable/ic_info"/>
 
+
+
+    <include layout="@layout/layout_bottom_navigation_view"/>
 </RelativeLayout>
+
 

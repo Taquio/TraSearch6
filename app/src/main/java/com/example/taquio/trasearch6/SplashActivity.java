@@ -1,18 +1,15 @@
 package com.example.taquio.trasearch6;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private final int SPLASH_DISPLAY_LENGTH = 5000;
-    LinearLayout layouttop;
-    Animation uptodown;
+    ImageView splashImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,22 +18,30 @@ public class SplashActivity extends AppCompatActivity {
 
         refId();
 //        animation
-        layouttop.setAnimation(uptodown);
+        Animation mAnimation = AnimationUtils.loadAnimation(this, R.anim.fadein);
+        splashImage.startAnimation(mAnimation);
+
+        final Intent intent = new Intent(SplashActivity.this, MainActivity.class);
 
         //splash screen
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run(){
-                Intent startActivityIntent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(startActivityIntent);
-                SplashActivity.this.finish();
-            }
-        }, SPLASH_DISPLAY_LENGTH);
-
+        Thread timer = new Thread()
+        {
+          public void run()
+          {
+              try{
+                  sleep(5000);
+              } catch (InterruptedException e) {
+                  e.printStackTrace();
+              }finally {
+                  startActivity(intent);
+                  finish();
+              }
+          }
+        };
+        timer.start();
     }
 
     public void refId(){
-        layouttop = findViewById(R.id.layouttop);
-        uptodown = AnimationUtils.loadAnimation(this, R.anim.uptodown);
+        splashImage = (ImageView) findViewById(R.id.splash_image);
     }
 }

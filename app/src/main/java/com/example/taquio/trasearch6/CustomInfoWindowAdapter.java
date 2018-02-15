@@ -9,48 +9,45 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
 /**
- * Created by ARVN on 2/14/2018.
+ * Created by User on 10/2/2017.
  */
 
-public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
+public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     private final View mWindow;
     private Context mContext;
 
     public CustomInfoWindowAdapter(Context context) {
-        this.mWindow = LayoutInflater.from(context).inflate(R.layout.map_info_window, null);
-        this.mContext = context;
+        mContext = context;
+        mWindow = LayoutInflater.from(context).inflate(R.layout.map_info_window, null);
     }
 
-    private void renderWindowText(Marker marker, View view)
-    {
-//        for the title of the place
+    private void rendowWindowText(Marker marker, View view){
+
         String title = marker.getTitle();
         TextView tvTitle = (TextView) view.findViewById(R.id.title);
 
-        if(!title.equals(""))
-        {
+        if(!title.equals("")){
             tvTitle.setText(title);
         }
-//        for the details of the place
-        String snippet = marker.getTitle();
-        TextView detail = (TextView) view.findViewById(R.id.details);
 
-        if(!detail.equals(""))
-        {
-            detail.setText(title);
+        String snippet = marker.getSnippet();
+        TextView tvSnippet = (TextView) view.findViewById(R.id.snippet);
+
+        if(!snippet.equals("")){
+            tvSnippet.setText(snippet);
         }
     }
 
     @Override
     public View getInfoWindow(Marker marker) {
-        renderWindowText(marker, mWindow);
-        return null;
+        rendowWindowText(marker, mWindow);
+        return mWindow;
     }
 
     @Override
     public View getInfoContents(Marker marker) {
-        renderWindowText(marker, mWindow);
-        return null;
+        rendowWindowText(marker, mWindow);
+        return mWindow;
     }
 }
