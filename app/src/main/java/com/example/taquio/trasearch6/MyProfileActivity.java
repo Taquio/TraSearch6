@@ -68,6 +68,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
                 txtname.setText(dataSnapshot.child("Name").getValue().toString());
                 txtemail.setText(dataSnapshot.child("Email").getValue().toString());
+                //setProfileImage
                 Picasso.with(MyProfileActivity.this).load(dataSnapshot.child("Image").getValue().toString())
                         .networkPolicy(NetworkPolicy.OFFLINE)
                         .placeholder(R.drawable.man)
