@@ -140,7 +140,7 @@
             android:name=".ViewProfile"
             android:parentActivityName=".Profile.ProfileActivity" />
         <activity
-            android:name=".MessageActivity"
+            android:name=".Messages.MessagesActivity"
             android:parentActivityName=".HomeActivity2" />
         <activity android:name=".GuestSearch" />
         <activity
