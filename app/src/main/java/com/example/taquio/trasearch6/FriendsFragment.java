@@ -101,7 +101,7 @@ public class FriendsFragment extends Fragment {
                 mUsersDatabase.child(list_user_Id).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String name = dataSnapshot.child("Name").getValue().toString();
+                        final String name = dataSnapshot.child("Name").getValue().toString();
                         String user_thumb_img = dataSnapshot.child("Image_thumb").getValue().toString();
 
                         if(dataSnapshot.hasChild("online"))
@@ -130,8 +130,9 @@ public class FriendsFragment extends Fragment {
                                         }
                                         if(which==1)
                                         {
-                                            startActivity(new Intent(getContext(), ViewProfile.class)
-                                                    .putExtra("user_id",list_user_Id));
+                                            startActivity(new Intent(getContext(), MessageActivity.class)
+                                                    .putExtra("user_id",list_user_Id)
+                                                    .putExtra("user_Name",name));
                                         }
                                     }
                                 });
