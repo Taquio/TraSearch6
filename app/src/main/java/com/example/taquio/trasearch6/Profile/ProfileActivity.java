@@ -321,7 +321,6 @@ public class ProfileActivity extends AppCompatActivity {
             CircleImageView mImageHolder = mView.findViewById(R.id.allUsersImg);
             Picasso.with(cTHis).load(ImageURL)
                     .into(mImageHolder);
-
         }
     }
 }

@@ -37,6 +37,7 @@ public class ActivityLogin extends AppCompatActivity {
     EditText Lfield_email,Lfield_password,traSearch_bar;
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
+    private DatabaseReference mUserRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class ActivityLogin extends AppCompatActivity {
         setContentView(R.layout.activity_log);
 
         Log.d(TAG, "onCreate: Started");
+
 
         refIDs();
 
@@ -109,7 +111,9 @@ public class ActivityLogin extends AppCompatActivity {
                                                 if(task.isSuccessful())
                                                 {
                                                     Log.d(TAG, "signInWithEmail:success");
+                                                    mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
                                                     checkUserExists();
+                                                    mUserRef.child("online").setValue(true);
                                                 }else{
 
                                                 }
@@ -132,6 +136,8 @@ public class ActivityLogin extends AppCompatActivity {
             }
         });
     }
+
+
 
     private boolean hasRegError()
     {
@@ -158,14 +164,17 @@ public class ActivityLogin extends AppCompatActivity {
 
     public void checkUserExists()
     {
+        Log.d(TAG, "checkUserExists: Started");
         final String user_id = mAuth.getCurrentUser().getUid();
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.hasChild(user_id))
                 {
+                    Log.d(TAG, "onDataChange: Auth Success");
                     Toast.makeText(ActivityLogin.this, "Authentication success.",
                             Toast.LENGTH_SHORT).show();
+//                    mUserRef.child("online").setValue(true);
                     Intent startActivityIntent = new Intent(ActivityLogin.this, HomeActivity2.class);
                     startActivity(startActivityIntent);
                     ActivityLogin.this.finish();
@@ -181,7 +190,6 @@ public class ActivityLogin extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }

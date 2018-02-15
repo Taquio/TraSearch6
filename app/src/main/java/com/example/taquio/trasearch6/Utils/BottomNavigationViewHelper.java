@@ -10,9 +10,9 @@ import android.view.MenuItem;
 import com.example.taquio.trasearch6.Camera.CameraActivity;
 import com.example.taquio.trasearch6.HomeActivity2;
 import com.example.taquio.trasearch6.MapsActivity;
+import com.example.taquio.trasearch6.MessageActivity;
 import com.example.taquio.trasearch6.Profile.ProfileActivity;
 import com.example.taquio.trasearch6.R;
-import com.example.taquio.trasearch6.chatActivity;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 /**
@@ -42,7 +42,7 @@ public class BottomNavigationViewHelper {
                         context.startActivity(intent1);
                         break;
                     case R.id.ic_messages:
-                        Intent intent2 = new Intent(context, chatActivity.class );
+                        Intent intent2 = new Intent(context, MessageActivity.class );
                         context.startActivity(intent2);
                         break;
                     case R.id.ic_camera:
