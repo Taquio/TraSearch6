@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/bg" />
+        android:src="@drawable/bsn1" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,10 +59,55 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="10"
+                android:background="@drawable/border"
+                android:layout_margin="10dp"
+                android:drawableRight="@drawable/icon_name"
+                android:paddingRight="10dp"
+                android:paddingLeft="15dp"
+                android:hint="Full Name"
+                android:inputType="text"
+                android:textColorHint="#ffffff"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:background="@drawable/border"
+                android:layout_margin="10dp"
+                android:drawableRight="@drawable/ic_busin"
+                android:paddingRight="10dp"
+                android:paddingLeft="15dp"
+                android:hint="Business Name"
+                android:inputType="textPassword"
+                android:textColorHint="#ffffff"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:background="@drawable/border"
+                android:layout_margin="10dp"
+                android:drawableRight="@drawable/ic_loc"
+                android:paddingRight="10dp"
+                android:paddingLeft="15dp"
+                android:hint="Location"
+                android:inputType="textPassword"
+                android:textColorHint="#ffffff"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10"
                 android:layout_margin="10dp"
                 android:background="@drawable/border"
-                android:drawableRight="@drawable/icon_email"
-                android:hint="Email"
+                android:drawableRight="@drawable/ic_website"
+                android:hint="Business Website"
                 android:paddingLeft="15dp"
                 android:paddingRight="12dp"
                 android:inputType="textEmailAddress"
@@ -76,41 +121,11 @@
                 android:layout_weight="10"
                 android:background="@drawable/border"
                 android:layout_margin="10dp"
-                android:drawableRight="@drawable/key"
+                android:drawableRight="@drawable/ic_tele"
                 android:paddingRight="10dp"
                 android:paddingLeft="15dp"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:textColorHint="#ffffff"
-                android:textColor="#ffffff"
-                android:textStyle="bold" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="10"
-                android:background="@drawable/border"
-                android:layout_margin="10dp"
-                android:drawableRight="@drawable/key"
-                android:paddingRight="10dp"
-                android:paddingLeft="15dp"
-                android:hint="Confirm Password"
-                android:inputType="textPassword"
-                android:textColorHint="#ffffff"
-                android:textColor="#ffffff"
-                android:textStyle="bold" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="10"
-                android:background="@drawable/border"
-                android:layout_margin="10dp"
-                android:drawableRight="@drawable/icon_name"
-                android:paddingRight="10dp"
-                android:paddingLeft="15dp"
-                android:hint="Full Name"
-                android:inputType="text"
+                android:hint="Phone No."
+                android:inputType="phone"
                 android:textColorHint="#ffffff"
                 android:textColor="#ffffff"
                 android:textStyle="bold" />
