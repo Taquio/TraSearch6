@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 //Onboarding Slider with button
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = findViewById(R.id.viewpager);
         sliderAdapter = new SliderAdapter(this);
         viewPager.setAdapter(sliderAdapter);
         addDotsIndicator(0);
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //        condition to load main activity
                 if(mNextBtn.getText().toString() == "Finish") {
-                    Intent startActivityIntent = new Intent(MainActivity.this, ActivityLogin.class);
+                    Intent startActivityIntent = new Intent(MainActivity.this, GuestSearch.class);
                     startActivity(startActivityIntent);
                     MainActivity.this.finish();
 
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     //for the dots in the sliding intro
     private void addDotsIndicator(int position)
     {
-        mDotLayout = (LinearLayout) findViewById(R.id.mDotsLayout);
+        mDotLayout = findViewById(R.id.mDotsLayout);
         mDots = new TextView[5];
         mDotLayout.removeAllViews();
         for(int i = 0; i < mDots.length; i++)

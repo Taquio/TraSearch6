@@ -13,8 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +22,6 @@ import android.widget.Toast;
 import com.example.taquio.trasearch6.ActivityLogin;
 import com.example.taquio.trasearch6.R;
 import com.example.taquio.trasearch6.Users;
-import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.ViewProfile;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,7 +36,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -79,7 +75,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
+        setContentView(R.layout.act_profile);
         refIDs();
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -87,6 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
         mImageStorage = FirebaseStorage.getInstance().getReference();
         mAllUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
+        //--------------------------logout---------------------------------//
         logout2 = findViewById(R.id.logout2);
         logout2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +95,9 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        setupBottomNavigationView();
+        //--------------------------logout---------------------------------//
+
+
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         String uid = mCurrentUser.getUid();
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
@@ -287,15 +286,7 @@ public class ProfileActivity extends AppCompatActivity {
             allUser.setLayoutManager(new LinearLayoutManager(ProfileActivity.this));
     }
 
-    private void setupBottomNavigationView() {
-        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
-        BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
-        Menu menu = bottomNavigationViewEx.getMenu();
-        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-        menuItem.setChecked(true);
-    }
+
 
     public static class UsersViewHolder extends RecyclerView.ViewHolder
     {

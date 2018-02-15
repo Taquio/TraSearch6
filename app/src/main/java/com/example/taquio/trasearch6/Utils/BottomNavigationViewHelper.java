@@ -11,7 +11,7 @@ import com.example.taquio.trasearch6.Camera.CameraActivity;
 import com.example.taquio.trasearch6.HomeActivity2;
 import com.example.taquio.trasearch6.MapsActivity;
 import com.example.taquio.trasearch6.MessageActivity;
-import com.example.taquio.trasearch6.Profile.ProfileActivity;
+import com.example.taquio.trasearch6.MyProfileActivity;
 import com.example.taquio.trasearch6.R;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -55,7 +55,7 @@ public class BottomNavigationViewHelper {
                         context.startActivity(intent4);
                         break;
                     case R.id.ic_profile:
-                        Intent intent5 = new Intent(context, ProfileActivity.class);
+                        Intent intent5 = new Intent(context, MyProfileActivity.class);
                         context.startActivity(intent5);
                         break;
                 }

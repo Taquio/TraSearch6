@@ -1,10 +1,8 @@
 package com.example.taquio.trasearch6;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -49,34 +47,34 @@ public class ActivityLogin extends AppCompatActivity {
 
         refIDs();
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null){
-            actionBar.hide();
-        }
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        ActionBar actionBar = getSupportActionBar();
+//        if(actionBar != null){
+//            actionBar.hide();
+//        }
 
-        btn_register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: register clicked");
-                final String email = Lfield_email.getText().toString();
-
-                Intent startActivityIntent = new Intent(ActivityLogin.this, RegisterActivity.class);
-
-                if(email.length()<=0)
-                {
-                    startActivity(startActivityIntent);
-                    ActivityLogin.this.finish();
-                }
-                else
-                {
-                    Log.d(TAG, "onClick: Passing: "+email+" to Reg Act");
-                    startActivityIntent.putExtra("emailPass",email);
-                    startActivity(startActivityIntent);
-                    ActivityLogin.this.finish();
-                }
-            }
-        });
+//        btn_register.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: register clicked");
+//                final String email = Lfield_email.getText().toString();
+//
+//                Intent startActivityIntent = new Intent(ActivityLogin.this, RegisterActivity.class);
+//
+//                if(email.length()<=0)
+//                {
+//                    startActivity(startActivityIntent);
+//                    ActivityLogin.this.finish();
+//                }
+//                else
+//                {
+//                    Log.d(TAG, "onClick: Passing: "+email+" to Reg Act");
+//                    startActivityIntent.putExtra("emailPass",email);
+//                    startActivity(startActivityIntent);
+//                    ActivityLogin.this.finish();
+//                }
+//            }
+//        });
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,10 +108,11 @@ public class ActivityLogin extends AppCompatActivity {
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if(task.isSuccessful())
                                                 {
+                                                    mUserRef.child("online").setValue(true);
                                                     Log.d(TAG, "signInWithEmail:success");
                                                     mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
                                                     checkUserExists();
-                                                    mUserRef.child("online").setValue(true);
+
                                                 }else{
 
                                                 }
@@ -190,6 +189,7 @@ public class ActivityLogin extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart: Started");
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
@@ -207,7 +207,6 @@ public class ActivityLogin extends AppCompatActivity {
     public void refIDs()
     {
         btn_login = findViewById(R.id.btn_login);
-        btn_register = findViewById(R.id.noAccountYet);
 
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
