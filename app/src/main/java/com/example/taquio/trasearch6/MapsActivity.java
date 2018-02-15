@@ -14,9 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -32,8 +32,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -44,7 +42,7 @@ import java.util.List;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
-// declarations
+    // declarations
     private static final float DEFAULT_ZOOM = 15f;
     private static final int PLACE_PICKER_REQUEST = 1;
 
@@ -78,11 +76,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap)
-    {
-        mGoogleMap =  googleMap;
-        initMap();
+    public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
 
+        updateLocationUI();
 //        new map style
         try {
             // Customise the styling of the base map using a JSON object defined
@@ -100,27 +97,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         getLocationPermission();
 
-        LatLng mapCenter = new LatLng(41.889, -87.622);
-
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, 13));
-
-        // Flat markers will rotate when the map is rotated,
-        // and change perspective when the map is tilted.
-        mGoogleMap.addMarker(new MarkerOptions()
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_backarrow))
-                .position(mapCenter)
-                .flat(true)
-                .rotation(245));
-
-        CameraPosition cameraPosition = CameraPosition.builder()
-                .target(mapCenter)
-                .zoom(13)
-                .bearing(90)
-                .build();
-
-        // Animate the change in camera view over 2 seconds
-        mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),
-                2000, null);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mGoogleMap.setMyLocationEnabled(true);
     }
 
     @Override
@@ -136,9 +116,53 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         refId();
 
+        initMap();
+
         final String search = mSearchInput.getText().toString();
 //        edittext perform search when enter key is pressed
-        mSearchInput.setOnEditorActionListener(searchOnKeyPress);
+
+//        edittext onkeypress
+        mSearchInput.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN)
+                        || (keyCode == KeyEvent.KEYCODE_ENTER)
+                        || (event.getAction() == EditorInfo.IME_ACTION_SEARCH)
+                        || (event.getAction() == EditorInfo.IME_ACTION_DONE)) {
+                    // after keypress
+
+                    Geocoder geocoder = new Geocoder(MapsActivity.this);
+                    String location = mSearchInput.getText().toString();
+                    List<Address> addressList;
+
+                    if (!location.equals("")) {
+                        try {
+                            addressList = geocoder.getFromLocationName(location, 5);
+
+                            if (addressList != null)
+                            {
+                                for (int i = 0; i < addressList.size(); i++)
+                                {
+                                    LatLng latLng = new LatLng(addressList.get(i).getLatitude(), addressList.get(i).getLongitude());
+                                    MarkerOptions markerOptions = new MarkerOptions();
+                                    markerOptions.position(latLng);
+                                    markerOptions.title(location);
+                                    mGoogleMap.addMarker(markerOptions);
+                                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                    mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                                }
+                            }
+                        } catch (IOException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+                return true;
+            }
+        });
         placePicker.setOnClickListener(displayPlacepicker);
     }
     @Override
@@ -161,47 +185,45 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 //    search bar function
-    private TextView.OnEditorActionListener searchOnKeyPress = new TextView.OnEditorActionListener() {
-        @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-            String location = mSearchInput.getText().toString();
-            List<Address> addressList;
-
-            if(!location.equals(""))
-            {
-                Geocoder geocoder = new Geocoder(MapsActivity.this);
-
-                try {
-                    addressList = geocoder.getFromLocationName(location, 5);
-
-                    if(addressList != null)
-                    {
-                        for(int i = 0;i<addressList.size();i++)
-                        {
-                            LatLng latLng = new LatLng(addressList.get(i).getLatitude() , addressList.get(i).getLongitude());
-                            MarkerOptions markerOptions = new MarkerOptions();
-                            markerOptions.position(latLng);
-                            markerOptions.title(location);
-                            mGoogleMap.addMarker(markerOptions);
-                            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                            mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return false;
-        }
-    };
+//    private EditText.OnEditorActionListener searchOnKeyPress = new EditText.OnEditorActionListener() {
+//        @Override
+//        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//            Geocoder geocoder = new Geocoder(MapsActivity.this);
+//            String location = mSearchInput.getText().toString();
+//            List<Address> addressList;
+//
+//            if(!location.equals(""))
+//            {
+//
+//                try {
+//                    addressList = geocoder.getFromLocationName(location, 5);
+//
+//                    if(addressList != null)
+//                    {
+//                        for(int i = 0;i<addressList.size();i++)
+//                        {
+//                            LatLng latLng = new LatLng(addressList.get(i).getLatitude() , addressList.get(i).getLongitude());
+//                            MarkerOptions markerOptions = new MarkerOptions();
+//                            markerOptions.position(latLng);
+//                            markerOptions.title(location);
+//                            mGoogleMap.addMarker(markerOptions);
+//                            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//                            mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+//                        }
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            return false;
+//        }
+//    };
 //    place picker button
    private View.OnClickListener displayPlacepicker = new View.OnClickListener() {
        @Override
        public void onClick(View v) {
            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
            try {
                startActivityForResult(builder.build(MapsActivity.this), PLACE_PICKER_REQUEST);
            } catch (GooglePlayServicesRepairableException e) {
@@ -229,7 +251,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.e("Exception: %s", e.getMessage());
         }
     }
-
+//place picker list buttom
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
@@ -250,7 +272,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        updateLocationUI();
     }
 }
