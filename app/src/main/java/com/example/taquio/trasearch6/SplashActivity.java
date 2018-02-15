@@ -1,19 +1,19 @@
 package com.example.taquio.trasearch6;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private final int SPLASH_DISPLAY_LENGTH = 5000;
-    LinearLayout layouttop;
-    Animation uptodown;
+    ImageView splashImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,9 +22,27 @@ public class SplashActivity extends AppCompatActivity {
 
         refId();
 //        animation
-        layouttop.setAnimation(uptodown);
+        Animation mAnimation = AnimationUtils.loadAnimation(this, R.anim.fadein);
+        splashImage.startAnimation(mAnimation);
+
+        final Intent intent = new Intent(SplashActivity.this, MainActivity.class);
 
         //splash screen
+        Thread timer = new Thread()
+        {
+          public void run()
+          {
+              try{
+                  sleep(5000);
+              } catch (InterruptedException e) {
+                  e.printStackTrace();
+              }finally {
+                  startActivity(intent);
+                  finish();
+              }
+          }
+        };
+        timer.start();
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run(){
@@ -59,7 +77,6 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void refId(){
-        layouttop = findViewById(R.id.layouttop);
-        uptodown = AnimationUtils.loadAnimation(this, R.anim.uptodown);
+        splashImage = (ImageView) findViewById(R.id.splash_image);
     }
 }
