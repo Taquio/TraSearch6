@@ -40,7 +40,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="20"
+                android:layout_weight="16.6666666667"
                 android:orientation="horizontal"
                 android:gravity="center">
 
@@ -66,14 +66,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="20"
+                android:layout_weight="16.6666666667"
                 android:orientation="horizontal">
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/border"
-                    android:layout_marginTop="10dp"
+
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:drawableRight="@drawable/icon_user"
@@ -90,14 +90,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="20"
+                android:layout_weight="16.6666666667"
                 android:orientation="horizontal">
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/border"
-                    android:layout_marginTop="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:drawableRight="@drawable/icon_email"
@@ -114,20 +113,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="20"
+                android:layout_weight="16.6666666667"
                 android:orientation="horizontal">
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/border"
-                    android:layout_marginTop="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:drawableRight="@drawable/key"
                     android:paddingRight="12dp"
                     android:paddingLeft="15dp"
-                    android:hint="Password"
+                    android:hint="New Password"
                     android:inputType="textPassword"
                     android:textColorHint="#ffffff"
                     android:textColor="#000000"
@@ -138,17 +136,39 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="20"
+                android:layout_weight="16.6666666667"
                 android:orientation="horizontal">
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/border"
-                    android:layout_marginTop="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:drawableRight="@drawable/key"
+                    android:paddingRight="12dp"
+                    android:paddingLeft="15dp"
+                    android:hint="Confirm Password"
+                    android:inputType="textPassword"
+                    android:textColorHint="#ffffff"
+                    android:textColor="#000000"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="16.6666666667"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/border"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:drawableRight="@drawable/icon_phone"
                     android:paddingRight="12dp"
                     android:paddingLeft="15dp"
                     android:hint="Mobile No."
