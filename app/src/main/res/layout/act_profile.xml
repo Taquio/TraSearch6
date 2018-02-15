@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:gravity="center_horizontal"
+            android:background="#50C878"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageView1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_below="@+id/linearLayout1"
+            android:layout_marginTop="-50dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/images"
+            android:background="@drawable/background" />
+
+        <LinearLayout
+            android:id="@+id/relLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayout1"
+            android:orientation="vertical"
+            android:background="@drawable/border_bottom_only">
+
+            <LinearLayout
+                android:id="@+id/relLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/editUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sean Daniel Del Mar"
+                    android:textSize="20dp"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginTop="2.1dp"
+                    android:src="@drawable/ic_verify"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/relLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/icon_name"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:id="@+id/userEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="officialsuzuen@gmail.com"
+                    android:textSize="15dp"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/icon_phone"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginRight="1dp"/>
+
+                <TextView
+                    android:id="@+id/userNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="09280239038"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_marginBottom="15dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/btnEdit"
+                    android:layout_width="200dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/btn"
+                    android:text="Edit Profile"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relLog"
+            android:layout_marginBottom="50dp">
+
+            <GridView
+                android:id="@+id/gridView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:horizontalSpacing="1dp"
+                android:numColumns="3"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="1dp">
+
+            </GridView>
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</merge>
