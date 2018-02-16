@@ -25,6 +25,13 @@
             android:src="@drawable/junkyard"
             android:background="@drawable/background" />
 
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_businessadd"
+            android:layout_toRightOf="@+id/busViewImageView1"
+            android:layout_marginTop="80dp" />
+
         <LinearLayout
             android:id="@+id/busRelLog"
             android:layout_width="match_parent"
@@ -70,7 +77,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:src="@drawable/icon_email"
+                    android:src="@drawable/ic_direction"
                     android:layout_marginRight="1dp"
                     android:layout_marginTop="3dp"/>
 
@@ -78,7 +85,7 @@
                     android:id="@+id/busUserEmailView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="taylor_junkyard@gmail.com"
+                    android:text="196 D. Jackosalem St. Cebu City"
                     android:textSize="15dp"
                     android:textColor="@color/black" />
 
