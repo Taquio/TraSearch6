@@ -89,7 +89,8 @@
             </intent-filter>
         </activity>
         <!-- <activity android:name=".AppStart" /> -->
-        <activity android:name=".RegisterActivity" />
+        <activity android:name=".RegisterActivity"
+            android:parentActivityName=".ChooseLayout"/>
 
         <!-- <activity -->
         <!-- android:name=".Profile.EditActivity" -->
@@ -140,7 +141,7 @@
             android:name=".ViewProfile"
             android:parentActivityName=".Profile.ProfileActivity" />
         <activity
-            android:name=".MessageActivity"
+            android:name=".Messages.MessagesActivity"
             android:parentActivityName=".HomeActivity2" />
         <activity android:name=".GuestSearch" />
         <activity
@@ -149,6 +150,8 @@
         <activity android:name=".MyProfileActivity" />
         <activity android:name=".EditProfileActivity"
             android:parentActivityName=".MyProfileActivity"/>
+        <activity android:name=".MessageActivity"
+            android:parentActivityName=".Messages.MessagesActivity"/>
     </application>
 
 </manifest>

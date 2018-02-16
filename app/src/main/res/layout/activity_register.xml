@@ -155,7 +155,7 @@
                 android:layout_weight="14.2857142857"
                 android:text="Cancel"
                 android:textColor="#000000"
-                android:textSize="17sp"/>
+                android:textSize="15sp"/>
 
         </LinearLayout>
 

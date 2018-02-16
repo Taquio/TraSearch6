@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class HomeActivity2 extends AppCompatActivity {
@@ -54,7 +55,7 @@ public class HomeActivity2 extends AppCompatActivity {
         else
         {
             Log.d(TAG, "onStart: User Online");
-            mUserRef.child("online").setValue(true);
+            mUserRef.child("online").setValue("true");
         }
     }
 
@@ -79,7 +80,7 @@ public class HomeActivity2 extends AppCompatActivity {
 
         if(currentUser!=null) {
             Log.d(TAG, "onPause: User Offline");
-            mUserRef.child("online").setValue(false);
+            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
 
@@ -93,7 +94,7 @@ public class HomeActivity2 extends AppCompatActivity {
     private void setupViewPager() {
         Log.d(TAG, "setupViewPager: HomeActivity2 setupeViewPager started");
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new FriendsFragment());
+        adapter.addFragment(new VideosFragment());
         adapter.addFragment(new ArticlesFragment());
         adapter.addFragment(new ItemsFragment());
         adapter.addFragment(new JunkShopsFragment());
@@ -103,7 +104,7 @@ public class HomeActivity2 extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.getTabAt(0).setText("Friends");
+        tabLayout.getTabAt(0).setText("Videos");
         tabLayout.getTabAt(1).setText("Articles");
         tabLayout.getTabAt(2).setText("Items");
         tabLayout.getTabAt(3).setText("Shops");

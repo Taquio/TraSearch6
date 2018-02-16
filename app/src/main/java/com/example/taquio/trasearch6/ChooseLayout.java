@@ -1,5 +1,6 @@
 package com.example.taquio.trasearch6;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -17,11 +18,13 @@ public class ChooseLayout extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_layout);
+        refIDs();
 
         choose_NonBusiness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(ChooseLayout.this,RegisterActivity.class));
+                finish();
             }
         });
 

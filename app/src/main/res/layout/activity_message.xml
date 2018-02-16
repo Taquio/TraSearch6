@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#cccccc"
     tools:context="com.example.taquio.trasearch6.MessageActivity">
 
     <include
@@ -12,12 +13,36 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
 
-
-
-
-    <include
-        layout="@layout/layout_bottom_navigation_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:paddingBottom="12dp"
+        android:paddingEnd="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="16dp"
+        android:weightSum="10">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/ic_add_black_24dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:background="#FFF"
+            android:hint="Enter Message..."
+            android:padding="10dp"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_menu_send" />
+    </LinearLayout>
 </RelativeLayout>
