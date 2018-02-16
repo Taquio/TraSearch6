@@ -18,9 +18,10 @@ public class PlaceInfo {
     private LatLng latLng;
     private float rating;
     private String attribution;
+    private String type;
 
     public PlaceInfo(String name, String address, String phoneNumber, String id, Uri websiteUri,
-                     LatLng latLng, float rating, String attribution) {
+                     LatLng latLng, float rating, String attribution, String type) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
@@ -29,6 +30,7 @@ public class PlaceInfo {
         this.latLng = latLng;
         this.rating = rating;
         this.attribution = attribution;
+        this.type = type;
     }
 
     public PlaceInfo()
@@ -98,6 +100,14 @@ public class PlaceInfo {
         this.attribution = attribution;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "PlaceInfo{" +
@@ -109,6 +119,7 @@ public class PlaceInfo {
                 ", latLng=" + latLng +
                 ", rating=" + rating +
                 ", attribution='" + attribution + '\'' +
+                ", type='" + type + '\'' +
                 '}';
     }
 }

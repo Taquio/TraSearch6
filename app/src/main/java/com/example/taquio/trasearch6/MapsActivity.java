@@ -23,7 +23,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
@@ -45,6 +44,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -56,9 +56,8 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 /**
- * Created by User on 10/2/2017.
+ * Created by ARVN 02-16-2018.
  */
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
@@ -75,7 +74,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.d(TAG, "onMapReady: map is ready");
         mMap = googleMap;
 
+        loadStaticMarker();
+
         if (mLocationPermissionsGranted) {
+            loadStaticMarker();
             getDeviceLocation();
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -95,18 +97,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private static final float DEFAULT_ZOOM = 15f;
+    private static final float DEFAULT_ZOOM = 13f;
     private static final int PLACE_PICKER_REQUEST = 1;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(-40, -168), new LatLng(71, 136));
     private Context mContext = MapsActivity.this;
     private final int ACTIVITY_NUM = 3;
 
-
     //widgets
     private AutoCompleteTextView mSearchText;
     private ImageView mGps, mInfo, mPlacePicker;
-
 
     //vars
     private Boolean mLocationPermissionsGranted = false;
@@ -128,21 +128,149 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mInfo = (ImageView) findViewById(R.id.place_info);
         mPlacePicker = (ImageView) findViewById(R.id.place_picker);
 
-        getLocationPermission();
-
-        initMap();
-
-    }
-
-    private void init(){
-        Log.d(TAG, "init: initializing");
-
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, this)
                 .build();
+
+        getLocationPermission();
+
+        initMap();
+
+    }
+
+    private void loadStaticMarker()
+    {
+        //preset marker
+        //Ma-Vill
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3540675,123.9208625))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Ma-Vill")
+//                .visible(false)
+                .snippet("Recycling Center"));
+        //E & J Scrap Buyer
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3744345,123.9138125))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("E & J Scrap Buyer")
+//                .visible(false)
+                .snippet("Recycling Center"));
+        //TSL Enterprises
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.33493,123.9316495))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("TSL Enterprises")
+//                .visible(false)
+                .snippet("Recycling Center"));
+        //Naturefress
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3540562,123.9208624))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Naturefress")
+//                .visible(false)
+                .snippet("Bottle & Can Redemption Center"));
+        //Bakilid Junk Shop Corner
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3469118,123.9289209))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Bakilid Junk Shop Corner")
+//                .visible(false)
+                .snippet("Junkyard"));
+        //Thes Junk Shop
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3532373,123.9422024))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Thes Junk Shop")
+//                .visible(false)
+                .snippet("Junkyard"));
+        //Pables Junk Shop
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3532307,123.9422023))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Pables Junk Shop")
+//                .visible(false)
+                .snippet("Junkyard"));
+        //Elica Junk Shop
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3830479,123.9456331))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Elica Junk Shop")
+//                .visible(false)
+                .snippet("Junkyard"));
+        //Cindy's Enterprises
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3830158,123.8408229))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Cindy's Enterprises")
+//                .visible(false)
+                .snippet("Junkyard"));
+        //Roadside Junk Shop
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3396889,123.9293173))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Roadside Junk Shop")
+//                .visible(false)
+                .snippet("Junkyard"));
+        //Pab Les Junk Shop
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3261964,123.9522611))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Pab Les Junk Shop")
+//                .visible(false)
+                .snippet("Junkyard"));
+        //Meme Junk Shop
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3141685,123.9235954))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Meme Junk Shop")
+//                .visible(false)
+                .snippet("Junkyard"));
+        //Kerjaspher Junk Shop
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3119518,123.9091465))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Kerjaspher Junk Shop")
+//                .visible(false)
+                .snippet("Junkyard"));
+        //Ajj Junk Shop
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3164531,123.9130684))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Ajj Junk Shop")
+//                .visible(false)
+                .snippet("Junkyard"));
+        //Montejo Junk Shop
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3216555,123.9222994))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Montejo Junk Shop")
+//                .visible(false)
+                .snippet("Junkyard"));
+        //Bakilid Junk Shop Corner
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3381261,123.9354665))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Bakilid Junk Shop Corner")
+//                .visible(false)
+                .snippet("Junkyard"));
+        //Jr Cabato Junk Shop
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10.3021436,123.9037193))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("Jr Cabato Junk Shopr")
+//                .visible(false)
+                .snippet("Junkyard"));
+
+        //camera zoom
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(10.3532373,123.9422024)
+                , DEFAULT_ZOOM));
+    }
+
+    private void init(){
+        Log.d(TAG, "init: initializing");
 
         mSearchText.setOnItemClickListener(mAutocompleteClickListener);
 
@@ -151,18 +279,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mSearchText.setAdapter(mPlaceAutocompleteAdapter);
 
-        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mSearchText.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+            public boolean onKey(View v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH
                         || actionId == EditorInfo.IME_ACTION_DONE
-                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
+                        || actionId == KeyEvent.ACTION_DOWN
+                        || actionId == KeyEvent.KEYCODE_ENTER){
 
                     //execute our method for searching
                     geoLocate();
                 }
-
                 return false;
             }
         });
@@ -171,6 +298,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked gps icon");
+
                 getDeviceLocation();
             }
         });
@@ -327,7 +455,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void initMap(){
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-
         mapFragment.getMapAsync(MapsActivity.this);
     }
 
@@ -430,6 +557,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Log.d(TAG, "onResult: website uri: " + place.getWebsiteUri());
 
                 Log.d(TAG, "onResult: place: " + mPlace.toString());
+
             }catch (NullPointerException e){
                 Log.e(TAG, "onResult: NullPointerException: " + e.getMessage() );
             }
