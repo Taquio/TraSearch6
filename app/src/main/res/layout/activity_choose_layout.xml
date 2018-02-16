@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_gradient_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:text="Select account type"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/choose_NonBusiness"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/nonb_border"
+            android:drawableLeft="@drawable/nonb"
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:text="Non-Business"
+            />
+
+        <Button
+            android:id="@+id/btnYesB"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/yesb_border"
+            android:drawableLeft="@drawable/yesb"
+            android:paddingLeft="20dp"
+            android:paddingRight="45dp"
+            android:text="Business"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,377 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blue"
     android:padding="20dp">
 
-    <android.support.v7.widget.CardView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardCornerRadius="15dp">
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="100">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/trash"/>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_below="@+id/relativeLayout1"
+            android:layout_weight="85"
+            android:gravity="center"
             android:orientation="vertical"
             android:weightSum="100">
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/field_username"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="15"
-                android:orientation="horizontal">
+                android:layout_margin="10dp"
+                android:layout_weight="10"
+                android:background="@drawable/border"
+                android:drawableRight="@drawable/icon_user"
+                android:hint="Username"
+                android:inputType="text"
+                android:paddingLeft="15dp"
+                android:paddingRight="12dp"
+                android:textColor="#ffffff"
+                android:textColorHint="#ffffff"
+                android:textStyle="bold" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white2"
-                    android:src="@drawable/ts"/>
-
-            </LinearLayout>
-
-            <LinearLayout
+            <EditText
+                android:id="@+id/field_email"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="10.625"
-                android:orientation="horizontal">
+                android:layout_margin="10dp"
+                android:layout_weight="10"
+                android:background="@drawable/border"
+                android:drawableRight="@drawable/icon_email"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="15dp"
+                android:paddingRight="12dp"
+                android:textColor="#ffffff"
+                android:textColorHint="#ffffff"
+                android:textStyle="bold"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="Create an account"
-                    android:textSize="20sp"
-                    android:textStyle="bold"/>
-
-            </LinearLayout>
-
-            <LinearLayout
+            <EditText
+                android:id="@+id/field_password"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="9.44444444444"
-                android:orientation="horizontal"
-                android:weightSum="100">
+                android:layout_margin="10dp"
+                android:layout_weight="10"
+                android:background="@drawable/border"
+                android:drawableRight="@drawable/key"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:paddingLeft="15dp"
+                android:paddingRight="10dp"
+                android:textColor="#ffffff"
+                android:textColorHint="#ffffff"
+                android:textStyle="bold"/>
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5">
-
-                </RelativeLayout>
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="3dp"
-                    android:layout_weight="20"
-                    android:background="@drawable/border2"
-                    android:padding="5dp"
-                    android:src="@drawable/user"
-                    />
-
-                <EditText
-                    android:id="@+id/field_username"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="70"
-                    android:background="@drawable/backgroundborder"
-                    android:hint="Choose a username"
-                    android:inputType="text"
-                    android:paddingLeft="15dp"/>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5">
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
+            <EditText
+                android:id="@+id/field_cPassword"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="9.44444444444"
-                android:orientation="horizontal"
-                android:weightSum="100">
+                android:layout_margin="10dp"
+                android:layout_weight="10"
+                android:background="@drawable/border"
+                android:drawableRight="@drawable/key"
+                android:hint="Confirm Password"
+                android:inputType="textPassword"
+                android:paddingLeft="15dp"
+                android:paddingRight="10dp"
+                android:textColor="#ffffff"
+                android:textColorHint="#ffffff"
+                android:textStyle="bold"/>
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-
-                    android:layout_height="match_parent"
-                    android:layout_weight="5">
-
-                </RelativeLayout>
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="3dp"
-                    android:layout_weight="20"
-                    android:background="@drawable/border2"
-                    android:padding="5dp"
-                    android:src="@drawable/final_name"
-                    />
-
-                <EditText
-                    android:id="@+id/field_name"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="70"
-                    android:background="@drawable/backgroundborder"
-                    android:hint="Enter your name"
-                    android:inputType="textPersonName"
-                    android:paddingLeft="15dp"/>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5">
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
+            <EditText
+                android:id="@+id/field_name"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="9.44444444444"
-                android:orientation="horizontal">
+                android:layout_margin="10dp"
+                android:layout_weight="10"
+                android:background="@drawable/border"
+                android:drawableRight="@drawable/icon_name"
+                android:hint="Full Name"
+                android:inputType="text"
+                android:paddingLeft="15dp"
+                android:paddingRight="10dp"
+                android:textColor="#ffffff"
+                android:textColorHint="#ffffff"
+                android:textStyle="bold"/>
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5">
-
-                </RelativeLayout>
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="3dp"
-                    android:layout_weight="20"
-                    android:background="@drawable/border2"
-                    android:padding="5dp"
-                    android:src="@drawable/final_password"
-                    />
-
-                <EditText
-                    android:id="@+id/field_password"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="70"
-                    android:background="@drawable/backgroundborder"
-                    android:hint="Choose a password"
-                    android:inputType="textPassword"
-                    android:paddingLeft="15dp"/>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5">
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
+            <EditText
+                android:id="@+id/field_phonenumber"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="9.44444444444"
-                android:orientation="horizontal">
+                android:layout_margin="10dp"
+                android:layout_weight="10"
+                android:background="@drawable/border"
+                android:drawableRight="@drawable/icon_phone"
+                android:hint="Mobile No."
+                android:inputType="phone"
+                android:paddingLeft="15dp"
+                android:paddingRight="10dp"
+                android:textColor="#ffffff"
+                android:textColorHint="#ffffff"
+                android:textStyle="bold" />
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5">
-
-                </RelativeLayout>
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="3dp"
-                    android:layout_weight="20"
-                    android:background="@drawable/border2"
-                    android:padding="5dp"
-                    android:src="@drawable/final_password"
-                    />
-
-                <EditText
-                    android:id="@+id/field_cPassword"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="70"
-                    android:background="@drawable/backgroundborder"
-                    android:hint="Confirm your password"
-                    android:inputType="textPassword"
-                    android:paddingLeft="15dp"/>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5">
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/btn_submit"
+                android:layout_width="250dp"
                 android:layout_height="0dp"
-                android:layout_weight="9.44444444444"
-                android:orientation="horizontal">
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="10"
+                android:background="@drawable/btn"
+                android:stateListAnimator="@null"
+                android:text="Register"/>
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5">
-
-                </RelativeLayout>
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="3dp"
-                    android:layout_weight="20"
-                    android:background="@drawable/border2"
-                    android:padding="5dp"
-                    android:src="@drawable/final_email"
-                    />
-
-                <EditText
-                    android:id="@+id/field_email"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="70"
-                    android:background="@drawable/backgroundborder"
-                    android:hint="Enter your email address"
-                    android:inputType="textEmailAddress"
-                    android:paddingLeft="15dp"/>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5">
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="9.44444444444"
-                android:orientation="horizontal">
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5">
-
-                </RelativeLayout>
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="3dp"
-                    android:layout_weight="20"
-                    android:background="@drawable/border2"
-                    android:padding="5dp"
-                    android:src="@drawable/final_phone"
-                    />
-
-                <EditText
-                    android:id="@+id/field_phonenumber"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="70"
-                    android:background="@drawable/backgroundborder"
-                    android:hint="Enter your mobile no."
-                    android:inputType="number"
-                    android:paddingLeft="15dp"/>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5">
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="9.44444444444"
-                android:orientation="horizontal"
-                android:weightSum="100">
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="10">
-
-                </RelativeLayout>
-
-                <Button
-                    android:id="@+id/btn_submit"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="80"
-                    android:background="@drawable/buttondesign"
-                    android:text="Create Account"/>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="10">
-
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="9.44444444444"
-                android:orientation="horizontal">
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="10">
-
-                </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/registerTx1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="80"
-                    android:gravity="center"
-                    android:text="RETURN TO LOGIN"
-                    android:textSize="13sp"/>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="10">
-
-                </RelativeLayout>
-
-            </LinearLayout>
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_weight="14.2857142857"
+                android:text="Cancel"
+                android:textColor="#000000"
+                android:textSize="15sp"/>
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </LinearLayout>
+
 </RelativeLayout>

@@ -1,7 +1,6 @@
 package com.example.taquio.trasearch6;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
@@ -16,9 +15,6 @@ import android.widget.TextView;
  */
 
 public class SliderAdapter extends PagerAdapter{
-    Context context;
-    LayoutInflater inflater;
-
     //list of images
     public int[] list_images = {
             R.drawable.trasearchicon,
@@ -43,6 +39,8 @@ public class SliderAdapter extends PagerAdapter{
             "Maps lends a hand.",
             "Chat to communicate.",
     };
+    Context context;
+    LayoutInflater inflater;
 
     public SliderAdapter (Context context){
         this.context = context;
@@ -56,12 +54,12 @@ public class SliderAdapter extends PagerAdapter{
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.slide, container,false);
         LinearLayout layout = view.findViewById(R.id.slidelinearlayout);
-        ImageView imgslide = (ImageView) view.findViewById(R.id.slideimg);
-        TextView txttitle = (TextView) view.findViewById(R.id.txttitle);
-        TextView txtdesc = (TextView) view.findViewById(R.id.txtdesc);
+        ImageView imgslide = view.findViewById(R.id.slideimg);
+        TextView txttitle = view.findViewById(R.id.txttitle);
+        TextView txtdesc = view.findViewById(R.id.txtdesc);
         imgslide.setImageResource(list_images[position]);
         txttitle.setText(list_titles[position]);
         txtdesc.setText(list_desc[position]);
@@ -76,6 +74,6 @@ public class SliderAdapter extends PagerAdapter{
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return (view == (LinearLayout)object);
+        return (view == object);
     }
 }

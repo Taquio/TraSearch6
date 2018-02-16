@@ -6,33 +6,33 @@
         android:background="@drawable/white_grey_border_bottom">
 
         <android.support.v7.widget.Toolbar
+            android:id="@+id/profToolBar5"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/profToolBar5">
+            android:layout_height="wrap_content">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <ImageView
+                    android:id="@+id/backArrow2"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="20dp"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/backArrow2"
                     android:src="@drawable/ic_backarrow"/>
 
-                <TextView
-                    android:id="@+id/etTx1"
-                    android:layout_toRightOf="@+id/backArrow2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="User"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"
-                    android:layout_marginRight="5dp"/>
+                <!--<TextView-->
+                    <!--android:id="@+id/etTx1"-->
+                    <!--android:layout_toRightOf="@+id/backArrow2"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:text="User"-->
+                    <!--android:textSize="20sp"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:layout_marginRight="5dp"/>-->
 
             </RelativeLayout>
 

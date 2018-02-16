@@ -6,31 +6,38 @@
     android:weightSum="100">
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/allUsersImg"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:layout_weight="40"
-        android:id="@+id/allUsersImg"/>
+        android:layout_weight="40"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="60"
-        android:weightSum="100"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="100">
 
         <TextView
+            android:id="@+id/allUsersName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
             android:layout_weight="50"
-            android:id="@+id/allUsersName"/>
+            android:text="Name"/>
         <TextView
+            android:id="@+id/allUsersEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email"
             android:layout_weight="50"
-            android:id="@+id/allUsersEmail"/>
+            android:text="Email"/>
 
     </LinearLayout>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/stat_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:src="@drawable/online_stat"
+        android:visibility="invisible"/>
 
 </LinearLayout>

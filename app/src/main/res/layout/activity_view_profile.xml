@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include layout="@layout/snippet_top_toolbar"/>
+        <include layout="@layout/app_bar_layout"/>
     </RelativeLayout>
 
     <RelativeLayout

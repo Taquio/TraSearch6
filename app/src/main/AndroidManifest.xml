@@ -16,19 +16,19 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        android:name=".BaseApplication"
+        android:name=".Trasearch"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@drawable/trasearchicon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme1">
-        <service
-            android:name=".FireBaseMessagingService">
+        <service android:name=".FireBaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -41,27 +41,27 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
 
-        <!--<service-->
-            <!--android:name=".MyFirebaseMessagingService">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.google.firebase.MESSAGING_EVENT"/>-->
-            <!--</intent-filter>-->
-        <!--</service>-->
-        <!--<service-->
-            <!--android:name=".MyFirebaseInstanceIDService">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>-->
-            <!--</intent-filter>-->
-        <!--</service>-->
-        <!--<meta-data-->
-            <!--android:name="com.google.firebase.messaging.default_notification_icon"-->
-            <!--android:resource="@drawable/ic_stat_ic_notification" />-->
-        <!--<meta-data-->
-            <!--android:name="com.google.firebase.messaging.default_notification_color"-->
-            <!--android:resource="@color/colorAccent" />-->
-        <!--<meta-data-->
-            <!--android:name="com.google.firebase.messaging.default_notification_channel_id"-->
-            <!--android:value="@string/default_notification_channel_id"/>-->
+        <!-- <service -->
+        <!-- android:name=".MyFirebaseMessagingService"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.firebase.MESSAGING_EVENT"/> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
+        <!-- <service -->
+        <!-- android:name=".MyFirebaseInstanceIDService"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
+        <!-- <meta-data -->
+        <!-- android:name="com.google.firebase.messaging.default_notification_icon" -->
+        <!-- android:resource="@drawable/ic_stat_ic_notification" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="com.google.firebase.messaging.default_notification_color" -->
+        <!-- android:resource="@color/colorAccent" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="com.google.firebase.messaging.default_notification_channel_id" -->
+        <!-- android:value="@string/default_notification_channel_id"/> -->
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
@@ -95,9 +95,8 @@
             </intent-filter>
         </activity>
         <!-- <activity android:name=".AppStart" /> -->
-        <activity
-            android:name=".RegisterActivity"
-            android:parentActivityName=".ActivityLogin" />
+        <activity android:name=".RegisterActivity"
+            android:parentActivityName=".ChooseLayout"/>
 
         <!-- <activity -->
         <!-- android:name=".Profile.EditActivity" -->
@@ -121,7 +120,13 @@
         <activity android:name=".UserProfileActivity" />
         <activity android:name=".BusinessProfileActivity" />
         <activity android:name=".Camera.CameraActivity" />
-        <activity android:name=".Profile.ProfileActivity" />
+        <activity android:name=".Profile.ProfileActivity">
+            <intent-filter>
+                <action android:name="com.example.taquio.trasearch6_TARGET_NOTIFICATION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Nearby.NearbyActivity" />
 
         <!-- <activity android:name=".LoginActivity"/> -->
@@ -139,8 +144,21 @@
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".HomeActivity2" />
         <activity android:name=".Utils.Donate" />
-        <activity android:name=".ViewProfile"
-            android:parentActivityName=".Profile.ProfileActivity"></activity>
+        <activity
+            android:name=".ViewProfile"
+            android:parentActivityName=".Profile.ProfileActivity" />
+        <activity
+            android:name=".Messages.MessagesActivity"
+            android:parentActivityName=".HomeActivity2" />
+        <activity android:name=".GuestSearch" />
+        <activity
+            android:name=".ChooseLayout"
+            android:parentActivityName=".GuestSearch" />
+        <activity android:name=".MyProfileActivity" />
+        <activity android:name=".EditProfileActivity"
+            android:parentActivityName=".MyProfileActivity"/>
+        <activity android:name=".MessageActivity"
+            android:parentActivityName=".Messages.MessagesActivity"/>
     </application>
 
 </manifest>
