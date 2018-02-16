@@ -1,6 +1,7 @@
 package com.example.taquio.trasearch6;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -90,7 +92,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        Log.d(TAG, "onCreateView: ");
+        Log.d(TAG, "onCreateView: STARTING PROFILE FRAGMENT >>>>>>>");
         mProfilePhoto = (CircleImageView) view.findViewById(R.id.myProfile_image);
         mName = (TextView) view.findViewById(R.id.myProfile_name);
         mEmail = (TextView) view.findViewById(R.id.myProfile_email);
@@ -119,17 +121,17 @@ public class ProfileFragment extends Fragment {
 //                getActivity().finish();
 //            }
 //        });
-//        TextView editProfile = (TextView) view.findViewById(R.id.textEditProfile);
-//        editProfile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick: navigating to " + mContext.getString(R.string.edit_profile_fragment));
-//                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-//                intent.putExtra(getString(R.string.calling_activity), getString(R.string.profile_activity));
-//                startActivity(intent);
-//                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-//            }
-//        });
+        Button editProfile = view.findViewById(R.id.myProfile_editBtn);
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: navigating to " + mContext.getString(R.string.edit_profile_fragment));
+                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+                intent.putExtra(getString(R.string.calling_activity), getString(R.string.profile_activity));
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
+        });
         return view;
     }
 
@@ -149,7 +151,7 @@ public class ProfileFragment extends Fragment {
         final ArrayList<Photo> photos = new ArrayList<>();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference
-                .child(getString(R.string.dbname_user_photos))
+                .child("Users_Photos")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -221,7 +223,9 @@ public class ProfileFragment extends Fragment {
         });
     }
     private void setProfileWidgets(UserSettings userSettings) {
-
+        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getEmail() );
+        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getName() );
+        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getPhoneNumber());
         User user = userSettings.getUser();
 
         mName.setText(user.getName());
@@ -254,9 +258,9 @@ public class ProfileFragment extends Fragment {
 
 
         mUser = FirebaseAuth.getInstance().getCurrentUser();
-        String uid = mUser.getUid();
+        final String uid = mUser.getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        myRef = mFirebaseDatabase.getReference().child("Users").child(uid);
+        myRef = mFirebaseDatabase.getReference();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -278,26 +282,33 @@ public class ProfileFragment extends Fragment {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange: GETTING DATA FROM DATABASE >>>>>>>>>");
                 //GE RETRIEVE ANG DATA SA USERS GAMIT ANG SNAPSHOT SA DATABASE
-                Picasso.with(mContext).load(dataSnapshot.child("Image").getValue().toString())
-                        .networkPolicy(NetworkPolicy.OFFLINE)
-                        .placeholder(R.drawable.man)
-                        .into(mProfilePhoto, new Callback() {
-                            @Override
-                            public void onSuccess() {
 
-                            }
-
-                            @Override
-                            public void onError() {
-                                Picasso.with(mContext)
-                                        .load(dataSnapshot
-                                                .child("Image").getValue().toString())
-                                        .placeholder(R.drawable.man)
-                                        .into(mProfilePhoto);
-                            }
-                        });
                 setProfileWidgets(mFirebaseMethods.getUserSettings(dataSnapshot));
+//                Log.d(TAG, "onDataChange: GETTTINGGGG >>>> PICTURE" + dataSnapshot.child("Users").child(mUser.getUid()).child("Image").getValue().toString() );
+//            Picasso.with(mContext).load(dataSnapshot.child("Users")
+//                    .child(uid)
+//                    .child("Image")
+//                    .getValue().toString())
+//            .networkPolicy(NetworkPolicy.OFFLINE)
+//            .placeholder(R.drawable.man)
+//            .into(mProfilePhoto, new Callback() {
+//                @Override
+//                public void onSuccess() {
+//
+//                }
+//
+//                @Override
+//                public void onError() {
+//                    Picasso.with(mContext)
+//                            .load(dataSnapshot.child("Users")
+//                                    .child(mUser.getUid()).child("Image")
+//                                    .getValue().toString())
+//                            .placeholder(R.drawable.man)
+//                            .into(mProfilePhoto);
+//                }
+//            });
             }
 
             @Override

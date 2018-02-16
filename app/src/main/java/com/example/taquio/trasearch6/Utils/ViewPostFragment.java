@@ -43,13 +43,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-
-
-/**
- * Created by User on 8/12/2017.
- */
-
-
 /**
  * Created by User on 8/12/2017.
  */
@@ -89,7 +82,6 @@ public class ViewPostFragment extends Fragment {
     private int mActivityNumber = 0;
     private String photoUsername = "";
     private String profilePhotoUrl = "";
-    private User mUserAccountSettings;
     private GestureDetector mGestureDetector;
     private Heart mHeart;
     private Boolean mLikedByCurrentUser;
@@ -130,11 +122,13 @@ public class ViewPostFragment extends Fragment {
         try{
             //mPhoto = getPhotoFromBundle();
             UniversalImageLoader.setImage(getPhotoFromBundle().getImage_path(), mPostImage, null, "");
+            Log.d(TAG, "init: GETTING BUNDLE >>>>>>>>>>>>> " +getPhotoFromBundle().getImage_path() );
+
             mActivityNumber = getActivityNumFromBundle();
             String photo_id = getPhotoFromBundle().getPhoto_id();
 
             Query query = FirebaseDatabase.getInstance().getReference()
-                    .child(getString(R.string.dbname_photos))
+                    .child("Photos")
                     .orderByChild(getString(R.string.field_photo_id))
                     .equalTo(photo_id);
             query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -206,7 +200,7 @@ public class ViewPostFragment extends Fragment {
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference
-                .child(getString(R.string.dbname_photos))
+                .child("Photos")
                 .child(mPhoto.getPhoto_id())
                 .child(getString(R.string.field_likes));
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -217,8 +211,8 @@ public class ViewPostFragment extends Fragment {
 
                     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
                     Query query = reference
-                            .child(getString(R.string.dbname_users))
-                            .orderByChild(getString(R.string.field_user_id))
+                            .child("Users")
+                            .orderByChild("userID")
                             .equalTo(singleSnapshot.getValue(Like.class).getUser_id());
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -293,8 +287,8 @@ public class ViewPostFragment extends Fragment {
     private void getCurrentUser(){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference
-                .child(getString(R.string.dbname_users))
-                .orderByChild(getString(R.string.field_user_id))
+                .child("Users")
+                .orderByChild("userID")
                 .equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -322,7 +316,7 @@ public class ViewPostFragment extends Fragment {
         public boolean onSingleTapConfirmed(MotionEvent e) {
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             Query query = reference
-                    .child(getString(R.string.dbname_photos))
+                    .child("Photos")
                     .child(mPhoto.getPhoto_id())
                     .child(getString(R.string.field_likes));
             query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -337,13 +331,13 @@ public class ViewPostFragment extends Fragment {
                                 singleSnapshot.getValue(Like.class).getUser_id()
                                         .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
 
-                            myRef.child(getString(R.string.dbname_photos))
+                            myRef.child("Photos")
                                     .child(mPhoto.getPhoto_id())
                                     .child(getString(R.string.field_likes))
                                     .child(keyID)
                                     .removeValue();
 
-                            myRef.child(getString(R.string.dbname_user_photos))
+                            myRef.child("Users_Photos")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .child(mPhoto.getPhoto_id())
                                     .child(getString(R.string.field_likes))
@@ -440,13 +434,13 @@ public class ViewPostFragment extends Fragment {
         Like like = new Like();
         like.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        myRef.child(getString(R.string.dbname_photos))
+        myRef.child("Photos")
                 .child(mPhoto.getPhoto_id())
                 .child(getString(R.string.field_likes))
                 .child(newLikeID)
                 .setValue(like);
 
-        myRef.child(getString(R.string.dbname_user_photos))
+        myRef.child("Users_Photos")
                 .child(mPhoto.getUser_id())
                 .child(mPhoto.getPhoto_id())
                 .child(getString(R.string.field_likes))
@@ -468,7 +462,7 @@ public class ViewPostFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-                    mUserAccountSettings = singleSnapshot.getValue(User.class);
+                    mCurrentUser = singleSnapshot.getValue(User.class);
                 }
                 //setupWidgets();
             }
@@ -483,14 +477,15 @@ public class ViewPostFragment extends Fragment {
 
 
     private void setupWidgets(){
+        Log.d(TAG, "setupWidgets:  GETTTTINGGG IMAGEE >>>> " + mCurrentUser.getImage() );
         String timestampDiff = getTimestampDifference();
         if(!timestampDiff.equals("0")){
             mTimestamp.setText(timestampDiff + " DAYS AGO");
         }else{
             mTimestamp.setText("TODAY");
         }
-        UniversalImageLoader.setImage(mUserAccountSettings.getImage(), mProfileImage, null, "");
-        mUsername.setText(mUserAccountSettings.getUserName());
+//        UniversalImageLoader.setImage(mCurrentUser.getImage(), mPostImage, null, "");
+        mUsername.setText(mCurrentUser.getUserName());
         mLikes.setText(mLikesString);
         mCaption.setText(mPhoto.getCaption());
 

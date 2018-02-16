@@ -39,8 +39,6 @@ import java.util.Map;
 import java.util.TimeZone;
 
 
-
-
 /**
  * Created by User on 8/12/2017.
  */
@@ -121,7 +119,7 @@ public class ViewCommentsFragment extends Fragment {
                 Log.d(TAG, "onClick: navigating back");
                 if(getCallingActivityFromBundle().equals(getString(R.string.home_activity))){
                     getActivity().getSupportFragmentManager().popBackStack();
-//                    ((HomeActivity2)getActivity()).showLayout();
+                    ((HomeActivity2)getActivity()).showLayout();
 
                 }else{
                     getActivity().getSupportFragmentManager().popBackStack();
@@ -255,7 +253,7 @@ public class ViewCommentsFragment extends Fragment {
                         Log.d(TAG, "onChildAdded: child added.");
 
                         Query query = myRef
-                                .child(mContext.getString(R.string.dbname_photos))
+                                .child("Photos")
                                 .orderByChild(mContext.getString(R.string.field_photo_id))
                                 .equalTo(mPhoto.getPhoto_id());
                         query.addListenerForSingleValueEvent(new ValueEventListener() {

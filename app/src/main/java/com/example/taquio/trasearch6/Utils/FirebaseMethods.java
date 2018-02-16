@@ -114,6 +114,9 @@ public class FirebaseMethods {
                                 .getValue(User.class)
                                 .getOnline()
                 );
+                user.setPhoneNumber(ds.child(userID)
+                        .getValue(User.class)
+                        .getPhoneNumber());
             }
         }
         /**
@@ -134,7 +137,7 @@ public class FirebaseMethods {
 
             String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
             StorageReference storageReference = mStorageReference
-                    .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + user_id + "/photoPost" + (count + 1));
+                    .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + user_id + "/photoPost" +"/photo"+ (count + 1));
 
             //convert image url to bitmap
             if (bm == null) {

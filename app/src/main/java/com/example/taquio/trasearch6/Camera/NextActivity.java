@@ -26,7 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 
 
 
-
 /**
  * Created by User on 7/24/2017.
  */
@@ -55,7 +54,7 @@ public class NextActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_next);
+        setContentView(R.layout.activitynext);
         mFirebaseMethods = new FirebaseMethods(NextActivity.this);
         mCaption = (EditText) findViewById(R.id.caption) ;
 

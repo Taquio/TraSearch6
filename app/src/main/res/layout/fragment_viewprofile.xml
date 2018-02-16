@@ -31,7 +31,7 @@
             android:layout_height="32dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="80dp"
-            android:layout_toRightOf="@+id/imageView1"
+            android:layout_toRightOf="@+id/viewedProfile"
             android:background="@drawable/add_friend" />
 
         <LinearLayout
@@ -126,7 +126,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btnEdit"
+                    android:id="@+id/btnMessage"
                     android:layout_width="200dp"
                     android:layout_height="30dp"
                     android:background="@drawable/btn"

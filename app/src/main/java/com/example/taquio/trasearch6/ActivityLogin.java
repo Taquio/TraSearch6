@@ -108,10 +108,13 @@ public class ActivityLogin extends AppCompatActivity {
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if(task.isSuccessful())
                                                 {
-                                                    mUserRef.child("online").setValue(true);
+//                                                    mUserRef.child("online").setValue(true);
                                                     Log.d(TAG, "signInWithEmail:success");
                                                     mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
-                                                    checkUserExists();
+//                                                    checkUserExists();
+                                                    Intent startActivityIntent = new Intent(ActivityLogin.this, HomeActivity2.class);
+                                                    startActivity(startActivityIntent);
+                                                    ActivityLogin.this.finish();
 
                                                 }else{
 

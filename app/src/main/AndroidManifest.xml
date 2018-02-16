@@ -3,6 +3,7 @@
     package="com.example.taquio.trasearch6">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -112,7 +113,6 @@
         <activity android:name=".chatActivity" />
         <activity android:name=".UserProfileActivity" />
         <activity android:name=".BusinessProfileActivity" />
-        <activity android:name=".Camera.CameraActivity" />
         <activity android:name=".Profile.ProfileActivity">
             <intent-filter>
                 <action android:name="com.example.taquio.trasearch6_TARGET_NOTIFICATION" />
@@ -149,6 +149,10 @@
         <activity android:name=".MyProfileActivity" />
         <activity android:name=".EditProfileActivity"
             android:parentActivityName=".MyProfileActivity"/>
+        <activity android:name=".Camera.CameraActivity"/>
+        <activity android:name=".Camera.NextActivity"/>
+        <activity android:name=".OpenGL.OpenGLES10Activity"/>
+        <activity android:name=".OpenGL.NewStoryActivity"/>
     </application>
 
 </manifest>

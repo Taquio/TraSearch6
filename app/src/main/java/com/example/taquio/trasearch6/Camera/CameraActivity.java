@@ -18,7 +18,7 @@ import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.Utils.Permissions;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-//import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
+
 
 /**
  * Created by Del Mar on 2/7/2018.
@@ -26,6 +26,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class CameraActivity extends AppCompatActivity {
     private static final String TAG = "CameraActivity";
+
     //constants
     private static final int ACTIVITY_NUM = 2;
     private static final int VERIFY_PERMISSIONS_REQUEST = 1;

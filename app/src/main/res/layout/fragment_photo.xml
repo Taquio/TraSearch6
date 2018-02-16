@@ -3,16 +3,15 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <!--<Button-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:textSize="30sp"-->
-        <!--android:text="@string/string_open_camera"-->
-        <!--android:layout_marginTop="40dp"-->
-        <!--android:layout_marginRight="30dp"-->
-        <!--android:layout_marginLeft="30dp"-->
-        <!--android:background="@drawable/white_rounded_button"-->
-        <!--android:id="@+id/btnLaunchCamera"/>-->
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp"
+        android:text="@string/string_open_camera"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:id="@+id/btnLaunchCamera"/>
 
 </RelativeLayout>

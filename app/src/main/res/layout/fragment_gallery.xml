@@ -4,12 +4,15 @@
               android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/relLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/relLayout1">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
         <!-- gallery toolbar -->
-        <include layout="@layout/snippet_top_gallerytoolbar"/>
+        <include layout="@layout/snippet_top_gallerytoolbar" />
 
     </RelativeLayout>
 

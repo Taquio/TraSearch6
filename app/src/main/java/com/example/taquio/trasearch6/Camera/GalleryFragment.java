@@ -30,7 +30,6 @@ import java.util.ArrayList;
 
 
 
-
 /**
  * Created by User on 5/28/2017.
  */
@@ -49,7 +48,7 @@ public class GalleryFragment extends Fragment {
     private ProgressBar mProgressBar;
     private Spinner directorySpinner;
 
-    //varsdasdsadsadasdsaddasdsadaddgdfgfdgdfgfdgdfgfdgfdgdffdsfsdfd
+    //vars
     private ArrayList<String> directories;
     private String mAppend = "file:/";
     private String mSelectedImage;

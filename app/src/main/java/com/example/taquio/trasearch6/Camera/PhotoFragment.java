@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.taquio.trasearch6.EditProfileActivity;
 import com.example.taquio.trasearch6.R;
@@ -36,6 +37,10 @@ public class PhotoFragment extends Fragment {
         Log.d(TAG, "onCreateView: started.");
 
 
+        Button btn = view.findViewById(R.id.btnLaunchCamera);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if(((CameraActivity)getActivity()).getCurrentTabNumber() == PHOTO_FRAGMENT_NUM){
                     if(((CameraActivity)getActivity()).checkPermissions(Permissions.CAMERA_PERMISSION[0])){
                         Log.d(TAG, "onClick: starting camera");
@@ -47,6 +52,9 @@ public class PhotoFragment extends Fragment {
                         startActivity(intent);
                     }
                 }
+
+            }
+        });
 
         return view;
     }
