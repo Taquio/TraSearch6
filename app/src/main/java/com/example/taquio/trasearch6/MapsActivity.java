@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
+import com.example.taquio.trasearch6.modal.PlaceInfo;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -55,8 +56,6 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import modals.PlaceInfo;
 
 /**
  * Created by User on 10/2/2017.

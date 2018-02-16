@@ -1,4 +1,4 @@
-package modals;
+package com.example.taquio.trasearch6.modal;
 
 import android.net.Uri;
 
