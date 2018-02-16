@@ -6,33 +6,47 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FAFAFA">
+        android:layout_height="match_parent"
+        android:background="#FAFAFA"
+        android:layout_margin="10dp">
 
-        <ImageView
-            android:id="@+id/userProfile"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/allUsersImg"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/images"/>
+            android:src="@drawable/images"
+            android:layout_centerVertical="true"/>
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@+id/userProfile"
-            android:gravity="center_vertical"
-            android:text="Sean Daniel Del Mar"
-            android:textColor="#000000"
-            android:textSize="20sp"/>
+            android:layout_toRightOf="@+id/allUsersImg"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/ic_ellipse"
-            />
+            <TextView
+                android:id="@+id/allUsersName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/userProfile"
+                android:text="Sean Daniel Del Mar"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/allUsersEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="2dp"
+                android:text="officialsuzuen@gmail.com"
+                android:textColor="#000000"
+                android:textSize="13sp"/>
+
+        </LinearLayout>
 
     </RelativeLayout>
 
