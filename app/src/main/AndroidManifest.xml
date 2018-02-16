@@ -135,7 +135,8 @@
         -->
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".HomeActivity2" />
         <activity android:name=".Utils.Donate" />
         <activity android:name=".ViewProfile"
