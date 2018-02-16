@@ -17,7 +17,7 @@
         </LinearLayout>
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/viewedProfile"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_below="@+id/linearLayout1"
@@ -51,7 +51,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/editUser"
+                    android:id="@+id/viewedName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -86,7 +86,7 @@
                     android:src="@drawable/icon_name"/>
 
                 <TextView
-                    android:id="@+id/userEmail"
+                    android:id="@+id/viewedEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="officialsuzuen@gmail.com"
@@ -108,7 +108,7 @@
                     android:src="@drawable/icon_phone"/>
 
                 <TextView
-                    android:id="@+id/userNumber"
+                    android:id="@+id/viewedNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="09280239038"
