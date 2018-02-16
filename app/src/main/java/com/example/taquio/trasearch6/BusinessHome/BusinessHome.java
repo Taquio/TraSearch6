@@ -10,11 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.taquio.trasearch6.BusinessMessages.BusinessInboxFragment;
-import com.example.taquio.trasearch6.Messages.FriendsListFragment;
 import com.example.taquio.trasearch6.R;
 import com.example.taquio.trasearch6.SectionsPagerAdapter;
-import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.Utils.BusinessBottomNavigationViewHelper;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -25,8 +22,8 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 public class BusinessHome extends AppCompatActivity {
 
     private static final String TAG = "BusinessHome";
-    private Context mContext = BusinessHome.this;
     private static final int ACTIVITY_NUM = 0;
+    private Context mContext = BusinessHome.this;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,10 +40,10 @@ public class BusinessHome extends AppCompatActivity {
         adapter.addFragment(new BusinessVideoFragment());
         adapter.addFragment(new BusinessArticleFragment());
         adapter.addFragment(new BusinessItemsFragment());
-        ViewPager viewPager = (ViewPager) findViewById(R.id.businessHomeContainer);
+        ViewPager viewPager = findViewById(R.id.businessHomeContainer);
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.busHomeTabLayout);
+        TabLayout tabLayout = findViewById(R.id.busHomeTabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setText("Videos");
@@ -56,7 +53,7 @@ public class BusinessHome extends AppCompatActivity {
 
     private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.businessBottomNavViewBar);
+        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.businessBottomNavViewBar);
         BusinessBottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
         BusinessBottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();

@@ -7,9 +7,9 @@
         android:layout_height="50dp">
 
         <android.support.v7.widget.Toolbar
+            android:id="@+id/profToolBar4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/profToolBar4"
             android:background="@drawable/white_grey_border_bottom">
 
             <LinearLayout
@@ -21,15 +21,15 @@
                 <SearchView
                     android:id="@+id/searchV"
                     android:layout_width="0dp"
-                    android:layout_weight="60"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="60">
 
                 </SearchView>
 
                 <ImageView
                     android:layout_width="0dp"
-                    android:layout_weight="30"
                     android:layout_height="50dp"
+                    android:layout_weight="30"
                     android:src="@drawable/ts"/>
 
             </LinearLayout>

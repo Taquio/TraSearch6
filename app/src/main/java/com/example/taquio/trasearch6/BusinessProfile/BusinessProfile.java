@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
 import com.example.taquio.trasearch6.BusinessMessages.BusinessInboxFragment;
 import com.example.taquio.trasearch6.Messages.FriendsListFragment;
 import com.example.taquio.trasearch6.R;
@@ -25,8 +24,8 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 public class BusinessProfile extends AppCompatActivity {
 
     private static final String TAG = "BusinessProfile";
-    private Context mContext = BusinessProfile.this;
     private static final int ACTIVITY_NUM = 2;
+    private Context mContext = BusinessProfile.this;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,10 +42,10 @@ public class BusinessProfile extends AppCompatActivity {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new BusinessInboxFragment());
         adapter.addFragment(new FriendsListFragment());
-        ViewPager viewPager = (ViewPager) findViewById(R.id.businessProfileContainer);
+        ViewPager viewPager = findViewById(R.id.businessProfileContainer);
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.busProfileTabLayout);
+        TabLayout tabLayout = findViewById(R.id.busProfileTabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setText("Selling");
@@ -55,7 +54,7 @@ public class BusinessProfile extends AppCompatActivity {
 
     private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.businessBottomNavViewBar);
+        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.businessBottomNavViewBar);
         BusinessBottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
         BusinessBottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();

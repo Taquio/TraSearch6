@@ -35,5 +35,12 @@
         android:text="4:20"
         android:textSize="13sp"/>
 
+    <ImageView
+        android:id="@+id/chatSingleConvImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chatSingleTime"
+        android:scaleType="centerCrop"/>
+
 
 </RelativeLayout>

@@ -14,10 +14,10 @@
                 android:id="@+id/messageTabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabMaxWidth="0dp"
-                app:tabMode="fixed"
+                android:background="@drawable/white_grey_border_bottom"
                 app:tabGravity="fill"
-                android:background="@drawable/white_grey_border_bottom">
+                app:tabMaxWidth="0dp"
+                app:tabMode="fixed">
 
             </android.support.design.widget.TabLayout>
 
