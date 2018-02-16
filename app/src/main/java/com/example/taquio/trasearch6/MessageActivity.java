@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,12 +44,16 @@ public class  MessageActivity extends AppCompatActivity {
     private TextView chatUserName,chatUserLastSeen;
     private CircleImageView chatUserImage;
     private String currentUserID;
+    private ImageButton ChatUser_addBtn,ChatUser_sendBtn;
+    private EditText ChatUser_txtFld;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+        refIDs();
+
         mChatToolBar =  findViewById(R.id.messageAppbar);
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -62,7 +68,6 @@ public class  MessageActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View action_bar_view = inflater.inflate(R.layout.custom_chatappbar,null);
         actionBar.setCustomView(action_bar_view);
-        refIDs();
 
         user_id = getIntent().getStringExtra("user_id");
         String name = getIntent().getStringExtra("user_Name");
@@ -119,7 +124,7 @@ public class  MessageActivity extends AppCompatActivity {
         mRootRef.child("Chat").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(user_id))
+                if(!dataSnapshot.hasChild(user_id))
                 {
                     Map chatAddMap = new HashMap<>();
                     chatAddMap.put("seen",false);
@@ -134,7 +139,11 @@ public class  MessageActivity extends AppCompatActivity {
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                             if(databaseError!=null)
                             {
-                                Log.d(TAG, "onComplete: ");
+                                Log.d(TAG, "onComplete: Error On creating Chat DB");
+                            }
+                            else
+                            {
+                                Log.d(TAG, "onComplete: Success Error On creating Chat DB");
                             }
                         }
                     });
@@ -158,7 +167,8 @@ public class  MessageActivity extends AppCompatActivity {
         chatUserImage = findViewById(R.id.chatUserImage);
         chatUserLastSeen = findViewById(R.id.chatUserLastSeen);
         chatUserName = findViewById(R.id.chatUserName);
-
-
+        ChatUser_addBtn = findViewById(R.id.ChatUser_addBtn);
+        ChatUser_sendBtn = findViewById(R.id.ChatUser_sendBtn);
+        ChatUser_txtFld = findViewById(R.id.ChatUser_txtFld);
     }
 }

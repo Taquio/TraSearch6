@@ -25,24 +25,28 @@
         android:weightSum="10">
 
         <ImageButton
+            android:id="@+id/ChatUser_addBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="10dp"
-            android:src="@drawable/ic_add_black_24dp" />
+            android:src="@drawable/ic_add_black_24dp"/>
 
         <EditText
+            android:id="@+id/ChatUser_txtFld"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:background="#FFF"
             android:hint="Enter Message..."
+            android:inputType="text"
             android:padding="10dp"/>
 
         <ImageButton
+            android:id="@+id/ChatUser_sendBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_menu_send" />
+            android:src="@drawable/ic_menu_send"/>
     </LinearLayout>
 </RelativeLayout>
