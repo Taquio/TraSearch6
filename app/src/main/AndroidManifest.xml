@@ -88,11 +88,7 @@
         <activity
             android:name=".SplashActivity"
             android:theme="@style/AppTheme2">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <!-- <activity android:name=".AppStart" /> -->
         <activity android:name=".RegisterActivity"
@@ -159,6 +155,16 @@
             android:parentActivityName=".MyProfileActivity"/>
         <activity android:name=".MessageActivity"
             android:parentActivityName=".Messages.MessagesActivity"/>
+        <activity android:name=".BusinessHome.BusinessHome">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".BusinessMessages.BusinessMessages">
+        </activity>
+        <activity android:name=".BusinessProfile.BusinessProfile"/>
     </application>
 
 </manifest>

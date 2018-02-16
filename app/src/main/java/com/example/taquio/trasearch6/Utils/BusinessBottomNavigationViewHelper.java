@@ -7,6 +7,9 @@ import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.taquio.trasearch6.BusinessHome.BusinessHome;
+import com.example.taquio.trasearch6.BusinessMessages.BusinessMessages;
+import com.example.taquio.trasearch6.BusinessProfile.BusinessProfile;
 import com.example.taquio.trasearch6.Camera.CameraActivity;
 import com.example.taquio.trasearch6.HomeActivity2;
 import com.example.taquio.trasearch6.MapsActivity;
@@ -20,7 +23,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
  * Created by Del Mar on 2/7/2018.
  */
 
-public class BottomNavigationViewHelper {
+public class BusinessBottomNavigationViewHelper {
     private static final String TAG = "BottomNavigationViewHel";
 
     public static void setupBottomNavigationView(BottomNavigationViewEx bottomNavigationViewEx) {
@@ -36,26 +39,17 @@ public class BottomNavigationViewHelper {
 
                 switch (item.getItemId()) {
 
-                    case R.id.ic_home:
-                        Intent intent1 = new Intent(context, HomeActivity2.class);
+                    case R.id.bs_home:
+                        Intent intent1 = new Intent(context, BusinessHome.class);
                         context.startActivity(intent1);
                         break;
-                    case R.id.ic_messages:
-                        Intent intent2 = new Intent(context, MessagesActivity.class );
+                    case R.id.bs_messages:
+                        Intent intent2 = new Intent(context, BusinessMessages.class );
                         context.startActivity(intent2);
                         break;
-                    case R.id.ic_camera:
-                        Intent intent3 = new Intent(context, CameraActivity.class);
+                    case R.id.bs_profile:
+                        Intent intent3 = new Intent(context, BusinessProfile.class);
                         context.startActivity(intent3);
-                        break;
-                    case R.id.ic_nearby:
-                        Log.d(TAG, "onNavigationItemSelected: Nearby selected");
-                        Intent intent4 = new Intent(context, MapsActivity.class);
-                        context.startActivity(intent4);
-                        break;
-                    case R.id.ic_profile:
-                        Intent intent5 = new Intent(context, MyProfileActivity.class);
-                        context.startActivity(intent5);
                         break;
                 }
 

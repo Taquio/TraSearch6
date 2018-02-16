@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
@@ -11,7 +13,7 @@
             android:layout_height="wrap_content">
 
             <android.support.design.widget.TabLayout
-                android:id="@+id/messageTabLayout"
+                android:id="@+id/busMessagesTabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:tabMaxWidth="0dp"
@@ -25,4 +27,4 @@
 
     </RelativeLayout>
 
-</merge>
+</android.support.design.widget.CoordinatorLayout>
