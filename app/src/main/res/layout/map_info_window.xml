@@ -2,45 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="3dp">
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/mapimage"
-        android:src="@drawable/ic_grid_24dp"/>
+    android:layout_height="match_parent"
+    android:background="#ffff"
+    android:padding="10dp">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Address"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:id="@+id/mapaddress"/>
+            android:id="@+id/title"
+            android:layout_gravity="center_horizontal"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#000"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="Latitude"
-            android:id="@+id/maplatitude"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Longitude"
-            android:textSize="15sp"
-            android:id="@+id/maplongitude"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Snippet"
-            android:textSize="15sp"
-            android:textColor="@color/green"
-            android:id="@+id/mapsnippet"/>
+            android:ellipsize="end"
+            android:maxLines="10"
+            android:textSize="14sp"
+            android:textColor="#000"
+            android:id="@+id/snippet"/>
     </LinearLayout>
 
 </LinearLayout>
