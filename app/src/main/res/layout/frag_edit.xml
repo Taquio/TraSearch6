@@ -78,7 +78,6 @@
                     android:layout_marginRight="20dp"
                     android:background="@drawable/border"
                     android:drawableRight="@drawable/icon_user"
-                    android:hint="Name"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="12dp"
@@ -102,7 +101,6 @@
                     android:layout_marginRight="20dp"
                     android:background="@drawable/border"
                     android:drawableRight="@drawable/icon_email"
-                    android:hint="Email"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="12dp"
@@ -126,7 +124,7 @@
                     android:layout_marginRight="20dp"
                     android:background="@drawable/border"
                     android:drawableRight="@drawable/key"
-                    android:hint="Password"
+                    android:hint="New Password"
                     android:inputType="textPassword"
                     android:paddingLeft="15dp"
                     android:paddingRight="12dp"
@@ -143,7 +141,7 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/ediProfile_mobile"
+                    android:id="@+id/ediProfile_cpassword"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginLeft="20dp"
@@ -167,19 +165,19 @@
                 android:orientation="horizontal">
 
                 <EditText
+                    android:id="@+id/ediProfile_mobile"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:background="@drawable/border"
                     android:drawableRight="@drawable/icon_phone"
-                    android:hint="Mobile No."
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="12dp"
                     android:textColor="#000000"
                     android:textColorHint="#ffffff"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 

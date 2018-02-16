@@ -70,11 +70,11 @@ public class SplashActivity extends AppCompatActivity {
 
 
             }
-        }, SPLASH_DISPLAY_LENGTH);
+        }, 5000);
 
     }
 
     public void refId(){
-        splashImage = (ImageView) findViewById(R.id.splash_image);
+        splashImage = findViewById(R.id.splash_image);
     }
 }

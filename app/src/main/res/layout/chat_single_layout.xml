@@ -1,4 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Re\ xmlns:android="http://schemas.android.com/apk/res/android"android:layout_width="match_parent"android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chaSingleLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp">
 
-    </Re\>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/chatSingleImage"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/man" />
+
+    <TextView
+        android:id="@+id/chatSingleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="18dp"
+        android:layout_marginStart="18dp"
+        android:layout_toEndOf="@+id/chatSingleImage"
+        android:layout_toRightOf="@+id/chatSingleImage"
+        android:background="@drawable/chat_text_background"
+        android:padding="15dp"
+        android:text="TextView"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/chatSingleTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/chatSingleText"
+        android:layout_below="@+id/chatSingleText"
+        android:text="4:20"
+        android:textSize="13sp"/>
+
+
+</RelativeLayout>
