@@ -13,6 +13,8 @@ import android.widget.ImageView;
 
 public class SplashActivity extends AppCompatActivity {
 
+    private int SPLASH_DISPLAY_LENGTH = 5000;
+
     ImageView splashImage;
 
     @Override

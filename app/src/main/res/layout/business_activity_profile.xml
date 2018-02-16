@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/bProfileRel1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/business_profile_include"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bProfileRel2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bProfileRel1">
+
+            <include layout="@layout/business_profile_top_tabs"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bProfileRel3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/bProfileRel2">
+
+            <include layout="@layout/business_profile_viewpager"/>
+
+        </RelativeLayout>
+
+        <include layout="@layout/business_bottom_navigation"/>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
