@@ -20,6 +20,7 @@ public class ChooseLayout extends AppCompatActivity {
         setContentView(R.layout.activity_choose_layout);
         refIDs();
 
+        refIDs();
         choose_NonBusiness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

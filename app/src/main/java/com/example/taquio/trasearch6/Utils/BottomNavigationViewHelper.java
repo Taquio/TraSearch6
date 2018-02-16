@@ -1,5 +1,6 @@
 package com.example.taquio.trasearch6.Utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -29,7 +30,7 @@ public class BottomNavigationViewHelper {
         bottomNavigationViewEx.enableShiftingMode(false);
     }
 
-    public static void enableNavigation(final Context context, BottomNavigationViewEx view) {
+    public static void enableNavigation(final Context context, final Activity callingActivity, BottomNavigationViewEx view) {
         view.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -39,23 +40,28 @@ public class BottomNavigationViewHelper {
                     case R.id.ic_home:
                         Intent intent1 = new Intent(context, HomeActivity2.class);
                         context.startActivity(intent1);
+                        callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;
                     case R.id.ic_messages:
                         Intent intent2 = new Intent(context, MessagesActivity.class );
                         context.startActivity(intent2);
+                        callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;
                     case R.id.ic_camera:
                         Intent intent3 = new Intent(context, CameraActivity.class);
                         context.startActivity(intent3);
+                        callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;
                     case R.id.ic_nearby:
                         Log.d(TAG, "onNavigationItemSelected: Nearby selected");
                         Intent intent4 = new Intent(context, MapsActivity.class);
                         context.startActivity(intent4);
+                        callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;
                     case R.id.ic_profile:
                         Intent intent5 = new Intent(context, MyProfileActivity.class);
                         context.startActivity(intent5);
+                        callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;
                 }
 

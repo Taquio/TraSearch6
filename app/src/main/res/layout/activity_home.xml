@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.taquio.trasearch6.HomeActivity2">
+    tools:context="officialsuzuen.google.com.trasearch.Home.HomeActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -15,13 +15,13 @@
         android:layout_height="match_parent"
         android:id="@+id/relLayoutParent">
 
-        <RelativeLayout
-        android:id="@+id/relatLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/relatLayout1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
 
-        <include layout="@layout/snippet_top_searchbar"/>
-        </RelativeLayout>
+            <!--<include layout="@layout/snippet_top_searchbar"/>-->
+        <!--</RelativeLayout>-->
 
         <RelativeLayout
             android:id="@+id/relatLayout2"
