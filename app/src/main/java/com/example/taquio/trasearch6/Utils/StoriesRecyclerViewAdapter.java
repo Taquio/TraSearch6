@@ -1,7 +1,6 @@
 package com.example.taquio.trasearch6.Utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;

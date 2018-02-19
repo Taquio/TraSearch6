@@ -9,9 +9,21 @@ import android.os.Parcelable;
 
 public class User implements Parcelable {
 
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
     private String userID, Email, Name, Image,
             Image_thumb, PhoneNumber, UserName, device_token;
-    private Boolean online;
+    private Long online;
 
 
     public User() {
@@ -27,21 +39,12 @@ public class User implements Parcelable {
         PhoneNumber = in.readString();
         UserName = in.readString();
         device_token = in.readString();
-        byte tmpOnline = in.readByte();
-        online = tmpOnline == 0 ? null : tmpOnline == 1;
+        if (in.readByte() == 0) {
+            online = null;
+        } else {
+            online = in.readLong();
+        }
     }
-
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
 
     public String getUserID() {
         return userID;
@@ -107,11 +110,11 @@ public class User implements Parcelable {
         this.device_token = device_token;
     }
 
-    public Boolean getOnline() {
+    public Long getOnline() {
         return online;
     }
 
-    public void setOnline(Boolean online) {
+    public void setOnline(Long online) {
         this.online = online;
     }
 
@@ -130,6 +133,11 @@ public class User implements Parcelable {
         dest.writeString(PhoneNumber);
         dest.writeString(UserName);
         dest.writeString(device_token);
-        dest.writeByte((byte) (online == null ? 0 : online ? 1 : 2));
+        if (online == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(online);
+        }
     }
 }

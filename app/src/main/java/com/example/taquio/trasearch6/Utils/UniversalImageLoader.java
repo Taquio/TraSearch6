@@ -32,25 +32,6 @@ public class UniversalImageLoader {
         mContext = context;
     }
 
-    public ImageLoaderConfiguration getConfig(){
-        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(defaultImage)
-                .showImageForEmptyUri(defaultImage)
-                .showImageOnFail(defaultImage)
-                .considerExifParams(true)
-                .cacheOnDisk(true).cacheInMemory(true)
-                .cacheOnDisk(true).resetViewBeforeLoading(true)
-                .imageScaleType(ImageScaleType.EXACTLY)
-                .displayer(new FadeInBitmapDisplayer(300)).build();
-
-        ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(mContext)
-                .defaultDisplayImageOptions(defaultOptions)
-                .memoryCache(new WeakMemoryCache())
-                .diskCacheSize(100 * 1024 * 1024).build();
-
-        return configuration;
-    }
-
     /**
      * this method can be sued to set images that are static. It can't be used if the images
      * are being changed in the Fragment/Activity - OR if they are being set in a list or
@@ -92,5 +73,24 @@ public class UniversalImageLoader {
                     }
                 }
         });
+    }
+
+    public ImageLoaderConfiguration getConfig(){
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                .showImageOnLoading(defaultImage)
+                .showImageForEmptyUri(defaultImage)
+                .showImageOnFail(defaultImage)
+                .considerExifParams(true)
+                .cacheOnDisk(true).cacheInMemory(true)
+                .cacheOnDisk(true).resetViewBeforeLoading(true)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .displayer(new FadeInBitmapDisplayer(300)).build();
+
+        ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(mContext)
+                .defaultDisplayImageOptions(defaultOptions)
+                .memoryCache(new WeakMemoryCache())
+                .diskCacheSize(100 * 1024 * 1024).build();
+
+        return configuration;
     }
 }

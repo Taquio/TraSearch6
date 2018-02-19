@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.taquio.trasearch6.HomeActivity2">
 
     <FrameLayout
+        android:id="@+id/frame_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/frame_container"/>
+        android:layout_height="match_parent"/>
     <RelativeLayout
+        android:id="@+id/relLayoutParent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/relLayoutParent">
+        android:layout_height="match_parent">
 
         <RelativeLayout
         android:id="@+id/relatLayout1"

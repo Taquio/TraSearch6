@@ -14,9 +14,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -73,25 +70,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 String name = dataSnapshot.child("Name").getValue().toString();
                 String image = dataSnapshot.child("Image_thumb").getValue().toString();
 
-                Picasso.with(holder.chatSingleConvImage.getContext())
-                        .load(dataSnapshot.child("Image_thumb").getValue().toString())
-                        .networkPolicy(NetworkPolicy.OFFLINE)
-                        .placeholder(R.drawable.man)
-                        .into(holder.chatSingleConvImage, new Callback() {
-                            @Override
-                            public void onSuccess() {
-
-                            }
-
-                            @Override
-                            public void onError() {
-                                Picasso.with(holder.chatSingleConvImage.getContext())
-                                        .load(dataSnapshot
-                                                .child("Image_thumb").getValue().toString())
-                                        .placeholder(R.drawable.man)
-                                        .into(holder.chatSingleConvImage);
-                            }
-                        });
+//                Picasso.with(holder.chatSingleConvImage.getContext())
+//                        .load(dataSnapshot.child("Image_thumb").getValue().toString())
+//                        .networkPolicy(NetworkPolicy.OFFLINE)
+//                        .placeholder(R.drawable.man)
+//                        .into(holder.chatSingleConvImage, new Callback() {
+//                            @Override
+//                            public void onSuccess() {
+//
+//                            }
+//
+//                            @Override
+//                            public void onError() {
+//                                Picasso.with(holder.chatSingleConvImage.getContext())
+//                                        .load(dataSnapshot
+//                                                .child("Image_thumb").getValue().toString())
+//                                        .placeholder(R.drawable.man)
+//                                        .into(holder.chatSingleConvImage);
+//                            }
+//                        });
             }
 
             @Override
@@ -104,17 +101,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         {
             holder.chatSingleText.setText(c.getMessage());
             holder.chatSingleTime.setText(getDate(c.getTime(),"hh:mm:ss aa"));
-            holder.chatSingleConvImage.setVisibility(View.INVISIBLE);
+//            holder.chatSingleConvImage.setVisibility(View.INVISIBLE);
         }
-        else
-        {
-            holder.chatSingleText.setVisibility(View.INVISIBLE);
-            holder.chatSingleConvImage.setVisibility(View.VISIBLE);
-
-            Picasso.with(holder.chatSingleConvImage.getContext()).load(c.getMessage())
-                    .placeholder(R.drawable.man).into(holder.chatSingleConvImage);
-
-        }
+//        else
+//        {
+//            holder.chatSingleText.setVisibility(View.INVISIBLE);
+//            holder.chatSingleConvImage.setVisibility(View.VISIBLE);
+//
+//            Picasso.with(holder.chatSingleConvImage.getContext()).load(c.getMessage())
+//                    .placeholder(R.drawable.man).into(holder.chatSingleConvImage);
+//
+//        }
 
 
 
@@ -151,7 +148,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             chatSingleText = itemView.findViewById(R.id.chatSingleText);
             chatSingleTime = itemView.findViewById(R.id.chatSingleTime);
             chatSingleImage = itemView.findViewById(R.id.chatSingleImage);
-            chatSingleConvImage = itemView.findViewById(R.id.chatSingleConvImage);
+//            chatSingleConvImage = itemView.findViewById(R.id.chatSingleConvImage);
 
 
         }

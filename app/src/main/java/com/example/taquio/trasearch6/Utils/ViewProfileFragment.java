@@ -1,7 +1,6 @@
 package com.example.taquio.trasearch6.Utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,7 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.taquio.trasearch6.EditProfileActivity;
 import com.example.taquio.trasearch6.Models.Comment;
 import com.example.taquio.trasearch6.Models.Like;
 import com.example.taquio.trasearch6.Models.Photo;
@@ -53,29 +51,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ViewProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
-
-
-    /* GA HIMO UG INTERFACE INSIDE SA FRAGMENT PARA IG
-        PARA MA GAMIT SA GRID IMAGE CLICK PERO ANG
-        PAG INFLATE SA LAYOUT ADTO SA PROFILE ACTIVITY USING
-        THE PARAMETERS SUPPLIED  ARI NGA GE CALL
-    */
-    public interface OnGridImageSelectedListener{
-        void onGridImageSelected(Photo photo, int activityNumber);
-    }
-    OnGridImageSelectedListener mOnGridImageSelectedListener;
-
     private static final int ACTIVITY_NUM = 4;
     private static final int NUM_GRID_COLUMNS = 3;
-
+    OnGridImageSelectedListener mOnGridImageSelectedListener;
     //firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
-
-
-
     //widgets
     private TextView mName, mEmail, mPhoneNumber;
     private ProgressBar mProgressBar;
@@ -86,14 +69,11 @@ public class ViewProfileFragment extends Fragment {
     private Context mContext;
     private TextView editProfile;
     private Button message;
-
-
     //vars
     private User mUser;
     private int mFollowersCount = 0;
     private int mFollowingCount = 0;
     private int mPostsCount = 0;
-
 
     @Nullable
     @Override
@@ -106,8 +86,8 @@ public class ViewProfileFragment extends Fragment {
         mProfilePhoto = view.findViewById(R.id.viewedProfile);
         message = view.findViewById(R.id.btnMessage);
 
-        gridView = (GridView) view.findViewById(R.id.gridView);
-        bottomNavigationView = (BottomNavigationViewEx) view.findViewById(R.id.bottomNavViewBar);
+        gridView = view.findViewById(R.id.gridView);
+        bottomNavigationView = view.findViewById(R.id.bottomNavViewBar);
 
         mContext = getActivity();
         Log.d(TAG, "onCreateView: stared.");
@@ -181,6 +161,7 @@ public class ViewProfileFragment extends Fragment {
 
         return view;
     }
+
     private User getUserFromBundle(){
         Log.d(TAG, "getUserFromBundle: arguments: " + getArguments());
 
@@ -191,6 +172,7 @@ public class ViewProfileFragment extends Fragment {
             return null;
         }
     }
+
     private void init(){
 
         //set the profile widgets
@@ -275,6 +257,28 @@ public class ViewProfileFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(TAG, "onCancelled: query cancelled.");
+            }
+        });
+    }
+
+    private void setupImageGrid(final ArrayList<Photo> photos){
+        //setup our image grid
+        int gridWidth = getResources().getDisplayMetrics().widthPixels;
+        int imageWidth = gridWidth/NUM_GRID_COLUMNS;
+        gridView.setColumnWidth(imageWidth);
+
+        ArrayList<String> imgUrls = new ArrayList<String>();
+        for(int i = 0; i < photos.size(); i++){
+            imgUrls.add(photos.get(i).getImage_path());
+        }
+        GridImageAdapter adapter = new GridImageAdapter(getActivity(),R.layout.layout_grid_imageview,
+                "", imgUrls);
+        gridView.setAdapter(adapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mOnGridImageSelectedListener.onGridImageSelected(photos.get(position), ACTIVITY_NUM);
             }
         });
     }
@@ -394,30 +398,6 @@ public class ViewProfileFragment extends Fragment {
 //        editProfile.setVisibility(View.VISIBLE);
 //    }
 
-    private void setupImageGrid(final ArrayList<Photo> photos){
-        //setup our image grid
-        int gridWidth = getResources().getDisplayMetrics().widthPixels;
-        int imageWidth = gridWidth/NUM_GRID_COLUMNS;
-        gridView.setColumnWidth(imageWidth);
-
-        ArrayList<String> imgUrls = new ArrayList<String>();
-        for(int i = 0; i < photos.size(); i++){
-            imgUrls.add(photos.get(i).getImage_path());
-        }
-        GridImageAdapter adapter = new GridImageAdapter(getActivity(),R.layout.layout_grid_imageview,
-                "", imgUrls);
-        gridView.setAdapter(adapter);
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mOnGridImageSelectedListener.onGridImageSelected(photos.get(position), ACTIVITY_NUM);
-            }
-        });
-    }
-
-
-
     @Override
     public void onAttach(Context context) {
         try{
@@ -427,7 +407,6 @@ public class ViewProfileFragment extends Fragment {
         }
         super.onAttach(context);
     }
-
 
     private void setProfileWidgets(UserSettings userSettings){
         //Log.d(TAG, "setProfileWidgets: setting widgets with data retrieving from firebase database: " + userSettings.toString());
@@ -455,7 +434,6 @@ public class ViewProfileFragment extends Fragment {
 
     }
 
-
         /**
      * BottomNavigationView setup
      */
@@ -467,10 +445,6 @@ public class ViewProfileFragment extends Fragment {
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
-
-      /*
-    ------------------------------------ Firebase ---------------------------------------------
-     */
 
     /**
      * Setup the firebase auth object
@@ -501,6 +475,9 @@ public class ViewProfileFragment extends Fragment {
 
     }
 
+      /*
+    ------------------------------------ Firebase ---------------------------------------------
+     */
 
     @Override
     public void onStart() {
@@ -514,5 +491,14 @@ public class ViewProfileFragment extends Fragment {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    /* GA HIMO UG INTERFACE INSIDE SA FRAGMENT PARA IG
+        PARA MA GAMIT SA GRID IMAGE CLICK PERO ANG
+        PAG INFLATE SA LAYOUT ADTO SA PROFILE ACTIVITY USING
+        THE PARAMETERS SUPPLIED  ARI NGA GE CALL
+    */
+    public interface OnGridImageSelectedListener{
+        void onGridImageSelected(Photo photo, int activityNumber);
     }
 }

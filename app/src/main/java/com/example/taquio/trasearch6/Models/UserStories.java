@@ -11,23 +11,6 @@ import java.util.ArrayList;
 
 public class UserStories implements Parcelable {
 
-    private ArrayList<Story> media;
-    private User user_account_settings;
-
-    public UserStories(ArrayList<Story> media, User user_account_settings) {
-        this.media = media;
-        this.user_account_settings = user_account_settings;
-    }
-
-    public UserStories() {
-
-    }
-
-
-    protected UserStories(Parcel in) {
-        user_account_settings = in.readParcelable(User.class.getClassLoader());
-    }
-
     public static final Creator<UserStories> CREATOR = new Creator<UserStories>() {
         @Override
         public UserStories createFromParcel(Parcel in) {
@@ -39,6 +22,22 @@ public class UserStories implements Parcelable {
             return new UserStories[size];
         }
     };
+    private ArrayList<Story> media;
+    private User user_account_settings;
+
+    public UserStories(ArrayList<Story> media, User user_account_settings) {
+        this.media = media;
+        this.user_account_settings = user_account_settings;
+    }
+
+
+    public UserStories() {
+
+    }
+
+    protected UserStories(Parcel in) {
+        user_account_settings = in.readParcelable(User.class.getClassLoader());
+    }
 
     public ArrayList<Story> getMedia() {
         return media;
