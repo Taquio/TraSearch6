@@ -158,8 +158,6 @@
             android:parentActivityName=".MyProfileActivity" />
         <activity android:name=".Camera.CameraActivity" />
         <activity android:name=".Camera.NextActivity" />
-        <activity android:name=".OpenGL.OpenGLES10Activity" />
-        <activity android:name=".OpenGL.NewStoryActivity" />
         <activity android:name=".RegisterOptions"></activity>
     </application>
 

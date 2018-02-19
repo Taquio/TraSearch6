@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="officialsuzuen.google.com.trasearch.Home.HomeActivity">
+    tools:context="com.example.taquio.trasearch6.HomeActivity2">
 
     <FrameLayout
         android:layout_width="match_parent"

@@ -492,7 +492,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         String recyclingCenter = "recycling+center+junkyard";
         String url = getUrl(latitude, longitude, recyclingCenter);
-        Toast.makeText(this, "Check long: "+longitude+"lat: "+latitude, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Check lat: "+latitude+"long: "+longitude, Toast.LENGTH_SHORT).show();
         dataTransfer[0] = mMap;
         dataTransfer[1] = url;
 
