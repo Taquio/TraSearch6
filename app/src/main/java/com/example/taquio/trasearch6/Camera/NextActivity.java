@@ -70,10 +70,11 @@ public class NextActivity extends AppCompatActivity {
         });
 
 
-        TextView share = (TextView) findViewById(R.id.tvShare);
+        final TextView share = (TextView) findViewById(R.id.tvShare);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                share.setEnabled(false);
                 Log.d(TAG, "onClick: navigating to the final share screen.");
                 //upload the image to firebase
                 Toast.makeText(NextActivity.this, "Attempting to upload new photo", Toast.LENGTH_SHORT).show();
@@ -87,7 +88,6 @@ public class NextActivity extends AppCompatActivity {
                     bitmap = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
                     mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, null,bitmap);
                 }
-
 
 
             }

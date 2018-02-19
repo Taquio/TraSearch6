@@ -491,6 +491,8 @@ public class ViewPostFragment extends Fragment {
 
         if(mPhoto.getComments().size() > 0){
             mComments.setText("View all " + mPhoto.getComments().size() + " comments");
+        }else if(mPhoto.getComments().size() == 0){
+            mComments.setText("");
         }else{
             mComments.setText("");
         }
