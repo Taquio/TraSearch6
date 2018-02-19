@@ -7,15 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.Models.User;
@@ -23,9 +17,6 @@ import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
 import com.example.taquio.trasearch6.Utils.ViewPostFragment;
 import com.example.taquio.trasearch6.Utils.ViewProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-
-import java.util.ArrayList;
 
 
 

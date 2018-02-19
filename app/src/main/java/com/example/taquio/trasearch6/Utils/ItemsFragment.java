@@ -3,14 +3,11 @@ package com.example.taquio.trasearch6.Utils;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.eschao.android.widget.elasticlistview.ElasticListView;
 import com.eschao.android.widget.elasticlistview.LoadFooter;
@@ -18,7 +15,6 @@ import com.eschao.android.widget.elasticlistview.OnLoadListener;
 import com.eschao.android.widget.elasticlistview.OnUpdateListener;
 import com.example.taquio.trasearch6.Models.Comment;
 import com.example.taquio.trasearch6.Models.Photo;
-import com.example.taquio.trasearch6.Models.Story;
 import com.example.taquio.trasearch6.Models.User;
 import com.example.taquio.trasearch6.R;
 import com.google.firebase.database.DataSnapshot;
@@ -28,8 +24,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,24 +40,7 @@ import java.util.Map;
 public class ItemsFragment extends Fragment implements OnUpdateListener, OnLoadListener {
 
     private static final String TAG = "HomeFragment";
-
-    @Override
-    public void onUpdate() {
-        Log.d(TAG, "ElasticListView: updating list view...");
-
-        getFollowing();
-    }
-
-
-    @Override
-    public void onLoad() {
-        Log.d(TAG, "ElasticListView: loading...");
-
-        // Notify load is done
-        mListView.notifyLoaded();
-    }
-
-
+    public StoriesRecyclerViewAdapter mStoriesAdapter;
     //vars
     private ArrayList<Photo> mPhotos;
     private ArrayList<Photo> mPaginatedPhotos;
@@ -77,16 +54,28 @@ public class ItemsFragment extends Fragment implements OnUpdateListener, OnLoadL
     private ArrayList<User> mUserAccountSettings;
     //    private ArrayList<UserStories> mAllUserStories = new ArrayList<>();
     private JSONArray mMasterStoriesArray;
-
     private RecyclerView mRecyclerView;
-    public StoriesRecyclerViewAdapter mStoriesAdapter;
 
+    @Override
+    public void onUpdate() {
+        Log.d(TAG, "ElasticListView: updating list view...");
+
+        getFollowing();
+    }
+
+    @Override
+    public void onLoad() {
+        Log.d(TAG, "ElasticListView: loading...");
+
+        // Notify load is done
+        mListView.notifyLoaded();
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_items, container, false);
-        mListView = (ElasticListView) view.findViewById(R.id.listView);
+        mListView = view.findViewById(R.id.listView);
 
         initListViewRefresh();
         getFollowing();

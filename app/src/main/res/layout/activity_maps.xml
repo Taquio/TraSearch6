@@ -10,43 +10,43 @@
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/map"
-            tools:context=".MapsActivity"
             android:layout_marginBottom="50dp"
-            android:name="com.google.android.gms.maps.SupportMapFragment" />
+            tools:context=".MapsActivity" />
 
         <RelativeLayout
+            android:id="@+id/relLayout1"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="60dp"
             android:layout_marginLeft="10dp"
-            android:elevation="5dp"
-            android:id="@+id/relLayout1"
-            android:background="@drawable/map_search">
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/map_search"
+            android:elevation="5dp">
 
             <ImageView
+                android:id="@+id/ic_magnify"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:id="@+id/ic_magnify"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:src="@drawable/ic_search"/>
 
             <AutoCompleteTextView
+                android:id="@+id/input_search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/ic_magnify"
                 android:layout_centerVertical="true"
-                android:maxLines="1"
-                android:textSize="15sp"
-                android:textColor="#000"
-                android:id="@+id/input_search"
+                android:layout_toRightOf="@+id/ic_magnify"
                 android:background="@drawable/map_search"
                 android:hint="Enter Address, City or Zip Code"
-                android:imeOptions="actionSearch"/>
+                android:imeOptions="actionSearch"
+                android:maxLines="1"
+                android:textColor="#000"
+                android:textSize="15sp"/>
         </RelativeLayout>
 
         <!--<ImageButton-->
@@ -63,36 +63,36 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_alignParentRight="true"
             android:layout_below="@id/relLayout1"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
             <RadioButton
+                android:id="@+id/rb_recyclingcenter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Recycling Centers"
-                android:id="@+id/rb_recyclingcenter"
             />
 
             <RadioButton
+                android:id="@+id/rb_junkyar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Junkyards"
-                android:id="@+id/rb_junkyar"
             />
         </LinearLayout>
 
     <ImageButton
+        android:id="@+id/place_picker"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:id="@+id/place_picker"
+        android:layout_below="@+id/relLayout1"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="8dp"
-        android:scaleType="centerCrop"
-        android:layout_below="@+id/relLayout1"
         android:background="#ffff"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_map"/>
 
     <!--<ImageButton-->

@@ -37,9 +37,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,14 +51,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
-
-    public interface OnGridImageSelectedListener{
-        void onGridImageSelected(Photo photo, int activityNumber);
-    }
-    OnGridImageSelectedListener mOnGridImageSelectedListener;
-
     private static final int ACTIVITY_NUM = 4;
     private static final int NUM_GRID_COLUMNS = 3;
+    OnGridImageSelectedListener mOnGridImageSelectedListener;
     //firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -69,8 +61,6 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference myRef;
     private FirebaseMethods mFirebaseMethods;
     private FirebaseUser mUser;
-
-
     //widgets
     private TextView mName, mEmail, mPhone;
     private ProgressBar mProgressBar;
@@ -81,8 +71,6 @@ public class ProfileFragment extends Fragment {
     private BottomNavigationViewEx bottomNavigationView;
     private Context mContext;
     private TextView signOut;
-
-
     //vars
     private int mFollowersCount = 0;
     private int mFollowingCount = 0;
@@ -94,16 +82,16 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         Log.d(TAG, "onCreateView: STARTING PROFILE FRAGMENT >>>>>>>");
 
-        mProfilePhoto = (CircleImageView) view.findViewById(R.id.myProfile_image);
-        mName = (TextView) view.findViewById(R.id.myProfile_name);
-        mEmail = (TextView) view.findViewById(R.id.myProfile_email);
-        mPhone = (TextView)  view.findViewById(R.id.myProfile_phone);
+        mProfilePhoto = view.findViewById(R.id.myProfile_image);
+        mName = view.findViewById(R.id.myProfile_name);
+        mEmail = view.findViewById(R.id.myProfile_email);
+        mPhone = view.findViewById(R.id.myProfile_phone);
 //        mProgressBar = (ProgressBar) view.findViewById(R.id.profileProgressBar);
-        gridView = (GridView) view.findViewById(R.id.gridView);
-        toolbar = (Toolbar) view.findViewById(R.id.profileToolBar);
-        profileMenu = (ImageView) view.findViewById(R.id.profileMenu);
+        gridView = view.findViewById(R.id.gridView);
+        toolbar = view.findViewById(R.id.profileToolBar);
+        profileMenu = view.findViewById(R.id.profileMenu);
 //        signOut = view.findViewById(R.id.cmdSignout);
-        bottomNavigationView = (BottomNavigationViewEx) view.findViewById(R.id.bottomNavViewBar);
+        bottomNavigationView = view.findViewById(R.id.bottomNavViewBar);
         mContext = getActivity();
 
         mFirebaseMethods = new FirebaseMethods(getActivity());
@@ -223,6 +211,7 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
     private void setProfileWidgets(UserSettings userSettings) {
         Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getEmail() );
         Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getName() );
@@ -246,10 +235,6 @@ public class ProfileFragment extends Fragment {
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
-
-      /*
-    ------------------------------------ Firebase ---------------------------------------------
-     */
 
     /**
      * Setup the firebase auth object
@@ -319,6 +304,9 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+      /*
+    ------------------------------------ Firebase ---------------------------------------------
+     */
 
     @Override
     public void onStart() {
@@ -332,5 +320,9 @@ public class ProfileFragment extends Fragment {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    public interface OnGridImageSelectedListener{
+        void onGridImageSelected(Photo photo, int activityNumber);
     }
 }
