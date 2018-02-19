@@ -109,11 +109,11 @@ public class FirebaseMethods {
                                 .getValue(User.class)
                                 .getDevice_token()
                 );
-                user.setOnline(
-                        ds.child(userID)
-                                .getValue(User.class)
-                                .getOnline()
-                );
+//                user.setOnline(
+//                        ds.child(userID)
+//                                .getValue(User.class)
+//                                .getOnline()
+//                );
                 user.setPhoneNumber(ds.child(userID)
                         .getValue(User.class)
                         .getPhoneNumber());
@@ -189,7 +189,7 @@ public class FirebaseMethods {
         Log.d(TAG, "addPhotoToDatabase: adding photo to database.");
 
         String tags = StringManipulation.getTags(caption);
-        String newPhotoKey = myRef.child(mContext.getString(R.string.dbname_photos)).push().getKey();
+        String newPhotoKey = myRef.child("Photos").push().getKey();
         Photo photo = new Photo();
         photo.setCaption(caption);
         photo.setDate_created(getTimestamp());

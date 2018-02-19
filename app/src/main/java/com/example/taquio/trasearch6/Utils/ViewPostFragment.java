@@ -83,7 +83,7 @@ public class ViewPostFragment extends Fragment {
     private String photoUsername = "";
     private String profilePhotoUrl = "";
     private GestureDetector mGestureDetector;
-    private Heart mHeart;
+    private Likes mHeart;
     private Boolean mLikedByCurrentUser;
     private StringBuilder mUsers;
     private String mLikesString = "";
@@ -108,7 +108,7 @@ public class ViewPostFragment extends Fragment {
         mComment = (ImageView) view.findViewById(R.id.speech_bubble);
         mComments = (TextView) view.findViewById(R.id.image_comments_link);
 
-        mHeart = new Heart(mHeartWhite, mHeartRed);
+        mHeart = new Likes(mHeartWhite, mHeartRed);
         mGestureDetector = new GestureDetector(getActivity(), new GestureListener());
 
         setupFirebaseAuth();
@@ -288,7 +288,7 @@ public class ViewPostFragment extends Fragment {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference
                 .child("Users")
-                .orderByChild("userID")
+                .orderByKey()
                 .equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -477,14 +477,14 @@ public class ViewPostFragment extends Fragment {
 
 
     private void setupWidgets(){
-        Log.d(TAG, "setupWidgets:  GETTTTINGGG IMAGEE >>>> " + mCurrentUser.getImage() );
+//        Log.d(TAG, "setupWidgets:  GETTTTINGGG IMAGEE >>>> " + mCurrentUser.getImage() );
         String timestampDiff = getTimestampDifference();
         if(!timestampDiff.equals("0")){
             mTimestamp.setText(timestampDiff + " DAYS AGO");
         }else{
             mTimestamp.setText("TODAY");
         }
-//        UniversalImageLoader.setImage(mCurrentUser.getImage(), mPostImage, null, "");
+        UniversalImageLoader.setImage(mCurrentUser.getImage(), mProfileImage, null, "");
         mUsername.setText(mCurrentUser.getUserName());
         mLikes.setText(mLikesString);
         mCaption.setText(mPhoto.getCaption());
@@ -528,7 +528,7 @@ public class ViewPostFragment extends Fragment {
             mHeartRed.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    Log.d(TAG, "onTouch: red heart touch detected.");
+                    Log.d(TAG, "onTouch: red likes touch detected.");
                     return mGestureDetector.onTouchEvent(event);
                 }
             });
@@ -539,7 +539,7 @@ public class ViewPostFragment extends Fragment {
             mHeartWhite.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    Log.d(TAG, "onTouch: white heart touch detected.");
+                    Log.d(TAG, "onTouch: white likes touch detected.");
                     return mGestureDetector.onTouchEvent(event);
                 }
             });

@@ -86,7 +86,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         StringBuilder users;
         String mLikesString;
         boolean likeByCurrentUser;
-        Heart heart;
+        Likes liker;
         GestureDetector detector;
         Photo photo;
     }
@@ -121,7 +121,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         holder.photo = getItem(position);
         holder.detector = new GestureDetector(mContext, new GestureListener(holder));
         holder.users = new StringBuilder();
-        holder.heart = new Heart(holder.heartWhite, holder.heartRed);
+        holder.liker = new Likes(holder.heartWhite, holder.heartRed);
 
         //get the current users username (need for checking likes string)
         getCurrentUsername();
@@ -165,7 +165,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference
                 .child("Users")
-                .orderByChild("userID")
+               .orderByKey()
                 .equalTo(getItem(position).getUser_id());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -173,6 +173,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                 for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
 
                    // currentUsername = singleSnapshot.getValue(UserAccountSettings.class).getUsername();
+
 
                     Log.d(TAG, "onDataChange: found user: "
                             + singleSnapshot.getValue(User.class).getUserName());
@@ -203,6 +204,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                             Intent intent = new Intent(mContext, MyProfileActivity.class);
                             intent.putExtra(mContext.getString(R.string.calling_activity),
                                     mContext.getString(R.string.home_activity));
+                            Log.d(TAG, "onDataChange: GETTTTINGGGGG >> " +  holder.user);
                             intent.putExtra(mContext.getString(R.string.intent_user), holder.user);
                             mContext.startActivity(intent);
                         }
@@ -234,13 +236,13 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         //get the user object
         Query userQuery = mReference
                 .child("Users")
-                .orderByChild("userID")
+               .orderByKey()
                 .equalTo(getItem(position).getUser_id());
         userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-                    Log.d(TAG, "onDataChange: found user: " +
+                    Log.d(TAG, "onDataChange: found user:  THISSSS" +
                     singleSnapshot.getValue(User.class).getUserName());
 
                     holder.user = singleSnapshot.getValue(User.class);
@@ -329,7 +331,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                                     .child(keyID)
                                     .removeValue();
 
-                            mHolder.heart.toggleLike();
+                            mHolder.liker.toggleLike();
                             getLikesString(mHolder);
                         }
                         //case2: The user has not liked the photo
@@ -375,7 +377,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                 .child(newLikeID)
                 .setValue(like);
 
-        holder.heart.toggleLike();
+        holder.liker.toggleLike();
         getLikesString(holder);
     }
 
@@ -384,7 +386,8 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference
                 .child("Users")
-                .orderByChild("userID")
+//                .orderByChild("userID")
+                .orderByKey()
                 .equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -421,7 +424,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
                     Query query = reference
                             .child("Users")
-                            .orderByChild("userID")
+                            .orderByKey()
                             .equalTo(singleSnapshot.getValue(Like.class).getUser_id());
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override

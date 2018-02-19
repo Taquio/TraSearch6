@@ -149,14 +149,14 @@ public class ViewCommentsFragment extends Fragment {
         comment.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         //insert into photos node
-        myRef.child(getString(R.string.dbname_photos))
+        myRef.child("Photos")
                 .child(mPhoto.getPhoto_id())
                 .child(getString(R.string.field_comments))
                 .child(commentID)
                 .setValue(comment);
 
         //insert into user_photos node
-        myRef.child(getString(R.string.dbname_user_photos))
+        myRef.child("Users_Photos")
                 .child(mPhoto.getUser_id()) //should be mphoto.getUser_id()
                 .child(mPhoto.getPhoto_id())
                 .child(getString(R.string.field_comments))
@@ -244,7 +244,7 @@ public class ViewCommentsFragment extends Fragment {
         }
 
 
-        myRef.child(mContext.getString(R.string.dbname_photos))
+        myRef.child("Photos")
                 .child(mPhoto.getPhoto_id())
                 .child(mContext.getString(R.string.field_comments))
                 .addChildEventListener(new ChildEventListener() {

@@ -31,15 +31,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class HomeActivity2 extends AppCompatActivity implements
         MainFeedListAdapter.OnLoadMoreItemsListener{
 
-    @Override
-    public void onLoadMoreItems() {
-        Log.d(TAG, "onLoadMoreItems: displaying more photos");
-        ItemsFragment fragment = (ItemsFragment)getSupportFragmentManager()
-                .findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
-        if(fragment != null){
-            fragment.displayMorePhotos();
-        }
-    }
+
     private static final String TAG = "HomeActivity";
     private Context mContext = HomeActivity2.this;
     private static final int ACTIVITY_NUM = 0;
@@ -82,8 +74,19 @@ public class HomeActivity2 extends AppCompatActivity implements
 //        AddToStoryDialog dialog = new AddToStoryDialog();
 //        dialog.show(getFragmentManager(), getString(R.string.dialog_add_to_story));
 //    }
-
-
+    private void initImageLoader(){
+        UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
+        ImageLoader.getInstance().init(universalImageLoader.getConfig());
+    }
+    @Override
+    public void onLoadMoreItems() {
+        Log.d(TAG, "onLoadMoreItems: displaying more photos");
+        ItemsFragment fragment = (ItemsFragment)getSupportFragmentManager()
+                .findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
+        if(fragment != null){
+            fragment.displayMorePhotos();
+        }
+    }
     public void onCommentThreadSelected(Photo photo, String callingActivity){
         Log.d(TAG, "onCommentThreadSelected: selected a coemment thread");
 
@@ -149,10 +152,7 @@ public class HomeActivity2 extends AppCompatActivity implements
 //            }
 //        }
 //    }
-    private void initImageLoader(){
-        UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
-        ImageLoader.getInstance().init(universalImageLoader.getConfig());
-    }
+
     private void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new VideosFragment());
