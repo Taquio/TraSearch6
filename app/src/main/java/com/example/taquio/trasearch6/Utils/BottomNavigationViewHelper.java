@@ -25,9 +25,7 @@ public class BottomNavigationViewHelper {
     public static void setupBottomNavigationView(BottomNavigationViewEx bottomNavigationViewEx) {
         Log.d(TAG, "setupBottomNavigationView: Setting up BottomNavigationView (Main)");
         bottomNavigationViewEx.enableAnimation(false);
-        bottomNavigationViewEx.enableItemShiftingMode(false);
         bottomNavigationViewEx.enableShiftingMode(false);
-        bottomNavigationViewEx.setTextVisibility(false);
     }
 
     public static void enableNavigation(final Context context, BottomNavigationViewEx view) {
@@ -50,7 +48,7 @@ public class BottomNavigationViewHelper {
                         context.startActivity(intent3);
                         break;
                     case R.id.ic_nearby:
-                        Log.d(TAG, "onNavigationItemSelected: Nearby selected");
+                        //Log.d(TAG, "onNavigationItemSelected: Nearby selected");
                         Intent intent4 = new Intent(context, MapsActivity.class);
                         context.startActivity(intent4);
                         break;
