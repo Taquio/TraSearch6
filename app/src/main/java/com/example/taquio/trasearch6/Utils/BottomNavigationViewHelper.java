@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import com.example.taquio.trasearch6.Camera.CameraActivity;
 import com.example.taquio.trasearch6.HomeActivity2;
 import com.example.taquio.trasearch6.MapsActivity;
-import com.example.taquio.trasearch6.MessageActivity;
+import com.example.taquio.trasearch6.Messages.MessagesActivity;
 import com.example.taquio.trasearch6.MyProfileActivity;
 import com.example.taquio.trasearch6.R;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -26,9 +26,7 @@ public class BottomNavigationViewHelper {
     public static void setupBottomNavigationView(BottomNavigationViewEx bottomNavigationViewEx) {
         Log.d(TAG, "setupBottomNavigationView: Setting up BottomNavigationView (Main)");
         bottomNavigationViewEx.enableAnimation(false);
-        bottomNavigationViewEx.enableItemShiftingMode(false);
         bottomNavigationViewEx.enableShiftingMode(false);
-        bottomNavigationViewEx.setTextVisibility(false);
     }
 
     public static void enableNavigation(final Context context, final Activity callingActivity, BottomNavigationViewEx view) {
@@ -44,7 +42,7 @@ public class BottomNavigationViewHelper {
                         callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;
                     case R.id.ic_messages:
-                        Intent intent2 = new Intent(context, MessageActivity.class );
+                        Intent intent2 = new Intent(context, MessagesActivity.class );
                         context.startActivity(intent2);
                         callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;
@@ -54,7 +52,7 @@ public class BottomNavigationViewHelper {
                         callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;
                     case R.id.ic_nearby:
-                        Log.d(TAG, "onNavigationItemSelected: Nearby selected");
+                        //Log.d(TAG, "onNavigationItemSelected: Nearby selected");
                         Intent intent4 = new Intent(context, MapsActivity.class);
                         context.startActivity(intent4);
                         callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);

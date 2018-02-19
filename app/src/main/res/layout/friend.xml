@@ -9,22 +9,32 @@
         android:layout_height="wrap_content"
         android:background="#FAFAFA">
 
-        <ImageView
-            android:id="@+id/userProfile"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/allUsersImg"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="centerCrop"
             android:src="@drawable/images"/>
 
         <TextView
+            android:id="@+id/allUsersName"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@+id/userProfile"
+            android:layout_toRightOf="@+id/allUsersImg"
             android:gravity="center_vertical"
             android:text="Sean Daniel Del Mar"
             android:textColor="#000000"
             android:textSize="20sp"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/stat_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_toLeftOf="@+id/allUsersName"
+            android:src="@drawable/online_stat"
+            android:visibility="invisible"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -33,6 +43,7 @@
             android:layout_marginRight="5dp"
             android:src="@drawable/ic_ellipse"
             />
+
 
     </RelativeLayout>
 

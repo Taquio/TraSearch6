@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.annotations.NonNull;
 
 
 /**
@@ -48,12 +49,12 @@ public class FriendsFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,@NonNull ViewGroup container,
+                             @NonNull Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
         mMainView = inflater
-                .inflate(R.layout.fragment_friends,container,false);
+                .inflate(R.layout.fragment_friendslist,container,false);
         mFriendList = mMainView
                 .findViewById(R.id.friendsList);
         mAuth = FirebaseAuth
@@ -89,13 +90,13 @@ public class FriendsFragment extends Fragment {
 
         final FirebaseRecyclerAdapter<Friends,FriendsViewHolder> friendRecyclerAdapter = new FirebaseRecyclerAdapter<Friends, FriendsViewHolder>(
                 Friends.class,
-                R.layout.user_single_layout,
+                R.layout.friend,
                 FriendsViewHolder.class,
                 mFriendsDatabase
         ) {
             @Override
             protected void populateViewHolder(final FriendsViewHolder viewHolder, Friends model, int position) {
-                viewHolder.setDate(model.getDate());
+//                viewHolder.setDate(model.getDate());
 
                 final String list_user_Id = getRef(position).getKey();
                 mUsersDatabase.child(list_user_Id).addValueEventListener(new ValueEventListener() {
@@ -106,8 +107,16 @@ public class FriendsFragment extends Fragment {
 
                         if(dataSnapshot.hasChild("online"))
                         {
-                            Boolean user_online = (boolean) dataSnapshot.child("online").getValue();
-                            viewHolder.setuserOnline(user_online);
+                            String user_online = dataSnapshot.child("online").getValue().toString();
+                            if(user_online.equals("true"))
+                            {
+                                viewHolder.setuserOnline(true);
+                            }
+                            else
+                            {
+                                viewHolder.setuserOnline(false);
+
+                            }
                         }
 
                         viewHolder.setName(name);
@@ -133,6 +142,7 @@ public class FriendsFragment extends Fragment {
                                             startActivity(new Intent(getContext(), MessageActivity.class)
                                                     .putExtra("user_id",list_user_Id)
                                                     .putExtra("user_Name",name));
+
                                         }
                                     }
                                 });
@@ -164,11 +174,11 @@ public class FriendsFragment extends Fragment {
             mView = itemView;
         }
 
-        public void setDate(String Date)
-            {
-                TextView userNameView  = mView.findViewById(R.id.allUsersEmail);
-                userNameView.setText(Date);
-            }
+//        public void setDate(String Date)
+//            {
+//                TextView userNameView  = mView.findViewById(R.id.allUsersEmail);
+//                userNameView.setText(Date);
+//            }
         public void setName (String Name)
         {
             TextView nameView = mView.findViewById(R.id.allUsersName);

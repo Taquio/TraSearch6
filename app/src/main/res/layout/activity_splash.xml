@@ -4,21 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context="com.example.taquio.trasearch6.SplashActivity">
 
     <LinearLayout
-        android:id="@+id/layouttop"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="150dp"
-        android:orientation="vertical"
-        >
+        android:layout_gravity="center">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="25dp"
-            android:src="@drawable/ts_splash"/>
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:src="@drawable/ts_splash"
+            android:id="@+id/splash_image"
+            />
     </LinearLayout>
 </LinearLayout>

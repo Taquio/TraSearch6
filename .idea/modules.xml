@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TraSearch6.iml" filepath="$PROJECT_DIR$/TraSearch6.iml" />
-      <module fileurl="file://C:\Users\Edward\Desktop\TraSearch\TraSearch6\.idea\TraSearch6.iml" filepath="C:\Users\Edward\Desktop\TraSearch\TraSearch6\.idea\TraSearch6.iml" />
-      <module fileurl="file://C:\Users\Del Mar\AndroidStudioProjects\traSearchED\TraSearch6\TraSearch6.iml" filepath="C:\Users\Del Mar\AndroidStudioProjects\traSearchED\TraSearch6\TraSearch6.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -219,7 +219,7 @@ public class RegisterActivity extends AppCompatActivity {
             userDetails.put("Email",email);
             userDetails.put("Name",name);
             userDetails.put("UserName",username);
-            userDetails.put("Image","https://cdn1.iconfinder.com/data/icons/mix-color-4/502/Untitled-1-512.png");
+            userDetails.put("Image","default");
             userDetails.put("device_token",deviceToken);
             userDetails.put("PhoneNumber",phonenumber);
 
