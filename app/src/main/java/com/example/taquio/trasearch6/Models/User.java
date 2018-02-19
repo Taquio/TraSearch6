@@ -9,41 +9,12 @@ import android.os.Parcelable;
 
 public class User implements Parcelable {
 
-
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
     private String userID, Email, Name, Image,
-            Image_thumb, PhoneNumber, UserName, device_token;
-    private Long online;
+            Image_thumb, UserName, device_token, PhoneNumber;
 
 
     public User() {
 
-    }
-
-    protected User(Parcel in) {
-        userID = in.readString();
-        Email = in.readString();
-        Name = in.readString();
-        Image = in.readString();
-        Image_thumb = in.readString();
-        PhoneNumber = in.readString();
-        UserName = in.readString();
-        device_token = in.readString();
-        if (in.readByte() == 0) {
-            online = null;
-        } else {
-            online = in.readLong();
-        }
     }
 
     public String getUserID() {
@@ -86,14 +57,6 @@ public class User implements Parcelable {
         Image_thumb = image_thumb;
     }
 
-    public String getPhoneNumber() {
-        return PhoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        PhoneNumber = phoneNumber;
-    }
-
     public String getUserName() {
         return UserName;
     }
@@ -110,13 +73,40 @@ public class User implements Parcelable {
         this.device_token = device_token;
     }
 
-    public Long getOnline() {
-        return online;
+    public String getPhoneNumber() {
+        return PhoneNumber;
     }
 
-    public void setOnline(Long online) {
-        this.online = online;
+    public void setPhoneNumber(String phoneNumber) {
+        PhoneNumber = phoneNumber;
     }
+
+    public static Creator<User> getCREATOR() {
+        return CREATOR;
+    }
+
+    protected User(Parcel in) {
+        userID = in.readString();
+        Email = in.readString();
+        Name = in.readString();
+        Image = in.readString();
+        Image_thumb = in.readString();
+        UserName = in.readString();
+        device_token = in.readString();
+        PhoneNumber = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     @Override
     public int describeContents() {
@@ -130,14 +120,8 @@ public class User implements Parcelable {
         dest.writeString(Name);
         dest.writeString(Image);
         dest.writeString(Image_thumb);
-        dest.writeString(PhoneNumber);
         dest.writeString(UserName);
         dest.writeString(device_token);
-        if (online == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(online);
-        }
+        dest.writeString(PhoneNumber);
     }
 }
