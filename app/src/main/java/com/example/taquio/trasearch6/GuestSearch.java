@@ -38,7 +38,7 @@ public class GuestSearch extends AppCompatActivity {
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(GuestSearch.this,ChooseLayout.class));
+                startActivity(new Intent(GuestSearch.this,RegisterActivity.class));
                 finish();
             }
         });
