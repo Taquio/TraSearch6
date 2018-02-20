@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,7 +65,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Uri resultUri;
     private String newName,newEmail,newPassword,newMobile,mauthEmail,mauthPassword;
-    private ImageButton ediProfile_saveChanges;
+    private ImageView ediProfile_saveChanges;
 
     private Boolean name,email,password,mobile,image;
 

@@ -150,21 +150,21 @@ public class HomeActivity2 extends AppCompatActivity implements
 //            }
 //        }
 //    }
-    private void initImageLoader(){
+    private void initImageLoader() {
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
-
+    }
 
     @Override
-    protected void onPause() {
+    protected void onPause(){
         super.onPause();
         Log.d(TAG, "onPause: OnPause Started");
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if(currentUser!=null) {
-            Log.d(TAG, "onPause: User Offline");
-            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
-        }
+//        if(currentUser!=null) {
+//            Log.d(TAG, "onPause: User Offline");
+//            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
+//        }
     }
     private void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -225,16 +225,16 @@ public class HomeActivity2 extends AppCompatActivity implements
         super.onStart();
         Log.d(TAG, "onStart: Started");
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser==null)
-        {
-            Log.d(TAG, "onStart: Calling back to start method");
-            sendToStart();
-        }
-        else
-        {
-            Log.d(TAG, "onStart: User Online");
-            mUserRef.child("online").setValue("true");
-        }
+//        if(currentUser==null)
+//        {
+//            Log.d(TAG, "onStart: Calling back to start method");
+//            sendToStart();
+//        }
+//        else
+//        {
+//            Log.d(TAG, "onStart: User Online");
+//            mUserRef.child("online").setValue("true");
+//        }
         mAuth.addAuthStateListener(mAuthStateListener);
     }
 

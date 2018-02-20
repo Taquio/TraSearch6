@@ -10,7 +10,7 @@
             android:id="@+id/profToolBar4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/white_grey_border_bottom">
+            android:background="#009688">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -20,17 +20,26 @@
 
                 <SearchView
                     android:id="@+id/searchV"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="60">
+                    android:layout_height="30dp"
+                    android:layout_weight="60"
+                    android:background="@drawable/searchbar_shape">
 
                 </SearchView>
 
+                <!--<ImageView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="50dp"-->
+                    <!--android:layout_weight="30"-->
+                    <!--android:src="@drawable/ts"/>-->
                 <ImageView
                     android:layout_width="0dp"
-                    android:layout_height="50dp"
                     android:layout_weight="30"
-                    android:src="@drawable/ts"/>
+                    android:layout_height="50dp"
+                    android:src="@drawable/trash"/>
+
 
             </LinearLayout>
 

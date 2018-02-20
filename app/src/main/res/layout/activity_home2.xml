@@ -6,27 +6,33 @@
     android:layout_height="match_parent"
     tools:context="com.example.taquio.trasearch6.HomeActivity2">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/frame_container"/>
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/frame_container"/>-->
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/relLayoutParent">
-
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:id="@+id/hometoolbar">-->
+        <!--<include layout="@layout/snippet_hometoolbar"/>-->
+    <!--</RelativeLayout>-->
         <RelativeLayout
         android:id="@+id/relatLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <include layout="@layout/snippet_top_searchbar"/>
+            <include layout="@layout/snippet_top_searchbar"/>
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/relatLayout2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relatLayout1">
 
             <include layout="@layout/layout_top_tabs"/>
         </RelativeLayout>

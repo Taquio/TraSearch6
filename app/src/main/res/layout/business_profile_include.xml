@@ -10,7 +10,7 @@
             android:id="@+id/busProfLinLayout1"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:background="#50C878"
+            android:background="#009688"
             android:orientation="vertical">
 
         </LinearLayout>

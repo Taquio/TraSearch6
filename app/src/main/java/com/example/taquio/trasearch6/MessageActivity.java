@@ -7,12 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -161,25 +165,25 @@ public class  MessageActivity extends AppCompatActivity {
 
 
     }
-
-<<<<<<<<< Temporary merge branch 1
-    public void refIDs()
-    {
+//
+//<<<<<<<<< Temporary merge branch 1
+    public void refIDs() {
         chatUserImage = findViewById(R.id.chatUserImage);
         chatUserLastSeen = findViewById(R.id.chatUserLastSeen);
         chatUserName = findViewById(R.id.chatUserName);
         ChatUser_addBtn = findViewById(R.id.ChatUser_addBtn);
         ChatUser_sendBtn = findViewById(R.id.ChatUser_sendBtn);
         ChatUser_txtFld = findViewById(R.id.ChatUser_txtFld);
-=========
+    }
+//=========
     private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView (Chat)");
         BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
         BottomNavigationViewHelper.enableNavigation(mContext,this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
-        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
+        MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);
->>>>>>>>> Temporary merge branch 2
+//>>>>>>>>> Temporary merge branch 2
     }
 }
