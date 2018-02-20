@@ -222,6 +222,7 @@ public class RegisterActivity extends AppCompatActivity {
             userDetails.put("Image","default");
             userDetails.put("device_token",deviceToken);
             userDetails.put("PhoneNumber",phonenumber);
+            userDetails.put("userID",mAuth.getCurrentUser().getUid());
 
 
             current_user_db.setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
