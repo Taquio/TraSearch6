@@ -143,24 +143,28 @@ public class  MessageActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 String online = dataSnapshot.child("online").getValue().toString();
-                final String image = dataSnapshot.child("Image_thumb").getValue().toString();
-                Picasso.with(MessageActivity.this).load(image)
-                        .networkPolicy(NetworkPolicy.OFFLINE)
-                        .placeholder(R.drawable.man)
-                        .into(mProfileImage, new Callback() {
-                            @Override
-                            public void onSuccess() {
 
-                            }
+                if(dataSnapshot.hasChild("Image_thumb"))
+                {
+                    final String image = dataSnapshot.child("Image_thumb").getValue().toString();
+                    Picasso.with(MessageActivity.this).load(image)
+                            .networkPolicy(NetworkPolicy.OFFLINE)
+                            .placeholder(R.drawable.man)
+                            .into(mProfileImage, new Callback() {
+                                @Override
+                                public void onSuccess() {
 
-                            @Override
-                            public void onError() {
-                                Picasso.with(MessageActivity.this)
-                                        .load(image)
-                                        .placeholder(R.drawable.man)
-                                        .into(mProfileImage);
-                            }
-                        });
+                                }
+
+                                @Override
+                                public void onError() {
+                                    Picasso.with(MessageActivity.this)
+                                            .load(image)
+                                            .placeholder(R.drawable.man)
+                                            .into(mProfileImage);
+                                }
+                            });
+                }
 
 
                 if(online.equals("online")) {
