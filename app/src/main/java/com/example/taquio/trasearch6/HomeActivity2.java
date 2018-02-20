@@ -25,13 +25,22 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class HomeActivity2 extends AppCompatActivity implements
         MainFeedListAdapter.OnLoadMoreItemsListener{
 
-
+    @Override
+    public void onLoadMoreItems() {
+        Log.d(TAG, "onLoadMoreItems: displaying more photos");
+        ItemsFragment fragment = (ItemsFragment)getSupportFragmentManager()
+                .findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
+        if(fragment != null){
+            fragment.displayMorePhotos();
+        }
+    }
     private static final String TAG = "HomeActivity";
     private Context mContext = HomeActivity2.this;
     private static final int ACTIVITY_NUM = 0;
@@ -74,19 +83,8 @@ public class HomeActivity2 extends AppCompatActivity implements
 //        AddToStoryDialog dialog = new AddToStoryDialog();
 //        dialog.show(getFragmentManager(), getString(R.string.dialog_add_to_story));
 //    }
-    private void initImageLoader(){
-        UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
-        ImageLoader.getInstance().init(universalImageLoader.getConfig());
-    }
-    @Override
-    public void onLoadMoreItems() {
-        Log.d(TAG, "onLoadMoreItems: displaying more photos");
-        ItemsFragment fragment = (ItemsFragment)getSupportFragmentManager()
-                .findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
-        if(fragment != null){
-            fragment.displayMorePhotos();
-        }
-    }
+
+
     public void onCommentThreadSelected(Photo photo, String callingActivity){
         Log.d(TAG, "onCommentThreadSelected: selected a coemment thread");
 
@@ -152,7 +150,22 @@ public class HomeActivity2 extends AppCompatActivity implements
 //            }
 //        }
 //    }
+    private void initImageLoader(){
+        UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
+        ImageLoader.getInstance().init(universalImageLoader.getConfig());
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: OnPause Started");
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if(currentUser!=null) {
+            Log.d(TAG, "onPause: User Offline");
+            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
+        }
+    }
     private void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new VideosFragment());
@@ -210,6 +223,18 @@ public class HomeActivity2 extends AppCompatActivity implements
     @Override
     public void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart: Started");
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser==null)
+        {
+            Log.d(TAG, "onStart: Calling back to start method");
+            sendToStart();
+        }
+        else
+        {
+            Log.d(TAG, "onStart: User Online");
+            mUserRef.child("online").setValue("true");
+        }
         mAuth.addAuthStateListener(mAuthStateListener);
     }
 

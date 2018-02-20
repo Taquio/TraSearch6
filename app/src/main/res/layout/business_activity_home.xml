@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/bHomeRel1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/business_home_searchbar"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bHomeRel2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bHomeRel1">
+
+            <include layout="@layout/business_home_top_tabs"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bHomeRel3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/bHomeRel2">
+
+            <include layout="@layout/business_home_viewpager"/>
+
+        </RelativeLayout>
+
+        <include layout="@layout/business_bottom_navigation"/>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

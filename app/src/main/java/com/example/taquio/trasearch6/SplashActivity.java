@@ -1,8 +1,6 @@
 package com.example.taquio.trasearch6;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -77,6 +75,6 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void refId(){
-        splashImage = (ImageView) findViewById(R.id.splash_image);
+        splashImage = findViewById(R.id.splash_image);
     }
 }

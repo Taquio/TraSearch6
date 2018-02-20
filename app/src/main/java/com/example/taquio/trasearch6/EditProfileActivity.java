@@ -64,8 +64,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Uri resultUri;
     private String newName,newEmail,newPassword,newMobile,mauthEmail,mauthPassword;
-    private boolean name=false,email=false,password=false,mobile=false,image=false;
     private ImageButton ediProfile_saveChanges;
+
+    private Boolean name,email,password,mobile,image;
 
 
 
@@ -74,6 +75,7 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+
         refIDs();
         mImageStorage = FirebaseStorage.getInstance().getReference();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -86,7 +88,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 ediProfile_name.setHint(dataSnapshot.child("Name").getValue().toString());
                 ediProfile_email.setHint(dataSnapshot.child("Email").getValue().toString());
                 ediProfile_mobile.setHint(dataSnapshot.child("PhoneNumber").getValue().toString());
-
+                mauthEmail = dataSnapshot.child("Email").getValue().toString();
                 Picasso.with(EditProfileActivity.this).load(dataSnapshot.child("Image").getValue().toString())
                         .networkPolicy(NetworkPolicy.OFFLINE)
                         .placeholder(R.drawable.man)
@@ -105,122 +107,141 @@ public class EditProfileActivity extends AppCompatActivity {
                                         .into(ediProfile_image);
                             }
                         });
-
-
-                ediProfile_changeImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        CropImage.activity()
-                                .setGuidelines(CropImageView.Guidelines.ON)
-                                .setCropShape(CropImageView.CropShape.OVAL)
-                                .setBorderCornerColor(Color.GREEN)
-                                .setBorderLineColor(Color.GREEN)
-                                .setActivityMenuIconColor(Color.GREEN)
-                                .setBorderCornerColor(Color.GREEN)
-                                .setFixAspectRatio(true)
-                                .start(EditProfileActivity.this);
-                    }
-                });
-
-                newName = ediProfile_name.getText().toString();
-                if (!(TextUtils.isEmpty(newName))) {
-                    name = true;
-                }
-                newEmail = ediProfile_email.getText().toString();
-                mauthEmail = ediProfile_email.getHint().toString();
-                if (!(TextUtils.isEmpty(newEmail))) {
-                    mauthEmail = ediProfile_email.getHint().toString();
-                    email = true;
-                }
-                newPassword = ediProfile_password.getText().toString();
-                if (!(TextUtils.isEmpty(newPassword))) {
-                    password = true;
-                }
-                newMobile = ediProfile_mobile.getText().toString();
-                if (TextUtils.isEmpty(newMobile)) {
-                    mobile = true;
-                }
-
-                    image=true;
-
-
-                ediProfile_saveChanges.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditProfileActivity.this);
-                        alertDialog.setTitle("PASSWORD");
-                        alertDialog.setMessage("Enter Password");
-
-                        final EditText input = new EditText(EditProfileActivity.this);
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.MATCH_PARENT);
-                        input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        input.setLayoutParams(lp);
-                        alertDialog.setView(input);
-                        alertDialog.setIcon(R.drawable.key);
-
-                        alertDialog.setPositiveButton("YES",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        mauthPassword = input.getText().toString();
-                                        AuthCredential credential = EmailAuthProvider
-                                                .getCredential(mauthEmail, mauthPassword);
-                                        mCurrentUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    uploadData(password, image, name, email, mobile);
-                                                }
-                                                else
-                                                    {
-                                                    Toast
-                                                            .makeText(EditProfileActivity.this
-                                                                    , "Invalid Password"
-                                                                    , Toast.LENGTH_SHORT)
-                                                            .show();
-                                                    }
-                                            }
-                                        });
-                                    }
-                                });
-                        alertDialog.setNegativeButton("NO",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                        alertDialog.show();
-                    }
-                });
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
 
+        ediProfile_changeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setCropShape(CropImageView.CropShape.OVAL)
+                        .setBorderCornerColor(Color.GREEN)
+                        .setBorderLineColor(Color.GREEN)
+                        .setActivityMenuIconColor(Color.GREEN)
+                        .setBorderCornerColor(Color.GREEN)
+                        .setFixAspectRatio(true)
+                        .start(EditProfileActivity.this);
+            }
+        });
+
+
+
+        name=false;email=false;password=false;mobile=false;image=false;
+
+
+        ediProfile_saveChanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditProfileActivity.this);
+                alertDialog.setTitle("PASSWORD");
+                alertDialog.setMessage("Enter Password");
+                String itsName = ediProfile_name.getText().toString(),
+                        itsPass = ediProfile_password.getText().toString(),
+                        itsEmail = ediProfile_email.getText().toString(),
+                        itsMobile = ediProfile_mobile.getText().toString();
+
+                if(!TextUtils.isEmpty(itsName))
+                {name = true;}
+                if(!TextUtils.isEmpty(itsPass))
+                {password = true;}
+                if(!TextUtils.isEmpty(itsEmail))
+                {email = true;}
+                if(!TextUtils.isEmpty(itsMobile))
+                {mobile = true;}
+                if(resultUri!=null)
+                {image=true;}
+
+                final EditText input = new EditText(EditProfileActivity.this);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                input.setLayoutParams(lp);
+                alertDialog.setView(input);
+                alertDialog.setIcon(R.drawable.key);
+
+                alertDialog.setPositiveButton("YES",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                mauthPassword = input.getText().toString();
+                                if(TextUtils.isEmpty(mauthPassword))
+                                {
+                                    Toast
+                                            .makeText(EditProfileActivity.this
+                                                    , " Verify your old password"
+                                                    , Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                                else
+                                {
+
+                                    AuthCredential credential = EmailAuthProvider
+                                            .getCredential(mauthEmail, mauthPassword);
+                                    mCurrentUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+
+                                                uploadData(password, image, name, email, mobile);
+                                            }
+                                            else
+                                            {
+                                                Toast
+                                                        .makeText(EditProfileActivity.this
+                                                                , "Invalid Password: "+mauthPassword+"\n"+mauthEmail
+                                                                , Toast.LENGTH_SHORT)
+                                                        .show();
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                alertDialog.setNegativeButton("NO",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                alertDialog.show();
+            }
+        });
+
 
     }
 
-    public void uploadData(final boolean pass
-            , final boolean image
-            , final boolean name
-            , final boolean email
-            , final boolean mobile) {
+    public void uploadData(boolean Thispass
+            , boolean Thisimage
+            , boolean Thisname
+            , boolean Thisemail
+            , boolean Thismobile) {
         Map updateDB = new HashMap();
-        if (name) {
+       boolean flag =false
+               ,emailFlag=false;
+        if (Thisname) {
+            Log.d(TAG, "uploadData: Will Update Name");
             updateDB.put("Name", ediProfile_name.getText().toString());
+            flag =true;
         }
-        if (email) {
+        if (Thisemail) {
+            Log.d(TAG, "uploadData: Will Update Email");
+            flag =true;
             updateDB.put("Email", ediProfile_email.getText().toString());
         }
-        if (mobile) {
+        if (Thismobile) {
+            Log.d(TAG, "uploadData: Will Update Mobile");
+            flag =true;
             updateDB.put("PhoneNumber", ediProfile_mobile.getText().toString());
         }
-        if (pass) {
+        if (Thispass) {
+            Log.d(TAG, "uploadData: Will Update Password");
+            flag =true;
             mCurrentUser.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -232,7 +253,10 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
             });
         }
-        if (email) {
+        if (Thisemail) {
+            Log.d(TAG, "uploadData: Will Update Email");
+            flag =true;
+            emailFlag = true;
             mCurrentUser.updateEmail(newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -244,74 +268,94 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
             });
         }
-        if (image) {
-            try {
+        if(flag||Thisimage)
+        {
+            if(emailFlag)
+            {
+                updateDB.put("Email", ediProfile_email.getText().toString());
+            }
+            mUserDatabase.updateChildren(updateDB).addOnCompleteListener(new OnCompleteListener() {
+                @Override
+                public void onComplete(@NonNull Task task) {
+                    if(task.isSuccessful())
+                    {
+                        Toast.makeText(EditProfileActivity.this,"Updated",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(EditProfileActivity.this,EditProfileActivity.class));
+                        finish();
+                    }
+                }
+            });
+            if (Thisimage) {
+                Log.d(TAG, "uploadData: Will Update Image");
+
                 progressDialog = new ProgressDialog(EditProfileActivity.this);
                 progressDialog.setTitle("Uploading Image...");
                 progressDialog.setMessage("Please wait while we upload the your beautiful image");
                 progressDialog.show();
                 progressDialog.setCanceledOnTouchOutside(false);
-
                 File image_path = new File(resultUri.getPath());
                 final Bitmap thumbBitmap;
+                try {
+                    thumbBitmap = new Compressor(EditProfileActivity.this)
+                            .setMaxWidth(200).setMaxHeight(200).setQuality(75)
+                            .compressToBitmap(image_path);
 
-                thumbBitmap = new Compressor(EditProfileActivity.this)
-                        .setMaxWidth(200).setMaxHeight(200).setQuality(75)
-                        .compressToBitmap(image_path);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    thumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    final byte[] byteData = baos.toByteArray();
 
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                thumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                final byte[] byteData = baos.toByteArray();
+                    StorageReference filePath = mImageStorage.
+                            child("Photos").
+                            child(mCurrentUser.getUid()).
+                            child("ProfilePhoto").
+                            child("profile_image");
+                    final StorageReference thumbFilePath = mImageStorage.
+                            child("Photos").
+                            child(mCurrentUser.getUid()).
+                            child("ProfilePhoto").
+                            child("profile_thumb");
+                    filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                final String download_url = task.getResult().getDownloadUrl().toString();
 
-                StorageReference filePath = mImageStorage.
-                        child("Photos").
-                        child(mCurrentUser.getUid()).
-                        child("ProfilePhoto").
-                        child("profile_image");
-                final StorageReference thumbFilePath = mImageStorage.
-                        child("Photos").
-                        child(mCurrentUser.getUid()).
-                        child("ProfilePhoto").
-                        child("profile_thumb");
-                filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            final String download_url = task.getResult().getDownloadUrl().toString();
+                                UploadTask uploadTask = thumbFilePath.putBytes(byteData);
+                                uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumb_task) {
 
-                            UploadTask uploadTask = thumbFilePath.putBytes(byteData);
-                            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumb_task) {
+                                        final String thumb_downloadURL = thumb_task.getResult().getDownloadUrl().toString();
+                                        Map update_hashmap = new HashMap();
+                                        update_hashmap.put("Image", download_url);
+                                        update_hashmap.put("Image_thumb", thumb_downloadURL);
 
-                                    final String thumb_downloadURL = thumb_task.getResult().getDownloadUrl().toString();
-                                    Map update_hashmap = new HashMap();
-                                    update_hashmap.put("Image", download_url);
-                                    update_hashmap.put("Image_thumb", thumb_downloadURL);
+                                        mUserDatabase.updateChildren(update_hashmap).addOnCompleteListener(new OnCompleteListener() {
+                                            @Override
+                                            public void onComplete(@NonNull Task task) {
+                                                if (task.isSuccessful()) {
+                                                    progressDialog.dismiss();
 
-                                    mUserDatabase.updateChildren(update_hashmap).addOnCompleteListener(new OnCompleteListener() {
-                                        @Override
-                                        public void onComplete(@NonNull Task task) {
-                                            if (task.isSuccessful()) {
-                                                progressDialog.dismiss();
-
-                                            } else {
-                                                Toast.makeText(EditProfileActivity.this, "Failed to retrive image", Toast.LENGTH_SHORT).show();
-                                                progressDialog.dismiss();
+                                                } else {
+                                                    Toast.makeText(EditProfileActivity.this, "Failed to retrive image", Toast.LENGTH_SHORT).show();
+                                                    progressDialog.dismiss();
+                                                }
                                             }
-                                        }
-                                    });
-                                }
-                            });
-                        } else {
-                            Toast.makeText(EditProfileActivity.this, "Error Uploading Profile Picture", Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
+                                        });
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(EditProfileActivity.this, "Error Uploading Profile Picture", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            }
                         }
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+        }else{
+            Toast.makeText(EditProfileActivity.this,"Not Updated",Toast.LENGTH_SHORT).show();
         }
     }
         @Override
@@ -323,7 +367,6 @@ public class EditProfileActivity extends AppCompatActivity {
                     resultUri = result.getUri();
                     ediProfile_image.setImageURI(resultUri);
                     image=true;
-
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     Exception error = result.getError();
                 }

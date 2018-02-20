@@ -44,7 +44,7 @@ public class MyProfileActivity extends AppCompatActivity implements
     private ImageView profilePhoto;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 

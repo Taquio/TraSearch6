@@ -162,6 +162,7 @@ public class  MessageActivity extends AppCompatActivity {
 
     }
 
+<<<<<<<<< Temporary merge branch 1
     public void refIDs()
     {
         chatUserImage = findViewById(R.id.chatUserImage);
@@ -170,5 +171,15 @@ public class  MessageActivity extends AppCompatActivity {
         ChatUser_addBtn = findViewById(R.id.ChatUser_addBtn);
         ChatUser_sendBtn = findViewById(R.id.ChatUser_sendBtn);
         ChatUser_txtFld = findViewById(R.id.ChatUser_txtFld);
+=========
+    private void setupBottomNavigationView() {
+        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView (Chat)");
+        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(mContext,this, bottomNavigationViewEx);
+        Menu menu = bottomNavigationViewEx.getMenu();
+        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
+        menuItem.setChecked(true);
+>>>>>>>>> Temporary merge branch 2
     }
 }
