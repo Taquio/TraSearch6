@@ -37,6 +37,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +61,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference myRef;
+    private DatabaseReference myRef,mUserDatabase;
     private FirebaseMethods mFirebaseMethods;
     private FirebaseUser mUser;
     //widgets
@@ -212,16 +215,33 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void setProfileWidgets(UserSettings userSettings) {
+    private void setProfileWidgets(final UserSettings userSettings) {
         Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getEmail() );
         Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getName() );
         Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getPhoneNumber());
+        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getImage());
+
         User user = userSettings.getUser();
 
         mName.setText(user.getName());
         mEmail.setText(user.getEmail());
         mPhone.setText(user.getPhoneNumber());
 
+        Picasso.with(mContext).load(userSettings.getUser().getImage())
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .placeholder(R.drawable.man)
+                .into(mProfilePhoto, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                    }
+                    @Override
+                    public void onError() {
+                        Picasso.with(mContext)
+                                .load(userSettings.getUser().getImage())
+                                .placeholder(R.drawable.man)
+                                .into(mProfilePhoto);
+                    }
+                });
     }
 
     /**

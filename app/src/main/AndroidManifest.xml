@@ -79,12 +79,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBgBgls2M2SoakI70MhTqnKlctI6kFlIl8" />
-        <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".SplashActivity"
@@ -96,8 +96,9 @@
             </intent-filter>
         </activity>
         <!-- <activity android:name=".AppStart" /> -->
-        <activity android:name=".RegisterActivity"
-            android:parentActivityName=".ChooseLayout"/>
+        <activity
+            android:name=".RegisterActivity"
+            android:parentActivityName=".ChooseLayout" />
 
         <!-- <activity -->
         <!-- android:name=".Profile.EditActivity" -->
@@ -140,7 +141,7 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".HomeActivity2" />
         <activity android:name=".Utils.Donate" />
         <activity
@@ -150,6 +151,8 @@
             android:name=".Messages.MessagesActivity"
             android:parentActivityName=".HomeActivity2" />
         <activity android:name=".GuestSearch" />
+        <activity android:name=".MessageActivity"
+            android:parentActivityName=".Messages.MessagesActivity"/>
         <activity
             android:name=".ChooseLayout"
             android:parentActivityName=".GuestSearch" />
@@ -159,7 +162,8 @@
             android:parentActivityName=".MyProfileActivity" />
         <activity android:name=".Camera.CameraActivity" />
         <activity android:name=".Camera.NextActivity" />
-        <activity android:name=".RegisterOptions"></activity>
+        <activity android:name=".RegisterOptions" />
+        <activity android:name=".RegisterBusinessActivity"></activity>
     </application>
 
 </manifest>

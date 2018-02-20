@@ -23,6 +23,9 @@ import com.example.taquio.trasearch6.Utils.UniversalImageLoader;
 import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -46,13 +49,14 @@ public class HomeActivity2 extends AppCompatActivity implements
     private FrameLayout mFrameLayout;
     private RelativeLayout mRelativeLayout;
 
+    private DatabaseReference mUserDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting.");
-
         mViewPager = findViewById(R.id.container);
         mFrameLayout = findViewById(R.id.frame_container);
         mRelativeLayout = findViewById(R.id.relLayoutParent);
@@ -60,6 +64,7 @@ public class HomeActivity2 extends AppCompatActivity implements
         initImageLoader();
         setupBottomNavigationView();
         setupViewPager();
+
     }
 //    public void openNewStoryActivity(){
 //        Intent intent = new Intent(this, NewStoryActivity.class);
@@ -190,6 +195,7 @@ public class HomeActivity2 extends AppCompatActivity implements
     private void setUpFirebaseAuth(){
         Log.d(TAG, "setUpFirebase: FIREBASE SETTING UP....");
         mAuth = FirebaseAuth.getInstance();
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -208,6 +214,10 @@ public class HomeActivity2 extends AppCompatActivity implements
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthStateListener);
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mUserDatabase.child("online").setValue("online");
+        }
     }
 
     @Override
@@ -215,6 +225,7 @@ public class HomeActivity2 extends AppCompatActivity implements
         super.onStop();
         if(mAuthStateListener != null){
             mAuth.removeAuthStateListener(mAuthStateListener);
+            mUserDatabase.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
 }

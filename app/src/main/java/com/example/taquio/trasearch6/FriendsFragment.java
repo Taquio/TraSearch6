@@ -127,7 +127,7 @@ public class FriendsFragment extends Fragment {
                                 CharSequence options[] = new CharSequence[]{"Open Profile","Send Message"};
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                builder.setTitle("Select Options");
+                                builder.setTitle(name+"\nSelect Options");
                                 builder.setItems(options, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

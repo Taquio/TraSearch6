@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class ChooseLayout extends AppCompatActivity {
 
-    Button choose_NonBusiness;
+    Button choose_NonBusiness,choose_Business;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +24,16 @@ public class ChooseLayout extends AppCompatActivity {
         choose_NonBusiness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChooseLayout.this,RegisterActivity.class));
+                startActivity(new Intent(ChooseLayout.this,RegisterActivity.class)
+                        .putExtra("UserType","NonBusiness"));
+                finish();
+            }
+        });
+        choose_Business.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ChooseLayout.this,RegisterBusinessActivity.class)
+                        .putExtra("UserType","Business"));
                 finish();
             }
         });
@@ -34,6 +43,7 @@ public class ChooseLayout extends AppCompatActivity {
     public void refIDs()
     {
         choose_NonBusiness = findViewById(R.id.choose_NonBusiness);
+        choose_Business = findViewById(R.id.choose_Business);
     }
 }
 
