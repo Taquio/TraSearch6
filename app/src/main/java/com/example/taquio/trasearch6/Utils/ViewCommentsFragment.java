@@ -312,7 +312,6 @@ public class ViewCommentsFragment extends Fragment {
                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
                            }
-
                            @Override
                            public void onChildRemoved(DataSnapshot dataSnapshot) {
 

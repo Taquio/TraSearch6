@@ -121,7 +121,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
 //
 //                //going to need to do something else?
                 ((HomeActivity2)mContext).hideLayout();
-
+                ((HomeActivity2) mContext).finish();
             }
         });
 
@@ -142,7 +142,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference
                 .child("Users")
-               .orderByKey()
+               .orderByChild("userID")
                 .equalTo(getItem(position).getUser_id());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -213,7 +213,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         //get the user object
         Query userQuery = mReference
                 .child("Users")
-               .orderByKey()
+               .orderByChild("userID")
                 .equalTo(getItem(position).getUser_id());
         userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -288,8 +288,8 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference
                 .child("Users")
-//                .orderByChild("userID")
-                .orderByKey()
+                .orderByChild("userID")
+//                .orderByKey()
                 .equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
