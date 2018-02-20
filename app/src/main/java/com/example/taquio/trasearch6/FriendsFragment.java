@@ -103,12 +103,16 @@ public class FriendsFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         final String name = dataSnapshot.child("Name").getValue().toString();
-                        String user_thumb_img = dataSnapshot.child("Image_thumb").getValue().toString();
+                        if(dataSnapshot.hasChild("Image_thumb"))
+                        {
+                            String user_thumb_img = dataSnapshot.child("Image_thumb").getValue().toString();
+                            viewHolder.setProfileImage(user_thumb_img,getContext());
+                        }
 
                         if(dataSnapshot.hasChild("online"))
                         {
                             String user_online = dataSnapshot.child("online").getValue().toString();
-                            if(user_online.equals("true"))
+                            if(user_online.equals("online"))
                             {
                                 viewHolder.setuserOnline(true);
                             }
@@ -118,9 +122,8 @@ public class FriendsFragment extends Fragment {
 
                             }
                         }
-
+                        viewHolder.setStatus(dataSnapshot.child("Email").getValue().toString());
                         viewHolder.setName(name);
-                        viewHolder.setProfileImage(user_thumb_img,getContext());
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -174,11 +177,11 @@ public class FriendsFragment extends Fragment {
             mView = itemView;
         }
 
-//        public void setDate(String Date)
-//            {
-//                TextView userNameView  = mView.findViewById(R.id.allUsersEmail);
-//                userNameView.setText(Date);
-//            }
+        public void setStatus(String Status)
+            {
+                TextView userNameView  = mView.findViewById(R.id.allUsersEmail);
+                userNameView.setText(Status);
+            }
         public void setName (String Name)
         {
             TextView nameView = mView.findViewById(R.id.allUsersName);

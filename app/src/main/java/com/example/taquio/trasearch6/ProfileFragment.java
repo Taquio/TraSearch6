@@ -119,7 +119,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: navigating to " + mContext.getString(R.string.edit_profile_fragment));
                 Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-                intent.putExtra(getString(R.string.calling_activity), getString(R.string.profile_activity));
+//                intent.putExtra(getString(R.string.calling_activity), getString(R.string.profile_activity));
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
