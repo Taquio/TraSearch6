@@ -47,8 +47,8 @@ public class UserProfileActivity extends AppCompatActivity {
     private void initRecyclerView(){
 
 
-//        StaggeredRecyclerViewAdapter staggeredRecyclerViewAdapter =
-//                new StaggeredRecyclerViewAdapter(this, mItemName, mItemImage);
+//        StaggeredRecViewAdapter staggeredRecyclerViewAdapter =
+//                new StaggeredRecViewAdapter(this, mItemName, mItemImage);
 //        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayout.VERTICAL);
 //        recyclerView.setLayoutManager(staggeredGridLayoutManager);
 //        recyclerView.setAdapter(staggeredRecyclerViewAdapter);

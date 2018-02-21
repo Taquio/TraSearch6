@@ -20,7 +20,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_below="@+id/busProfLinLayout1"
-            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="-50dp"
             android:background="@drawable/background"
             android:src="@drawable/junkyard" />
@@ -48,14 +48,14 @@
                     android:text="Taylor's Junk Yard"
                     android:textColor="@color/black"
                     android:textSize="20dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_marginLeft="3dp"
                     android:layout_marginTop="2.1dp"
-                    android:src="@drawable/ic_verify"/>
+                    android:src="@drawable/ic_verify" />
 
             </LinearLayout>
 
@@ -72,7 +72,7 @@
                     android:layout_height="15dp"
                     android:layout_marginRight="1dp"
                     android:layout_marginTop="3dp"
-                    android:src="@drawable/icon_email"/>
+                    android:src="@drawable/icon_email" />
 
                 <TextView
                     android:id="@+id/busUserEmail"
@@ -95,7 +95,7 @@
                     android:layout_height="15dp"
                     android:layout_marginRight="1dp"
                     android:layout_marginTop="3dp"
-                    android:src="@drawable/icon_phone"/>
+                    android:src="@drawable/icon_phone" />
 
                 <TextView
                     android:id="@+id/busUserNumber"
@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:text="09280239038"
                     android:textColor="@color/black"
-                    android:textSize="15dp"/>
+                    android:textSize="15dp" />
 
             </LinearLayout>
 
@@ -118,7 +118,7 @@
                     android:layout_height="18dp"
                     android:layout_marginRight="3dp"
                     android:layout_marginTop="1dp"
-                    android:src="@drawable/business_fb"/>
+                    android:src="@drawable/business_fb" />
 
                 <TextView
                     android:id="@+id/busFacebook"
@@ -126,30 +126,7 @@
                     android:layout_height="wrap_content"
                     android:text="facebook/taylorjunkshop"
                     android:textColor="@color/black"
-                    android:textSize="15sp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginRight="3dp"
-                    android:layout_marginTop="3dp"
-                    android:src="@drawable/business_twit"/>
-
-                <TextView
-                    android:id="@+id/busTwit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="twitter/officialtaylorjunkshop"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
             </LinearLayout>
 

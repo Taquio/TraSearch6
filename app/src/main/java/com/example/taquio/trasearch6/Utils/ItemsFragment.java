@@ -5,22 +5,22 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.GridView;
 
 import com.eschao.android.widget.elasticlistview.ElasticListView;
-import com.eschao.android.widget.elasticlistview.LoadFooter;
 import com.eschao.android.widget.elasticlistview.OnLoadListener;
 import com.eschao.android.widget.elasticlistview.OnUpdateListener;
 import com.example.taquio.trasearch6.Models.Comment;
 import com.example.taquio.trasearch6.Models.Photo;
-import com.example.taquio.trasearch6.Models.Story;
 import com.example.taquio.trasearch6.Models.User;
 import com.example.taquio.trasearch6.R;
+import com.example.taquio.trasearch6.SampleTry.ItemGridAdapter;
+import com.example.taquio.trasearch6.SampleTry.StaggeredRecViewAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -28,8 +28,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,7 +68,7 @@ public class ItemsFragment extends Fragment implements OnUpdateListener, OnLoadL
     private ArrayList<String> mFollowing;
     private ArrayList<String> mAllUsers;
     private int recursionIterator = 0;
-    //    private ListView mListView;
+    private RecyclerView mRecView;
     private ElasticListView mListView;
     private MainFeedListAdapter adapter;
     private int resultsCount = 0;
@@ -78,17 +76,18 @@ public class ItemsFragment extends Fragment implements OnUpdateListener, OnLoadL
     //    private ArrayList<UserStories> mAllUserStories = new ArrayList<>();
     private JSONArray mMasterStoriesArray;
 
-    private RecyclerView mRecyclerView;
+    private GridView mgridView;
     public StoriesRecyclerViewAdapter mStoriesAdapter;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_items, container, false);
-        mListView = (ElasticListView) view.findViewById(R.id.listView);
-
-        initListViewRefresh();
+//        View view = inflater.inflate(R.layout.fragment_items, container, false);
+//        mListView = (ElasticListView) view.findViewById(R.id.listView);
+        View view = inflater.inflate(R.layout.try_mainlayout, container, false);
+        mgridView = view.findViewById(R.id.stagrecview);
+        initListViewRefresh(view);
         getFollowing();
 
         return view;
@@ -185,14 +184,17 @@ public class ItemsFragment extends Fragment implements OnUpdateListener, OnLoadL
 
         }
     }
-    private void initListViewRefresh(){
-        mListView.setHorizontalFadingEdgeEnabled(true);
-        mListView.setAdapter(adapter);
-        mListView.enableLoadFooter(true)
-                .getLoadFooter().setLoadAction(LoadFooter.LoadAction.RELEASE_TO_LOAD);
-        mListView.setOnUpdateListener(this)
-                .setOnLoadListener(this);
-        mListView.requestUpdate();
+    private void initListViewRefresh(View v){
+
+//        mgridView = v.findViewById(R.id.stagrecview);
+
+//        mListView.setHorizontalFadingEdgeEnabled(true);
+//        mListView.setAdapter(adapter);
+//        mListView.enableLoadFooter(true)
+//                .getLoadFooter().setLoadAction(LoadFooter.LoadAction.RELEASE_TO_LOAD);
+//        mListView.setOnUpdateListener(this)
+//                .setOnLoadListener(this);
+//        mListView.requestUpdate();
     }
 
 
@@ -384,9 +386,9 @@ public class ItemsFragment extends Fragment implements OnUpdateListener, OnLoadL
         if(mPaginatedPhotos != null){
             mPaginatedPhotos.clear();
         }
-        if(mRecyclerView != null){
-            mRecyclerView.setAdapter(null);
-        }
+//        if(mRecyclerView != null){
+//            mRecyclerView.setAdapter(null);
+//        }
         mFollowing = new ArrayList<>();
         mAllUsers = new ArrayList<>();
         mPhotos = new ArrayList<>();
@@ -420,12 +422,22 @@ public class ItemsFragment extends Fragment implements OnUpdateListener, OnLoadL
                     resultsCount++;
                     Log.d(TAG, "displayPhotos: adding a photo to paginated list: " + mPhotos.get(i).getPhoto_id());
                 }
+                int gridWidth = getResources().getDisplayMetrics().widthPixels;
+                int imageWidth = gridWidth/2;
+                mgridView.setColumnWidth(imageWidth);
+//                adapter = new MainFeedListAdapter(getActivity(), R.layout.layout_mainfeed_listitem, mPaginatedPhotos);
 
-                adapter = new MainFeedListAdapter(getActivity(), R.layout.layout_mainfeed_listitem, mPaginatedPhotos);
-                mListView.setAdapter(adapter);
+//                stagAdapter = new StaggeredRecViewAdapter(getActivity(),mPaginatedPhotos);
+//                StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL);
+//                mRecView.setLayoutManager(staggeredGridLayoutManager);
+//                mRecView.setAdapter(stagAdapter);
+                ItemGridAdapter adapter = new ItemGridAdapter(getActivity(),R.layout.try_gridview, mPaginatedPhotos);
+                mgridView.setAdapter(adapter);
+//                mListView.setAdapter(adapter);
 
                 // Notify update is done
-                mListView.notifyUpdated();
+//                mListView.notifyUpdated();
+
 
             }catch (IndexOutOfBoundsException e){
                 Log.e(TAG, "displayPhotos: IndexOutOfBoundsException:" + e.getMessage() );

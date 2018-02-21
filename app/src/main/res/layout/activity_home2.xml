@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/relatLayout1">
 
-            <include layout="@layout/layout_top_tabs"/>
+            <!--<include layout="@layout/layout_top_tabs"/>-->
         </RelativeLayout>
 
         <RelativeLayout
