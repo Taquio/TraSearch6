@@ -17,17 +17,12 @@ import android.widget.RelativeLayout;
 
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.SampleTry.ItemGridAdapter;
-import com.example.taquio.trasearch6.SampleTry.StaggeredRecViewAdapter;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.Utils.ItemsFragment;
-import com.example.taquio.trasearch6.Utils.MainFeedListAdapter;
 import com.example.taquio.trasearch6.Utils.UniversalImageLoader;
 import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 

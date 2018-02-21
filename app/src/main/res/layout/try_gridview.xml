@@ -17,7 +17,7 @@
             android:padding="5dp">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="30dp"
                 android:id="@+id/relLayout1">
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -34,7 +34,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:text="mitch.tabian"
                     android:layout_toRightOf="@+id/profile_photo"
                     android:layout_marginLeft="10dp"
@@ -42,16 +42,14 @@
                     android:id="@+id/username"
                     android:textColor="@color/black"
                     />
-
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_ellipses"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="20dp"
-                    android:id="@+id/ivEllipses"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="30dp"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:src="@drawable/ic_ellipses"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_marginRight="20dp"-->
+                    <!--android:id="@+id/ivEllipses"/>-->
 
             </RelativeLayout>
 
@@ -64,20 +62,20 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="30dp"
                 android:id="@+id/relLayout2"
                 android:layout_below="@+id/post_image"
                 android:background="@color/white">
 
                 <RelativeLayout
                     android:layout_width="60dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="20dp"
                     android:id="@+id/heartLayout"
                     android:background="@color/white">
 
                     <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:id="@+id/image_heart_red"
                         android:layout_centerInParent="true"
                         android:layout_marginLeft="20dp"
@@ -85,8 +83,8 @@
                         android:visibility="invisible"/>
 
                     <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:id="@+id/image_heart"
                         android:layout_centerInParent="true"
                         android:layout_marginLeft="20dp"
@@ -96,8 +94,8 @@
                 </RelativeLayout>
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:id="@+id/speech_bubble"
                     android:layout_toRightOf="@+id/heartLayout"
                     android:layout_marginLeft="10dp"
@@ -119,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:text="Liked by Mitch, Tom, Mohammed and 30 others"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textSize="13sp"
                     android:id="@+id/image_likes"/>
 
                 <TextView
@@ -127,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:text="mitch.tabian moutains #earthporn #mountains"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textSize="13sp"
                     android:id="@+id/image_caption"
                     android:layout_below="@+id/image_likes"
                     android:layout_marginTop="15dp"/>
@@ -137,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:text="View all 3 comments"
                     android:textColor="@color/grey"
-                    android:textSize="18sp"
+                    android:textSize="13sp"
                     android:layout_below="@+id/image_caption"
                     android:id="@+id/image_comments_link"
                     android:layout_marginTop="15dp"/>
@@ -147,7 +145,7 @@
                     android:layout_height="wrap_content"
                     android:text="3 DAYS AGO"
                     android:textColor="@color/grey"
-                    android:textSize="18sp"
+                    android:textSize="13sp"
                     android:layout_below="@+id/image_comments_link"
                     android:id="@+id/image_time_posted"
                     android:layout_marginTop="15dp"/>
