@@ -285,6 +285,7 @@ public class  MessageActivity extends AppCompatActivity {
 
         if(requestCode == GALLERY_PICK && resultCode == RESULT_OK){
 
+
             progressDialog = new ProgressDialog(MessageActivity.this);
             progressDialog.setTitle("Uploading Image...");
             progressDialog.setMessage("Please wait while we upload the your beautiful image");
@@ -292,73 +293,70 @@ public class  MessageActivity extends AppCompatActivity {
             Uri imageUri = data.getData();
             progressDialog.setCanceledOnTouchOutside(false);
             File image_path = new File(imageUri.getPath());
-
-            Bitmap thumbBitmap = null;
-
+            Bitmap thumbBitmap;
             try {
                 thumbBitmap = new Compressor(MessageActivity.this)
-                        .setMaxWidth(500).setMaxHeight(500).setQuality(80)
+                        .setMaxWidth(200).setMaxHeight(200).setQuality(80)
                         .compressToBitmap(image_path);
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                thumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] byteData = baos.toByteArray();
+
+                final String current_user_ref = "Messages/" + mCurrentUserId + "/" + mChatUser;
+                final String chat_user_ref = "Messages/" + mChatUser + "/" + mCurrentUserId;
+
+                DatabaseReference user_message_push = mRootRef.child("Messages")
+                        .child(mCurrentUserId).child(mChatUser).push();
+
+                final String push_id = user_message_push.getKey();
+
+
+                StorageReference filepath = mImageStorage.child("Photos").child(mCurrentUserId).child("ConvoImages").child( push_id + ".jpg");
+
+                UploadTask uploadTask = filepath.putBytes(byteData);
+                uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@android.support.annotation.NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if(task.isSuccessful()){
+
+                            String download_url = task.getResult().getDownloadUrl().toString();
+
+
+                            Map messageMap = new HashMap();
+                            messageMap.put("message", download_url);
+                            messageMap.put("seen", false);
+                            messageMap.put("type", "image");
+                            messageMap.put("time", ServerValue.TIMESTAMP);
+                            messageMap.put("from", mCurrentUserId);
+
+                            Map messageUserMap = new HashMap();
+                            messageUserMap.put(current_user_ref + "/" + push_id, messageMap);
+                            messageUserMap.put(chat_user_ref + "/" + push_id, messageMap);
+
+                            mChatMessageView.setText("");
+
+                            mRootRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
+                                    if(databaseError != null){
+
+                                        Log.d("CHAT_LOG", databaseError.getMessage().toString());
+                                        progressDialog.dismiss();
+                                    }else{
+                                        progressDialog.dismiss();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            thumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            final byte[] byteData = baos.toByteArray();
-
-
-
-            final String current_user_ref = "Messages/" + mCurrentUserId + "/" + mChatUser;
-            final String chat_user_ref = "Messages/" + mChatUser + "/" + mCurrentUserId;
-
-            DatabaseReference user_message_push = mRootRef.child("Messages")
-                    .child(mCurrentUserId).child(mChatUser).push();
-
-            final String push_id = user_message_push.getKey();
-
-
-            StorageReference filepath = mImageStorage.child("Photos").child(mCurrentUserId).child("ConvoImages").child( push_id + ".jpg");
-
-            UploadTask uploadTask = filepath.putBytes(byteData);
-            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@android.support.annotation.NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if(task.isSuccessful()){
-
-                        String download_url = task.getResult().getDownloadUrl().toString();
-
-
-                        Map messageMap = new HashMap();
-                        messageMap.put("message", download_url);
-                        messageMap.put("seen", false);
-                        messageMap.put("type", "image");
-                        messageMap.put("time", ServerValue.TIMESTAMP);
-                        messageMap.put("from", mCurrentUserId);
-
-                        Map messageUserMap = new HashMap();
-                        messageUserMap.put(current_user_ref + "/" + push_id, messageMap);
-                        messageUserMap.put(chat_user_ref + "/" + push_id, messageMap);
-
-                        mChatMessageView.setText("");
-
-                        mRootRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-
-                                if(databaseError != null){
-
-                                    Log.d("CHAT_LOG", databaseError.getMessage().toString());
-                                    progressDialog.dismiss();
-                                }else{
-                                    progressDialog.dismiss();
-                                }
-                            }
-                        });
-                    }
-                }
-            });
-
         }
     }
 
