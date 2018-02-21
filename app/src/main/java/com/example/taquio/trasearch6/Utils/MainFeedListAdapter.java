@@ -49,19 +49,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainFeedListAdapter extends ArrayAdapter<Photo> {
 
-    public interface OnLoadMoreItemsListener{
-        void onLoadMoreItems();
-    }
-    OnLoadMoreItemsListener mOnLoadMoreItemsListener;
-
     private static final String TAG = "MainFeedListAdapter";
-
+    OnLoadMoreItemsListener mOnLoadMoreItemsListener;
     private LayoutInflater mInflater;
     private int mLayoutResource;
     private Context mContext;
     private DatabaseReference mReference;
     private String currentUsername = "";
-
     public MainFeedListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Photo> objects) {
         super(context, resource, objects);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -74,23 +68,6 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
 //        }
     }
 
-    static class ViewHolder{
-        CircleImageView mprofileImage;
-        String likesString;
-        TextView username, timeDetla, caption, likes, comments;
-        SquareImageView image;
-        ImageView heartRed, heartWhite, comment;
-
-//        UserAccountSettings settings = new UserAccountSettings();
-        User user  = new User();
-        StringBuilder users;
-        String mLikesString;
-        boolean likeByCurrentUser;
-        Likes liker;
-        GestureDetector detector;
-        Photo photo;
-    }
-
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -101,16 +78,16 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
             convertView = mInflater.inflate(mLayoutResource, parent, false);
             holder = new ViewHolder();
 
-            holder.username = (TextView) convertView.findViewById(R.id.username);
-            holder.image = (SquareImageView) convertView.findViewById(R.id.post_image);
-            holder.heartRed = (ImageView) convertView.findViewById(R.id.image_heart_red);
-            holder.heartWhite = (ImageView) convertView.findViewById(R.id.image_heart);
-            holder.comment = (ImageView) convertView.findViewById(R.id.speech_bubble);
-            holder.likes = (TextView) convertView.findViewById(R.id.image_likes);
-            holder.comments = (TextView) convertView.findViewById(R.id.image_comments_link);
-            holder.caption = (TextView) convertView.findViewById(R.id.image_caption);
-            holder.timeDetla = (TextView) convertView.findViewById(R.id.image_time_posted);
-            holder.mprofileImage = (CircleImageView) convertView.findViewById(R.id.profile_photo);
+            holder.username = convertView.findViewById(R.id.username);
+            holder.image = convertView.findViewById(R.id.post_image);
+            holder.heartRed = convertView.findViewById(R.id.image_heart_red);
+            holder.heartWhite = convertView.findViewById(R.id.image_heart);
+            holder.comment = convertView.findViewById(R.id.speech_bubble);
+            holder.likes = convertView.findViewById(R.id.image_likes);
+            holder.comments = convertView.findViewById(R.id.image_comments_link);
+            holder.caption = convertView.findViewById(R.id.image_caption);
+            holder.timeDetla = convertView.findViewById(R.id.image_time_posted);
+            holder.mprofileImage = convertView.findViewById(R.id.profile_photo);
 
             convertView.setTag(holder);
         }
@@ -282,81 +259,6 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         }
     }
 
-    public class GestureListener extends GestureDetector.SimpleOnGestureListener{
-
-        ViewHolder mHolder;
-        public GestureListener(ViewHolder holder) {
-            mHolder = holder;
-        }
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return true;
-        }
-
-        @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-
-            Log.d(TAG, "SingleTapDetected: clicked on photo: " + mHolder.photo.getPhoto_id());
-
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-            Query query = reference
-                    .child("Photos")
-                    .child(mHolder.photo.getPhoto_id())
-                    .child(mContext.getString(R.string.field_likes));
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-
-                        String keyID = singleSnapshot.getKey();
-
-                        //case1: Then user already liked the photo
-                        if(mHolder.likeByCurrentUser
-//                                && singleSnapshot.getValue(Like.class).getUser_id()
-//                                        .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                ){
-
-                            mReference.child("Photos")
-                                    .child(mHolder.photo.getPhoto_id())
-                                    .child(mContext.getString(R.string.field_likes))
-                                    .child(keyID)
-                                    .removeValue();
-///
-                            mReference.child("Users_Photos")
-//                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .child(mHolder.photo.getUser_id())
-                                    .child(mHolder.photo.getPhoto_id())
-                                    .child(mContext.getString(R.string.field_likes))
-                                    .child(keyID)
-                                    .removeValue();
-
-                            mHolder.liker.toggleLike();
-                            getLikesString(mHolder);
-                        }
-                        //case2: The user has not liked the photo
-                        else if(!mHolder.likeByCurrentUser){
-                            //add new like
-                            addNewLike(mHolder);
-                            break;
-                        }
-                    }
-                    if(!dataSnapshot.exists()){
-                        //add new like
-                        addNewLike(mHolder);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            return true;
-        }
-    }
-
     private void addNewLike(final ViewHolder holder){
         Log.d(TAG, "addNewLike: adding new like");
 
@@ -439,11 +341,8 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
 
                             String[] splitUsers = holder.users.toString().split(",");
 
-                            if(holder.users.toString().contains(currentUsername + ",")){//ed, edward
-                                holder.likeByCurrentUser = true;
-                            }else{
-                                holder.likeByCurrentUser = false;
-                            }
+                            //ed, edward
+                            holder.likeByCurrentUser = holder.users.toString().contains(currentUsername + ",");
 
                             int length = splitUsers.length;
                             if(length == 1){
@@ -555,6 +454,102 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
             difference = "0";
         }
         return difference;
+    }
+
+    public interface OnLoadMoreItemsListener{
+        void onLoadMoreItems();
+    }
+
+    static class ViewHolder{
+        CircleImageView mprofileImage;
+        String likesString;
+        TextView username, timeDetla, caption, likes, comments;
+        SquareImageView image;
+        ImageView heartRed, heartWhite, comment;
+
+//        UserAccountSettings settings = new UserAccountSettings();
+        User user  = new User();
+        StringBuilder users;
+        String mLikesString;
+        boolean likeByCurrentUser;
+        Likes liker;
+        GestureDetector detector;
+        Photo photo;
+    }
+
+    public class GestureListener extends GestureDetector.SimpleOnGestureListener{
+
+        ViewHolder mHolder;
+        public GestureListener(ViewHolder holder) {
+            mHolder = holder;
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+
+            Log.d(TAG, "SingleTapDetected: clicked on photo: " + mHolder.photo.getPhoto_id());
+
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+            Query query = reference
+                    .child("Photos")
+                    .child(mHolder.photo.getPhoto_id())
+                    .child(mContext.getString(R.string.field_likes));
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+
+                        String keyID = singleSnapshot.getKey();
+
+                        //case1: Then user already liked the photo
+                        if(mHolder.likeByCurrentUser
+//                                && singleSnapshot.getValue(Like.class).getUser_id()
+//                                        .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                ){
+
+                            mReference.child("Photos")
+                                    .child(mHolder.photo.getPhoto_id())
+                                    .child(mContext.getString(R.string.field_likes))
+                                    .child(keyID)
+                                    .removeValue();
+///
+                            mReference.child("Users_Photos")
+//                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .child(mHolder.photo.getUser_id())
+                                    .child(mHolder.photo.getPhoto_id())
+                                    .child(mContext.getString(R.string.field_likes))
+                                    .child(keyID)
+                                    .removeValue();
+
+                            mHolder.liker.toggleLike();
+                            getLikesString(mHolder);
+                        }
+                        //case2: The user has not liked the photo
+                        else if(!mHolder.likeByCurrentUser){
+                            //add new like
+                            addNewLike(mHolder);
+                            break;
+                        }
+                    }
+                    if(!dataSnapshot.exists()){
+                        //add new like
+                        addNewLike(mHolder);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            return true;
+        }
     }
 
 }

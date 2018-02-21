@@ -7,15 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.Models.User;
@@ -23,10 +16,9 @@ import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
 import com.example.taquio.trasearch6.Utils.ViewPostFragment;
 import com.example.taquio.trasearch6.Utils.ViewProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.google.firebase.database.DatabaseReference;
 
-import java.util.ArrayList;
-
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -41,14 +33,20 @@ public class MyProfileActivity extends AppCompatActivity implements
     private static final String TAG = "ProfileActivity";
     private Context mContext = MyProfileActivity.this;
     private ProgressBar mProgressbar;
-    private ImageView profilePhoto;
+    private CircleImageView profilePhoto;
+    private DatabaseReference mUserDatabase;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
         init();
+        // ---------------------- Setting up Profile Image --------------------- //
+        profilePhoto = findViewById(R.id.myProfile_image);
+
+        // ---------------------- End of Setting up Profile Image --------------------- //
+
     }
     @Override
     public void onGridImageSelected(Photo photo, int activityNumber) {
@@ -100,6 +98,9 @@ public class MyProfileActivity extends AppCompatActivity implements
                     Bundle args = new Bundle();
                     args.putParcelable(getString(R.string.intent_user),
                             intent.getParcelableExtra(getString(R.string.intent_user)));
+
+
+
                     fragment.setArguments(args);
 
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

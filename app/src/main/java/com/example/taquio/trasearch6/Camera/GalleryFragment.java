@@ -58,16 +58,16 @@ public class GalleryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
-        galleryImage = (ImageView) view.findViewById(R.id.galleryImageView);
-        gridView = (GridView) view.findViewById(R.id.gridView);
-        directorySpinner = (Spinner) view.findViewById(R.id.spinnerDirectory);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        galleryImage = view.findViewById(R.id.galleryImageView);
+        gridView = view.findViewById(R.id.gridView);
+        directorySpinner = view.findViewById(R.id.spinnerDirectory);
+        mProgressBar = view.findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.GONE);
         directories = new ArrayList<>();
         Log.d(TAG, "onCreateView: started.");
 
         init();
-        ImageView shareClose = (ImageView) view.findViewById(R.id.ivCloseShare);
+        ImageView shareClose = view.findViewById(R.id.ivCloseShare);
         shareClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +77,7 @@ public class GalleryFragment extends Fragment {
         });
 
 
-        TextView nextScreen = (TextView) view.findViewById(R.id.tvNext);
+        TextView nextScreen = view.findViewById(R.id.tvNext);
         nextScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,12 +103,7 @@ public class GalleryFragment extends Fragment {
     }
 
     private boolean isRootTask(){
-        if(((CameraActivity)getActivity()).getTask() == 0){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return ((CameraActivity) getActivity()).getTask() == 0;
     }
 
     private void init(){

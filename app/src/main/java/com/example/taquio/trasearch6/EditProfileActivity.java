@@ -90,6 +90,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 ediProfile_email.setHint(dataSnapshot.child("Email").getValue().toString());
                 ediProfile_mobile.setHint(dataSnapshot.child("PhoneNumber").getValue().toString());
                 mauthEmail = dataSnapshot.child("Email").getValue().toString();
+
                 Picasso.with(EditProfileActivity.this).load(dataSnapshot.child("Image").getValue().toString())
                         .networkPolicy(NetworkPolicy.OFFLINE)
                         .placeholder(R.drawable.man)

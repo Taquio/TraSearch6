@@ -23,56 +23,40 @@ public class SplashActivity extends AppCompatActivity {
         Animation mAnimation = AnimationUtils.loadAnimation(this, R.anim.fadein);
         splashImage.startAnimation(mAnimation);
 
-        final Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-
         //splash screen
-        Thread timer = new Thread()
-        {
-          public void run()
-          {
-              try{
-                  sleep(5000);
-              } catch (InterruptedException e) {
-                  e.printStackTrace();
-              }finally {
-                  startActivity(intent);
-                  finish();
-              }
-          }
-        };
-        timer.start();
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run(){
-//                Intent startActivityIntent = new Intent(SplashActivity.this, MainActivity.class);
-//                startActivity(startActivityIntent);
-//                SplashActivity.this.finish();
+//        Thread timer = new Thread() {
+//            public void run() {
+//                try {
+//                    sleep(5000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                } finally {
+//                }
+//            }
+//        };
+//        timer.start();
 
-                SharedPreferences settings=getSharedPreferences("prefs",0);
-                boolean firstRun=settings.getBoolean("firstRun",false);
-                if(!firstRun)//if running for first time
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences settings = getSharedPreferences("prefs", 0);
+                boolean firstRun = settings.getBoolean("firstRun", false);
+                if (!firstRun)//if running for first time
                 //Splash will load for first time
                 {
-                    SharedPreferences.Editor editor=settings.edit();
-                    editor.putBoolean("firstRun",true);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putBoolean("firstRun", true);
                     editor.commit();
-                    startActivity(new Intent(SplashActivity.this,MainActivity.class));
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
                     finish();
-
-                }
-                else
-                {
-
-                    startActivity(new Intent(SplashActivity.this,GuestSearch.class));
+                } else {
+                    startActivity(new Intent(SplashActivity.this, GuestSearch.class));
                     finish();
                 }
-
-
-
             }
         }, 5000);
-
     }
+
 
     public void refId(){
         splashImage = findViewById(R.id.splash_image);
