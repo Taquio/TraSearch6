@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_gradient_background">
+    android:background="@drawable/login_gradient">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,12 +15,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
-            android:text="Select account type"
+            android:text="Select Account Type"
+            android:textColor="#ffff"
             android:textSize="30sp"
             android:textStyle="bold"/>
 
         <Button
-            android:id="@+id/choose_NonBusiness"
+            android:id="@+id/btnNonBusiness"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
@@ -32,7 +33,7 @@
             />
 
         <Button
-            android:id="@+id/btnYesB"
+            android:id="@+id/btnBusiness"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:background="@drawable/yesb_border"

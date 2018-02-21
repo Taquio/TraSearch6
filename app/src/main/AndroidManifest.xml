@@ -3,7 +3,7 @@
     package="com.example.taquio.trasearch6">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -19,7 +19,7 @@
     <application
         android:name=".Trasearch"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/trasearchicon"
         android:label="@string/app_name"
         android:roundIcon="@drawable/trasearchicon"
         android:supportsRtl="true"
@@ -96,8 +96,7 @@
             </intent-filter>
         </activity>
         <!-- <activity android:name=".AppStart" /> -->
-        <activity android:name=".RegisterActivity"
-            android:parentActivityName=".ChooseLayout"/>
+        <activity android:name=".RegisterActivity" />
 
         <!-- <activity -->
         <!-- android:name=".Profile.EditActivity" -->
@@ -138,17 +137,15 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/. 
         -->
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".MapsActivity"
+                  android:label="@string/title_activity_maps" />
         <activity android:name=".HomeActivity2" />
         <activity android:name=".Utils.Donate" />
         <activity
             android:name=".ViewProfile"
             android:parentActivityName=".Profile.ProfileActivity" />
         <activity
-            android:name=".Messages.MessagesActivity"
+            android:name=".MessageActivity"
             android:parentActivityName=".HomeActivity2" />
         <activity android:name=".GuestSearch" />
         <activity
@@ -157,8 +154,6 @@
         <activity android:name=".MyProfileActivity" />
         <activity android:name=".EditProfileActivity"
             android:parentActivityName=".MyProfileActivity"/>
-        <activity android:name=".MessageActivity"
-            android:parentActivityName=".Messages.MessagesActivity"/>
         <activity android:name=".BusinessHome.BusinessHome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -171,8 +166,8 @@
         <activity android:name=".BusinessProfile.BusinessProfile"/>
         <activity android:name=".Camera.CameraActivity"/>
         <activity android:name=".Camera.NextActivity"/>
-        <activity android:name=".OpenGL.OpenGLES10Activity"/>
-        <activity android:name=".OpenGL.NewStoryActivity"/>
+        <activity android:name=".BusinessRegActivity"/>
+
     </application>
 
 </manifest>

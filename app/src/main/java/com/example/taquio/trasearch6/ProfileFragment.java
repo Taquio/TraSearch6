@@ -93,6 +93,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         Log.d(TAG, "onCreateView: STARTING PROFILE FRAGMENT >>>>>>>");
+
         mProfilePhoto = (CircleImageView) view.findViewById(R.id.myProfile_image);
         mName = (TextView) view.findViewById(R.id.myProfile_name);
         mEmail = (TextView) view.findViewById(R.id.myProfile_email);
@@ -257,8 +258,8 @@ public class ProfileFragment extends Fragment {
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
 
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
-        final String uid = mUser.getUid();
+//        mUser = FirebaseAuth.getInstance().getCurrentUser();
+//        final String uid = mUser.getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
 

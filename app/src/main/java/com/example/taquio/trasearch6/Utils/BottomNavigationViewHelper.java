@@ -53,7 +53,7 @@ public class BottomNavigationViewHelper {
                         callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;
                     case R.id.ic_nearby:
-                        Log.d(TAG, "onNavigationItemSelected: Nearby selected");
+                        //Log.d(TAG, "onNavigationItemSelected: Nearby selected");
                         Intent intent4 = new Intent(context, MapsActivity.class);
                         context.startActivity(intent4);
                         callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);

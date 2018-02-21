@@ -196,7 +196,7 @@ public class ViewProfileFragment extends Fragment {
         //set the profile widgets
         DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference();
         Query query1 = reference1.child("Users")
-                .orderByChild("userID").equalTo(mUser.getUserID());
+                .orderByKey().equalTo(mUser.getUserID());
         query1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -439,9 +439,9 @@ public class ViewProfileFragment extends Fragment {
 
         UniversalImageLoader.setImage(user.getImage(), mProfilePhoto, null, "");
 
-    mName.setText(user.getUserName());
-    mEmail.setText(user.getEmail());
-    mPhoneNumber.setText(user.getPhoneNumber());
+        mName.setText(user.getUserName());
+        mEmail.setText(user.getEmail());
+        mPhoneNumber.setText(user.getPhoneNumber());
 
 
 //        mBackArrow.setOnClickListener(new View.OnClickListener() {

@@ -16,6 +16,8 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.example.taquio.trasearch6.Models.Photo;
+import com.example.taquio.trasearch6.SampleTry.ItemGridAdapter;
+import com.example.taquio.trasearch6.SampleTry.StaggeredRecViewAdapter;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.Utils.ItemsFragment;
 import com.example.taquio.trasearch6.Utils.MainFeedListAdapter;
@@ -30,7 +32,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class HomeActivity2 extends AppCompatActivity implements
-        MainFeedListAdapter.OnLoadMoreItemsListener{
+        ItemGridAdapter.OnLoadMoreItemsListener{
 
     @Override
     public void onLoadMoreItems() {
@@ -66,7 +68,7 @@ public class HomeActivity2 extends AppCompatActivity implements
         Log.d(TAG, "onCreate: starting.");
 
         mViewPager = (ViewPager) findViewById(R.id.container);
-        mFrameLayout = (FrameLayout) findViewById(R.id.frame_container);
+//        mFrameLayout = (FrameLayout) findViewById(R.id.frame_container);
         mRelativeLayout = (RelativeLayout) findViewById(R.id.relLayoutParent);
         setUpFirebaseAuth();
         initImageLoader();
@@ -150,21 +152,21 @@ public class HomeActivity2 extends AppCompatActivity implements
 //            }
 //        }
 //    }
-    private void initImageLoader(){
+    private void initImageLoader() {
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
-
+    }
 
     @Override
-    protected void onPause() {
+    protected void onPause(){
         super.onPause();
         Log.d(TAG, "onPause: OnPause Started");
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if(currentUser!=null) {
-            Log.d(TAG, "onPause: User Offline");
-            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
-        }
+//        if(currentUser!=null) {
+//            Log.d(TAG, "onPause: User Offline");
+//            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
+//        }
     }
     private void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -225,16 +227,16 @@ public class HomeActivity2 extends AppCompatActivity implements
         super.onStart();
         Log.d(TAG, "onStart: Started");
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser==null)
-        {
-            Log.d(TAG, "onStart: Calling back to start method");
-            sendToStart();
-        }
-        else
-        {
-            Log.d(TAG, "onStart: User Online");
-            mUserRef.child("online").setValue("true");
-        }
+//        if(currentUser==null)
+//        {
+//            Log.d(TAG, "onStart: Calling back to start method");
+//            sendToStart();
+//        }
+//        else
+//        {
+//            Log.d(TAG, "onStart: User Online");
+//            mUserRef.child("online").setValue("true");
+//        }
         mAuth.addAuthStateListener(mAuthStateListener);
     }
 

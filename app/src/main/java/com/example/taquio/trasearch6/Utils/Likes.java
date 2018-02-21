@@ -12,28 +12,28 @@ import android.widget.ImageView;
  * Created by User on 8/21/2017.
  */
 
-public class Heart {
+public class Likes {
 
-    private static final String TAG = "Heart";
+    private static final String TAG = "Likes";
 
     private static final DecelerateInterpolator DECCELERATE_INTERPOLATOR = new DecelerateInterpolator();
     private static final AccelerateInterpolator ACCELERATE_INTERPOLATOR = new AccelerateInterpolator();
 
     public ImageView heartWhite, heartRed;
 
-    public Heart(ImageView heartWhite, ImageView heartRed) {
+    public Likes(ImageView heartWhite, ImageView heartRed) {
         this.heartWhite = heartWhite;
         this.heartRed = heartRed;
     }
 
     public void toggleLike(){
-        Log.d(TAG, "toggleLike: toggling heart.");
+        Log.d(TAG, "toggleLike: toggling likes.");
 
         AnimatorSet animationSet =  new AnimatorSet();
 
 
         if(heartRed.getVisibility() == View.VISIBLE){
-            Log.d(TAG, "toggleLike: toggling red heart off.");
+            Log.d(TAG, "toggleLike: toggling red likes off.");
             heartRed.setScaleX(0.1f);
             heartRed.setScaleY(0.1f);
 
@@ -52,7 +52,7 @@ public class Heart {
         }
 
         else if(heartRed.getVisibility() == View.GONE){
-            Log.d(TAG, "toggleLike: toggling red heart on.");
+            Log.d(TAG, "toggleLike: toggling red likes on.");
             heartRed.setScaleX(0.1f);
             heartRed.setScaleY(0.1f);
 
