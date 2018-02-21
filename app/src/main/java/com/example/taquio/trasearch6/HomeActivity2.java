@@ -67,7 +67,7 @@ public class HomeActivity2 extends AppCompatActivity implements
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting.");
         mViewPager = findViewById(R.id.container);
-        mFrameLayout = findViewById(R.id.frame_container);
+//        mFrameLayout = findViewById(R.id.frame_container);
         mRelativeLayout = findViewById(R.id.relLayoutParent);
         setUpFirebaseAuth();
         initImageLoader();
