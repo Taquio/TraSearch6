@@ -19,9 +19,9 @@ import java.util.List;
 
 class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
+    String url;
     private String googlePlacesData;
     private GoogleMap mMap;
-    String url;
 
     @Override
     protected String doInBackground(Object... objects){

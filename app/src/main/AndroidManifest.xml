@@ -96,7 +96,8 @@
             </intent-filter>
         </activity>
         <!-- <activity android:name=".AppStart" /> -->
-        <activity android:name=".RegisterActivity" />
+        <activity android:name=".RegisterActivity"
+            android:parentActivityName=".ChooseLayout"/>
 
         <!-- <activity -->
         <!-- android:name=".Profile.EditActivity" -->
@@ -116,7 +117,6 @@
             android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name=".ActivityLogin" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".chatActivity" />
         <activity android:name=".UserProfileActivity" />
         <activity android:name=".BusinessProfileActivity" />
         <activity android:name=".Profile.ProfileActivity">
@@ -146,7 +146,7 @@
             android:name=".ViewProfile"
             android:parentActivityName=".Profile.ProfileActivity" />
         <activity
-            android:name=".MessageActivity"
+            android:name=".Messages.MessagesActivity"
             android:parentActivityName=".HomeActivity2" />
         <activity android:name=".GuestSearch" />
         <activity
@@ -159,6 +159,22 @@
         <activity android:name=".Camera.CameraActivity" />
         <activity android:name=".Camera.NextActivity" />
         <activity android:name=".RegisterOptions"></activity>
+        <activity android:name=".MessageActivity"
+            android:parentActivityName=".Messages.MessagesActivity"/>
+        <activity android:name=".BusinessHome.BusinessHome">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".BusinessMessages.BusinessMessages">
+        </activity>
+        <activity android:name=".BusinessProfile.BusinessProfile"/>
+        <activity android:name=".Camera.CameraActivity"/>
+        <activity android:name=".Camera.NextActivity"/>
+        <activity android:name=".OpenGL.OpenGLES10Activity"/>
+        <activity android:name=".OpenGL.NewStoryActivity"/>
     </application>
 
 </manifest>

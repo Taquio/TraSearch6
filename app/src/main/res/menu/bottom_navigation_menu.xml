@@ -4,35 +4,35 @@
     <item
         android:id="@+id/ic_home"
         android:icon="@drawable/ic_home"
-        android:title="">
+        android:title="Home">
 
     </item>
 
     <item
         android:id="@+id/ic_messages"
         android:icon="@drawable/ic_messages"
-        android:title="">
+        android:title="Messages">
 
     </item>
 
     <item
         android:id="@+id/ic_camera"
         android:icon="@drawable/ic_camera"
-        android:title="">
+        android:title="Post">
 
     </item>
 
     <item
         android:id="@+id/ic_nearby"
         android:icon="@drawable/ic_nearby"
-        android:title="">
+        android:title="Nearby">
 
     </item>
 
     <item
         android:id="@+id/ic_profile"
         android:icon="@drawable/ic_profile"
-        android:title="">
+        android:title="Profile">
 
     </item>
 </menu>

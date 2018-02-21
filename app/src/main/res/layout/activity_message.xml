@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +14,26 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeUpdate_swipeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayout3"
+        android:layout_below="@+id/messageAppbar"
+        android:layout_centerHorizontal="true">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/chatList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/messageAppbar"
+            app:reverseLayout="true"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -30,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="10dp"
-            android:src="@drawable/ic_add_black_24dp"/>
+            android:src="@drawable/ic_add_black_24dp" />
 
         <EditText
             android:id="@+id/ChatUser_txtFld"
@@ -40,13 +60,13 @@
             android:background="#FFF"
             android:hint="Enter Message..."
             android:inputType="text"
-            android:padding="10dp"/>
+            android:padding="10dp" />
 
         <ImageButton
             android:id="@+id/ChatUser_sendBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_menu_send"/>
+            android:src="@drawable/ic_menu_send" />
     </LinearLayout>
 </RelativeLayout>
