@@ -8,15 +8,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 import com.eschao.android.widget.elasticlistview.ElasticListView;
-import com.eschao.android.widget.elasticlistview.LoadFooter;
 import com.eschao.android.widget.elasticlistview.OnLoadListener;
 import com.eschao.android.widget.elasticlistview.OnUpdateListener;
 import com.example.taquio.trasearch6.Models.Comment;
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.Models.User;
 import com.example.taquio.trasearch6.R;
+import com.example.taquio.trasearch6.SampleTry.ItemGridAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -40,21 +41,6 @@ import java.util.Map;
 public class ItemsFragment extends Fragment implements OnUpdateListener, OnLoadListener {
 
     private static final String TAG = "HomeFragment";
-    public StoriesRecyclerViewAdapter mStoriesAdapter;
-    //vars
-    private ArrayList<Photo> mPhotos;
-    private ArrayList<Photo> mPaginatedPhotos;
-    private ArrayList<String> mFollowing;
-    private ArrayList<String> mAllUsers;
-    private int recursionIterator = 0;
-    //    private ListView mListView;
-    private ElasticListView mListView;
-    private MainFeedListAdapter adapter;
-    private int resultsCount = 0;
-    private ArrayList<User> mUserAccountSettings;
-    //    private ArrayList<UserStories> mAllUserStories = new ArrayList<>();
-    private JSONArray mMasterStoriesArray;
-    private RecyclerView mRecyclerView;
 
     @Override
     public void onUpdate() {
@@ -62,6 +48,7 @@ public class ItemsFragment extends Fragment implements OnUpdateListener, OnLoadL
 
         getFollowing();
     }
+
 
     @Override
     public void onLoad() {
@@ -71,13 +58,33 @@ public class ItemsFragment extends Fragment implements OnUpdateListener, OnLoadL
         mListView.notifyLoaded();
     }
 
+
+    //vars
+    private ArrayList<Photo> mPhotos;
+    private ArrayList<Photo> mPaginatedPhotos;
+    private ArrayList<String> mFollowing;
+    private ArrayList<String> mAllUsers;
+    private int recursionIterator = 0;
+    private RecyclerView mRecView;
+    private ElasticListView mListView;
+    private MainFeedListAdapter adapter;
+    private int resultsCount = 0;
+    private ArrayList<User> mUserAccountSettings;
+    //    private ArrayList<UserStories> mAllUserStories = new ArrayList<>();
+    private JSONArray mMasterStoriesArray;
+
+    private GridView mgridView;
+    public StoriesRecyclerViewAdapter mStoriesAdapter;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_items, container, false);
-        mListView = view.findViewById(R.id.listView);
-
-        initListViewRefresh();
+//        View view = inflater.inflate(R.layout.fragment_items, container, false);
+//        mListView = (ElasticListView) view.findViewById(R.id.listView);
+        View view = inflater.inflate(R.layout.try_mainlayout, container, false);
+        mgridView = view.findViewById(R.id.stagrecview);
+        initListViewRefresh(view);
         getFollowing();
 
         return view;
@@ -174,14 +181,17 @@ public class ItemsFragment extends Fragment implements OnUpdateListener, OnLoadL
 
         }
     }
-    private void initListViewRefresh(){
-        mListView.setHorizontalFadingEdgeEnabled(true);
-        mListView.setAdapter(adapter);
-        mListView.enableLoadFooter(true)
-                .getLoadFooter().setLoadAction(LoadFooter.LoadAction.RELEASE_TO_LOAD);
-        mListView.setOnUpdateListener(this)
-                .setOnLoadListener(this);
-        mListView.requestUpdate();
+    private void initListViewRefresh(View v){
+
+//        mgridView = v.findViewById(R.id.stagrecview);
+
+//        mListView.setHorizontalFadingEdgeEnabled(true);
+//        mListView.setAdapter(adapter);
+//        mListView.enableLoadFooter(true)
+//                .getLoadFooter().setLoadAction(LoadFooter.LoadAction.RELEASE_TO_LOAD);
+//        mListView.setOnUpdateListener(this)
+//                .setOnLoadListener(this);
+//        mListView.requestUpdate();
     }
 
 
@@ -373,9 +383,9 @@ public class ItemsFragment extends Fragment implements OnUpdateListener, OnLoadL
         if(mPaginatedPhotos != null){
             mPaginatedPhotos.clear();
         }
-        if(mRecyclerView != null){
-            mRecyclerView.setAdapter(null);
-        }
+//        if(mRecyclerView != null){
+//            mRecyclerView.setAdapter(null);
+//        }
         mFollowing = new ArrayList<>();
         mAllUsers = new ArrayList<>();
         mPhotos = new ArrayList<>();
@@ -409,12 +419,22 @@ public class ItemsFragment extends Fragment implements OnUpdateListener, OnLoadL
                     resultsCount++;
                     Log.d(TAG, "displayPhotos: adding a photo to paginated list: " + mPhotos.get(i).getPhoto_id());
                 }
+                int gridWidth = getResources().getDisplayMetrics().widthPixels;
+                int imageWidth = gridWidth/2;
+                mgridView.setColumnWidth(imageWidth);
+//                adapter = new MainFeedListAdapter(getActivity(), R.layout.layout_mainfeed_listitem, mPaginatedPhotos);
 
-                adapter = new MainFeedListAdapter(getActivity(), R.layout.layout_mainfeed_listitem, mPaginatedPhotos);
-                mListView.setAdapter(adapter);
+//                stagAdapter = new StaggeredRecViewAdapter(getActivity(),mPaginatedPhotos);
+//                StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL);
+//                mRecView.setLayoutManager(staggeredGridLayoutManager);
+//                mRecView.setAdapter(stagAdapter);
+                ItemGridAdapter adapter = new ItemGridAdapter(getActivity(),R.layout.try_gridview, mPaginatedPhotos);
+                mgridView.setAdapter(adapter);
+//                mListView.setAdapter(adapter);
 
                 // Notify update is done
-                mListView.notifyUpdated();
+//                mListView.notifyUpdated();
+
 
             }catch (IndexOutOfBoundsException e){
                 Log.e(TAG, "displayPhotos: IndexOutOfBoundsException:" + e.getMessage() );

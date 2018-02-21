@@ -4,39 +4,39 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/white_grey_border_bottom"
+        android:background="#009688"
         >
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/profileToolBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/profileToolBar">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/ivBackArrow"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
-                    android:src="@drawable/ic_backarrow" />
+                    android:layout_centerVertical="true"
+                    android:id="@+id/ivBackArrow"
+                    android:src="@drawable/ic_backarrow"
+                    android:layout_marginRight="20dp" />
 
 
                 <TextView
-                    android:id="@+id/tvShare"
                     android:layout_width="wrap_content"
-
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp"
+
                     android:text="@string/string_share"
-                    android:textColor="@color/link_blue"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
                     android:textSize="20sp"
+                    android:textColor="#ffff"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/tvShare"
                     />
 
 

@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="15"
-            android:background="#50C878"
+            android:background="#009688"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -193,7 +193,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="17"
-            android:background="#50C878">
+            android:background="#009688">
 
         </LinearLayout>
 

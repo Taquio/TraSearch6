@@ -16,7 +16,7 @@
                 android:id="@+id/busHomeTabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/white_grey_border_bottom"
+                android:background="#009688"
                 app:tabGravity="fill"
                 app:tabMaxWidth="0dp"
                 app:tabMode="fixed">

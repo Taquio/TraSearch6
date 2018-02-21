@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
+    android:background="@drawable/splash_gradient"
     android:orientation="horizontal"
     tools:context="com.example.taquio.trasearch6.SplashActivity">
 
@@ -13,9 +13,11 @@
         android:layout_gravity="center">
         <ImageView
             android:id="@+id/splash_image"
+            android:paddingLeft="25sp"
+            android:paddingRight="25sp"
             android:layout_width="match_parent"
             android:layout_height="125dp"
-            android:src="@drawable/ts_splash"
+            android:src="@drawable/trash"
             />
     </LinearLayout>
 </LinearLayout>
