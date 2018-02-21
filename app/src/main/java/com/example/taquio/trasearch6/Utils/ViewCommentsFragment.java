@@ -46,36 +46,32 @@ import java.util.TimeZone;
 public class ViewCommentsFragment extends Fragment {
 
     private static final String TAG = "ViewCommentsFragment";
-
-    public ViewCommentsFragment(){
-        super();
-        setArguments(new Bundle());
-    }
-
     //firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
-
     //widgets
     private ImageView mBackArrow, mCheckMark;
     private EditText mComment;
     private ListView mListView;
-
     //vars
     private Photo mPhoto;
     private ArrayList<Comment> mComments;
     private Context mContext;
+    public ViewCommentsFragment(){
+        super();
+        setArguments(new Bundle());
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_comments, container, false);
-        mBackArrow = (ImageView) view.findViewById(R.id.backArrow);
-        mCheckMark = (ImageView) view.findViewById(R.id.ivPostComment);
-        mComment = (EditText) view.findViewById(R.id.comment);
-        mListView = (ListView) view.findViewById(R.id.listView);
+        mBackArrow = view.findViewById(R.id.backArrow);
+        mCheckMark = view.findViewById(R.id.ivPostComment);
+        mComment = view.findViewById(R.id.comment);
+        mListView = view.findViewById(R.id.listView);
         mComments = new ArrayList<>();
         mContext = getActivity();
 
@@ -316,7 +312,6 @@ public class ViewCommentsFragment extends Fragment {
                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
                            }
-
                            @Override
                            public void onChildRemoved(DataSnapshot dataSnapshot) {
 

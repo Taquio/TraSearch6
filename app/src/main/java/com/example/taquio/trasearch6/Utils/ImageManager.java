@@ -16,8 +16,8 @@ import java.io.IOException;
 
 public class ImageManager {
 
-    private static final String TAG = "ImageManager";
     public static final int IMAGE_SAVE_QUALITY = 90;
+    private static final String TAG = "ImageManager";
 
     public static Bitmap getBitmap(String imgUrl){
         File imageFile = new File(imgUrl);

@@ -55,12 +55,6 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
         layoutResource = resource;
     }
 
-    private static class ViewHolder{
-        TextView comment, username, timestamp, reply, likes;
-        CircleImageView profileImage;
-        ImageView like;
-    }
-
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -71,13 +65,13 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             convertView = mInflater.inflate(layoutResource, parent, false);
             holder = new ViewHolder();
 
-            holder.comment = (TextView) convertView.findViewById(R.id.comment);
-            holder.username = (TextView) convertView.findViewById(R.id.comment_username);
-            holder.timestamp = (TextView) convertView.findViewById(R.id.comment_time_posted);
-            holder.reply = (TextView) convertView.findViewById(R.id.comment_reply);
-            holder.like = (ImageView) convertView.findViewById(R.id.comment_like);
-            holder.likes = (TextView) convertView.findViewById(R.id.comment_likes);
-            holder.profileImage = (CircleImageView) convertView.findViewById(R.id.comment_profile_image);
+            holder.comment = convertView.findViewById(R.id.comment);
+            holder.username = convertView.findViewById(R.id.comment_username);
+            holder.timestamp = convertView.findViewById(R.id.comment_time_posted);
+            holder.reply = convertView.findViewById(R.id.comment_reply);
+            holder.like = convertView.findViewById(R.id.comment_like);
+            holder.likes = convertView.findViewById(R.id.comment_likes);
+            holder.profileImage = convertView.findViewById(R.id.comment_profile_image);
 
             convertView.setTag(holder);
         }else{
@@ -160,6 +154,12 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             difference = "0";
         }
         return difference;
+    }
+
+    private static class ViewHolder{
+        TextView comment, username, timestamp, reply, likes;
+        CircleImageView profileImage;
+        ImageView like;
     }
 }
 

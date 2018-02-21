@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -33,13 +34,12 @@ public class HomeActivity2 extends AppCompatActivity implements
 
 
     private static final String TAG = "HomeActivity";
-    private Context mContext = HomeActivity2.this;
     private static final int ACTIVITY_NUM = 0;
     private static final int HOME_FRAGMENT = 1;
     private static final int RESULT_ADD_NEW_STORY = 7891;
     private final static int CAMERA_RQ = 6969;
     private static final int REQUEST_ADD_NEW_STORY = 8719;
-
+    private Context mContext = HomeActivity2.this;
     //Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -49,20 +49,22 @@ public class HomeActivity2 extends AppCompatActivity implements
     private FrameLayout mFrameLayout;
     private RelativeLayout mRelativeLayout;
 
+    private DatabaseReference mUserDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting.");
-
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mFrameLayout = (FrameLayout) findViewById(R.id.frame_container);
-        mRelativeLayout = (RelativeLayout) findViewById(R.id.relLayoutParent);
+        mViewPager = findViewById(R.id.container);
+        mFrameLayout = findViewById(R.id.frame_container);
+        mRelativeLayout = findViewById(R.id.relLayoutParent);
         setUpFirebaseAuth();
         initImageLoader();
         setupBottomNavigationView();
         setupViewPager();
+
     }
 //    public void openNewStoryActivity(){
 //        Intent intent = new Intent(this, NewStoryActivity.class);
@@ -159,10 +161,10 @@ public class HomeActivity2 extends AppCompatActivity implements
         adapter.addFragment(new ArticlesFragment());
         adapter.addFragment(new ItemsFragment());
         adapter.addFragment(new JunkShopsFragment());
-        ViewPager viewPager = (ViewPager) findViewById(R.id.container);
+        ViewPager viewPager = findViewById(R.id.container);
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setText("Videos");
@@ -174,7 +176,7 @@ public class HomeActivity2 extends AppCompatActivity implements
 
     private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
         BottomNavigationViewHelper.enableNavigation(mContext, this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
@@ -193,6 +195,7 @@ public class HomeActivity2 extends AppCompatActivity implements
     private void setUpFirebaseAuth(){
         Log.d(TAG, "setUpFirebase: FIREBASE SETTING UP....");
         mAuth = FirebaseAuth.getInstance();
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -211,6 +214,10 @@ public class HomeActivity2 extends AppCompatActivity implements
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthStateListener);
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mUserDatabase.child("online").setValue("online");
+        }
     }
 
     @Override
@@ -218,6 +225,7 @@ public class HomeActivity2 extends AppCompatActivity implements
         super.onStop();
         if(mAuthStateListener != null){
             mAuth.removeAuthStateListener(mAuthStateListener);
+            mUserDatabase.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
 }
