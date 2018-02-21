@@ -171,10 +171,8 @@
         <activity android:name=".BusinessMessages.BusinessMessages">
         </activity>
         <activity android:name=".BusinessProfile.BusinessProfile"/>
-        <activity android:name=".Camera.CameraActivity"/>
-        <activity android:name=".Camera.NextActivity"/>
-        <activity android:name=".OpenGL.OpenGLES10Activity"/>
-        <activity android:name=".OpenGL.NewStoryActivity"/>
+        <!--<activity android:name=".Camera.CameraActivity"/>-->
+        <!--<activity android:name=".Camera.NextActivity"/>-->
     </application>
 
 </manifest>
