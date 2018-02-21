@@ -310,6 +310,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             child(mCurrentUser.getUid()).
                             child("ProfilePhoto").
                             child("profile_image");
+
                     final StorageReference thumbFilePath = mImageStorage.
                             child("Photos").
                             child(mCurrentUser.getUid()).

@@ -1,7 +1,9 @@
 package com.example.taquio.trasearch6;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -36,13 +38,16 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.reactivex.annotations.NonNull;
+import id.zelory.compressor.Compressor;
 
 public class  MessageActivity extends AppCompatActivity {
 
@@ -67,6 +72,7 @@ public class  MessageActivity extends AppCompatActivity {
     private int mCurrentPage = 1;
     // Storage Firebase
     private StorageReference mImageStorage;
+    private ProgressDialog progressDialog;
 
 
     //New Solution
@@ -279,7 +285,29 @@ public class  MessageActivity extends AppCompatActivity {
 
         if(requestCode == GALLERY_PICK && resultCode == RESULT_OK){
 
+            progressDialog = new ProgressDialog(MessageActivity.this);
+            progressDialog.setTitle("Uploading Image...");
+            progressDialog.setMessage("Please wait while we upload the your beautiful image");
+            progressDialog.show();
             Uri imageUri = data.getData();
+            progressDialog.setCanceledOnTouchOutside(false);
+            File image_path = new File(imageUri.getPath());
+
+            Bitmap thumbBitmap = null;
+
+            try {
+                thumbBitmap = new Compressor(MessageActivity.this)
+                        .setMaxWidth(500).setMaxHeight(500).setQuality(80)
+                        .compressToBitmap(image_path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            thumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            final byte[] byteData = baos.toByteArray();
+
+
 
             final String current_user_ref = "Messages/" + mCurrentUserId + "/" + mChatUser;
             final String chat_user_ref = "Messages/" + mChatUser + "/" + mCurrentUserId;
@@ -292,10 +320,10 @@ public class  MessageActivity extends AppCompatActivity {
 
             StorageReference filepath = mImageStorage.child("Photos").child(mCurrentUserId).child("ConvoImages").child( push_id + ".jpg");
 
-            filepath.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            UploadTask uploadTask = filepath.putBytes(byteData);
+            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-
+                public void onComplete(@android.support.annotation.NonNull Task<UploadTask.TaskSnapshot> task) {
                     if(task.isSuccessful()){
 
                         String download_url = task.getResult().getDownloadUrl().toString();
@@ -321,15 +349,13 @@ public class  MessageActivity extends AppCompatActivity {
                                 if(databaseError != null){
 
                                     Log.d("CHAT_LOG", databaseError.getMessage().toString());
-
+                                    progressDialog.dismiss();
+                                }else{
+                                    progressDialog.dismiss();
                                 }
-
                             }
                         });
-
-
                     }
-
                 }
             });
 
