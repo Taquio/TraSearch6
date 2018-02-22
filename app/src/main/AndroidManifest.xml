@@ -175,6 +175,8 @@
         </activity>
         <activity android:name=".BusinessProfile.BusinessProfile"/>
         <activity android:name=".BusinessRegActivity"/>
+        <activity android:name=".BusinessRegActivity2"
+            android:parentActivityName=".BusinessRegActivity"/>
 
     </application>
 
