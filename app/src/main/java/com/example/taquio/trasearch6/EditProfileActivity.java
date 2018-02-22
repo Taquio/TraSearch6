@@ -30,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -65,6 +66,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private Uri resultUri;
     private String newName,newEmail,newPassword,newMobile,mauthEmail,mauthPassword;
     private ImageView ediProfile_saveChanges;
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
 
     private Boolean name,email,password,mobile,image;
 
@@ -388,5 +391,29 @@ public class EditProfileActivity extends AppCompatActivity {
         ediProfile_saveChanges = findViewById(R.id.ediProfile_saveChanges);
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue("online");
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue(ServerValue.TIMESTAMP);
+        }
     }
 }
