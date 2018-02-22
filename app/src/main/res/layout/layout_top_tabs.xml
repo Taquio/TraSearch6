@@ -13,7 +13,8 @@
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                app:tabSelectedTextColor="#ffff"
+                app:tabTextColor="#ffff"
                 android:background="#009688"
                 app:tabGravity="fill"
                 app:tabMaxWidth="0dp"

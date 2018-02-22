@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.Models.User;
+import com.example.taquio.trasearch6.Utils.ItemsFragment;
 import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
 import com.example.taquio.trasearch6.Utils.ViewPostFragment;
 import com.example.taquio.trasearch6.Utils.ViewProfileFragment;
@@ -27,7 +28,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MyProfileActivity extends AppCompatActivity implements
         ProfileFragment.OnGridImageSelectedListener ,
         ViewPostFragment.OnCommentThreadSelectedListener,
-        ViewProfileFragment.OnGridImageSelectedListener{
+        ViewProfileFragment.OnGridImageSelectedListener,
+        ItemsFragment.OnFeedImageSelectedListener{
 
     private static final String TAG = "ProfileActivity";
     private Context mContext = MyProfileActivity.this;
@@ -46,6 +48,21 @@ public class MyProfileActivity extends AppCompatActivity implements
 
         // ---------------------- End of Setting up Profile Image --------------------- //
 
+    }
+
+    @Override
+    public void onImageSelected(Photo photo, int activityNumber) {
+        ViewPostFragment fragment = new ViewPostFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(getString(R.string.photo), photo);
+        args.putInt(getString(R.string.activity_number), activityNumber);
+
+        fragment.setArguments(args);
+
+        FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack("View Post");
+        transaction.commit();
     }
     @Override
     public void onGridImageSelected(Photo photo, int activityNumber) {
@@ -97,8 +114,6 @@ public class MyProfileActivity extends AppCompatActivity implements
                     Bundle args = new Bundle();
                     args.putParcelable(getString(R.string.intent_user),
                             intent.getParcelableExtra(getString(R.string.intent_user)));
-
-
 
                     fragment.setArguments(args);
 
