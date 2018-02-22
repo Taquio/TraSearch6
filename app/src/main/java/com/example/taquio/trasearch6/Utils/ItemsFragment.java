@@ -1,9 +1,9 @@
 package com.example.taquio.trasearch6.Utils;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +12,14 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.eschao.android.widget.elasticlistview.ElasticListView;
+import com.eschao.android.widget.elasticlistview.LoadFooter;
 import com.eschao.android.widget.elasticlistview.OnLoadListener;
 import com.eschao.android.widget.elasticlistview.OnUpdateListener;
 import com.example.taquio.trasearch6.Models.Comment;
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.Models.User;
+import com.example.taquio.trasearch6.MyProfileActivity;
+import com.example.taquio.trasearch6.ProfileFragment;
 import com.example.taquio.trasearch6.R;
 import com.example.taquio.trasearch6.SampleTry.ItemGridAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -39,20 +42,22 @@ import java.util.Map;
  * Created by Edward on 2/7/2018.
  */
 
-public class ItemsFragment extends Fragment implements OnUpdateListener{
+public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoadListener {
 
     private static final String TAG = "HomeFragment";
-
-    public interface OnFeedImageSelectedListener{
-        void onImageSelected(Photo photo, int activityNumber);
-    }
-    OnFeedImageSelectedListener monFeedImageSelectedListener;
 
     @Override
     public void onUpdate() {
         Log.d(TAG, "ElasticListView: updating list view...");
 
-        getFollowing();
+        getKeys();
+    }
+    @Override
+    public void onLoad() {
+        Log.d(TAG, "ElasticListView: loading...");
+
+        // Notify load is done
+        mListView.notifyLoaded();
     }
 
 
@@ -62,9 +67,9 @@ public class ItemsFragment extends Fragment implements OnUpdateListener{
     private ArrayList<String> mFollowing;
     private ArrayList<String> mAllUsers;
     private ArrayList<User> mUserAccountSettings;
-
+    private ElasticListView mListView;
     private int resultsCount = 0;
-    private ItemGridAdapter adapter;
+    private MainFeedListAdapter adapter;
     private int ACTIVITY_NUM = 0;
 
     private GridView mgridView;
@@ -73,16 +78,26 @@ public class ItemsFragment extends Fragment implements OnUpdateListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.try_mainlayout, container, false);
-        mgridView = view.findViewById(R.id.stagrecview);
-        mgridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
-        getFollowing();
+        View view = inflater.inflate(R.layout.fragment_items, container, false);
+        mListView = (ElasticListView) view.findViewById(R.id.listView);
+
+        initListViewRefresh();
+        getKeys();
 
         return view;
     }
 
-    private void getFollowing() {
-        Log.d(TAG, "getFollowing: searching for following");
+    private void initListViewRefresh(){
+        mListView.setHorizontalFadingEdgeEnabled(true);
+        mListView.setAdapter(adapter);
+        mListView.enableLoadFooter(true)
+                .getLoadFooter().setLoadAction(LoadFooter.LoadAction.RELEASE_TO_LOAD);
+        mListView.setOnUpdateListener(this)
+                .setOnLoadListener(this);
+//        mListView.requestUpdate();
+    }
+    private void getKeys() {
+        Log.d(TAG, "getKeys: searching for following");
 
         clearAll();
 
@@ -93,17 +108,15 @@ public class ItemsFragment extends Fragment implements OnUpdateListener{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "getFollowing: found user: " + singleSnapshot
+                    Log.d(TAG, "getKeys: found user: " + singleSnapshot
                             .getChildren());
 
 //                    mFollowing.add(singleSnapshot
 //                            .child(getString(R.string.field_user_id)).getValue().toString());
-                    mAllUsers.add(singleSnapshot.child("userID").getValue().toString());
+                    mAllUsers.add(singleSnapshot.getKey());
                 }
 
                 getPhotos();
-//                getMyUserAccountSettings();
-//                getFriendsAccountSettings();
             }
 
             @Override
@@ -122,7 +135,7 @@ public class ItemsFragment extends Fragment implements OnUpdateListener{
             Query query = FirebaseDatabase.getInstance().getReference()
                     .child("Users_Photos")
                     .child(mAllUsers.get(i))
-                    .orderByChild("userID")
+                    .orderByChild("user_id")
                     .equalTo(mAllUsers.get(i));
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -186,14 +199,11 @@ public class ItemsFragment extends Fragment implements OnUpdateListener{
         if(mPaginatedPhotos != null){
             mPaginatedPhotos.clear();
         }
-        if(mgridView != null){
-            mgridView.setAdapter(null);
-        }
         mFollowing = new ArrayList<>();
-        mAllUsers = new ArrayList<>();
         mPhotos = new ArrayList<>();
         mPaginatedPhotos = new ArrayList<>();
         mUserAccountSettings = new ArrayList<>();
+        mAllUsers = new ArrayList<>();
     }
 
 
@@ -221,17 +231,11 @@ public class ItemsFragment extends Fragment implements OnUpdateListener{
                     resultsCount++;
                     Log.d(TAG, "displayPhotos: adding a photo to paginated list: " + mPhotos.get(i).getPhoto_id());
                 }
-                int gridWidth = getResources().getDisplayMetrics().widthPixels;
-                int imageWidth = gridWidth/2;
-                mgridView.setColumnWidth(imageWidth);
-                 adapter = new ItemGridAdapter(getActivity(),R.layout.try_gridview, mPaginatedPhotos);
-                mgridView.setAdapter(adapter);
-                mgridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                        monFeedImageSelectedListener.onImageSelected(mPaginatedPhotos.get(position), ACTIVITY_NUM);
-                    }
-                });
+                adapter = new MainFeedListAdapter(getActivity(), R.layout.try_gridview, mPaginatedPhotos);
+                mListView.setAdapter(adapter);
+
+                // Notify update is done
+                mListView.notifyUpdated();
 
 
             }catch (IndexOutOfBoundsException e){
@@ -272,6 +276,7 @@ public class ItemsFragment extends Fragment implements OnUpdateListener{
             Log.e(TAG, "displayPhotos: NullPointerException:" + e.getMessage() );
         }
     }
+
 
 
 }

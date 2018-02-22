@@ -19,8 +19,10 @@ import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.SampleTry.ItemGridAdapter;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.Utils.ItemsFragment;
+import com.example.taquio.trasearch6.Utils.MainFeedListAdapter;
 import com.example.taquio.trasearch6.Utils.UniversalImageLoader;
 import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
+import com.example.taquio.trasearch6.Utils.ViewPostFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +32,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class HomeActivity2 extends AppCompatActivity implements
-        ItemGridAdapter.OnLoadMoreItemsListener{
+        MainFeedListAdapter.OnLoadMoreItemsListener{
 
     @Override
     public void onLoadMoreItems() {
@@ -45,9 +47,6 @@ public class HomeActivity2 extends AppCompatActivity implements
     private Context mContext = HomeActivity2.this;
     private static final int ACTIVITY_NUM = 0;
     private static final int HOME_FRAGMENT = 1;
-    private static final int RESULT_ADD_NEW_STORY = 7891;
-    private final static int CAMERA_RQ = 6969;
-    private static final int REQUEST_ADD_NEW_STORY = 8719;
 
     //Firebase
     private FirebaseAuth mAuth;
@@ -67,7 +66,7 @@ public class HomeActivity2 extends AppCompatActivity implements
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting.");
         mViewPager = findViewById(R.id.container);
-//        mFrameLayout = findViewById(R.id.frame_container);
+        mFrameLayout = findViewById(R.id.frame_container);
         mRelativeLayout = findViewById(R.id.relLayoutParent);
         setUpFirebaseAuth();
         initImageLoader();
@@ -75,17 +74,6 @@ public class HomeActivity2 extends AppCompatActivity implements
         setupViewPager();
 
     }
-//    public void openNewStoryActivity(){
-//        Intent intent = new Intent(this, NewStoryActivity.class);
-//        startActivityForResult(intent, REQUEST_ADD_NEW_STORY);
-//    }
-//
-//    public void showAddToStoryDialog(){
-//        Log.d(TAG, "showAddToStoryDialog: showing add to story dialog.");
-//        AddToStoryDialog dialog = new AddToStoryDialog();
-//        dialog.show(getFragmentManager(), getString(R.string.dialog_add_to_story));
-//    }
-
 
     public void onCommentThreadSelected(Photo photo, String callingActivity){
         Log.d(TAG, "onCommentThreadSelected: selected a coemment thread");
@@ -102,7 +90,20 @@ public class HomeActivity2 extends AppCompatActivity implements
         transaction.commit();
 
     }
+    public void onImageSelected(Photo item, int i) {
+            ViewPostFragment fragment = new ViewPostFragment();
+            Bundle args = new Bundle();
+            args.putParcelable(getString(R.string.photo), item);
+            args.putInt(getString(R.string.activity_number), i);
 
+            fragment.setArguments(args);
+
+            FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frame_container, fragment);
+            transaction.addToBackStack("View Post");
+            transaction.commit();
+
+    }
     public void hideLayout(){
         Log.d(TAG, "hideLayout: hiding layout");
         mRelativeLayout.setVisibility(View.GONE);
@@ -122,37 +123,6 @@ public class HomeActivity2 extends AppCompatActivity implements
             showLayout();
         }
     }
-
-
-    //    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Log.d(TAG, "onActivityResult: incoming result.");
-//        // Received recording or error from MaterialCamera
-//
-//        if (requestCode == REQUEST_ADD_NEW_STORY) {
-//            Log.d(TAG, "onActivityResult: incoming new story.");
-//            if (resultCode == RESULT_ADD_NEW_STORY) {
-//                Log.d(TAG, "onActivityResult: got the new story.");
-//                Log.d(TAG, "onActivityResult: data type: " + data.getType());
-//
-//                final ItemsFragment fragment = (ItemsFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager_container + ":" + 1);
-//                if (fragment != null) {
-//
-//                    FirebaseMethods firebaseMethods = new FirebaseMethods(this);
-//                    firebaseMethods.uploadNewStory(data, fragment);
-//
-//                }
-//                else{
-//                    Log.d(TAG, "onActivityResult: could not communicate with home fragment.");
-//                }
-//
-//
-//
-//            }
-//        }
-//    }
-
     private void initImageLoader() {
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
@@ -254,4 +224,6 @@ public class HomeActivity2 extends AppCompatActivity implements
             mUserDatabase.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
+
+
 }
