@@ -13,8 +13,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="15"
-            android:gravity="center_horizontal"
             android:background="#50C878"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
         </LinearLayout>
@@ -24,41 +24,41 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_below="@+id/linearLayout1"
-            android:layout_marginTop="-50dp"
             android:layout_gravity="center"
-            android:src="@drawable/junkyard"
-            android:background="@drawable/background" />
+            android:layout_marginTop="-50dp"
+            android:background="@drawable/background"
+            android:src="@drawable/junkyard" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="70"
-            android:orientation="vertical"
             android:background="@drawable/border_bottom_only"
+            android:orientation="vertical"
             android:weightSum="100">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="14.2857142857"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:layout_marginTop="0.5dp"
                     android:layout_marginRight="3dp"
+                    android:layout_marginTop="0.5dp"
                     android:src="@drawable/icon_edit" />
 
                 <TextView
                     android:id="@+id/ediProfile_changeImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Change Photo"
-                    android:textSize="20dp"
                     android:gravity="center"
+                    android:text="Change Photo"
                     android:textColor="@color/black"
+                    android:textSize="20dp"
                     android:textStyle="bold"/>
 
             </LinearLayout>
@@ -73,17 +73,17 @@
                     android:id="@+id/ediProfile_name"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:background="@drawable/border"
-
                     android:layout_marginLeft="20dp"
+
                     android:layout_marginRight="20dp"
+                    android:background="@drawable/border"
                     android:drawableRight="@drawable/icon_user"
-                    android:paddingRight="12dp"
-                    android:paddingLeft="15dp"
                     android:hint="Business Name"
                     android:inputType="text"
-                    android:textColorHint="#ffffff"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="12dp"
                     android:textColor="#000000"
+                    android:textColorHint="#ffffff"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -98,16 +98,16 @@
                     android:id="@+id/ediProfile_email"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:background="@drawable/border"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
+                    android:background="@drawable/border"
                     android:drawableRight="@drawable/ic_loc"
-                    android:paddingRight="12dp"
-                    android:paddingLeft="15dp"
                     android:hint="Location"
                     android:inputType="text"
-                    android:textColorHint="#ffffff"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="12dp"
                     android:textColor="#000000"
+                    android:textColorHint="#ffffff"
                     android:textStyle="bold"/>
 
             </LinearLayout>
@@ -122,16 +122,16 @@
                     android:id="@+id/ediProfile_password"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:background="@drawable/border"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
+                    android:background="@drawable/border"
                     android:drawableRight="@drawable/key"
-                    android:paddingRight="12dp"
-                    android:paddingLeft="15dp"
                     android:hint="Password"
                     android:inputType="textPassword"
-                    android:textColorHint="#ffffff"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="12dp"
                     android:textColor="#000000"
+                    android:textColorHint="#ffffff"
                     android:textStyle="bold"/>
 
             </LinearLayout>
@@ -146,16 +146,16 @@
                     android:id="@+id/ediProfile_mobile"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:background="@drawable/border"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
+                    android:background="@drawable/border"
                     android:drawableRight="@drawable/key"
-                    android:paddingRight="12dp"
-                    android:paddingLeft="15dp"
                     android:hint="Confirm Password"
                     android:inputType="textPassword"
-                    android:textColorHint="#ffffff"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="12dp"
                     android:textColor="#000000"
+                    android:textColorHint="#ffffff"
                     android:textStyle="bold"/>
 
             </LinearLayout>
@@ -169,16 +169,16 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:background="@drawable/border"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
+                    android:background="@drawable/border"
                     android:drawableRight="@drawable/ic_tele"
-                    android:paddingRight="12dp"
-                    android:paddingLeft="15dp"
                     android:hint="Telephone No."
                     android:inputType="text"
-                    android:textColorHint="#ffffff"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="12dp"
                     android:textColor="#000000"
+                    android:textColorHint="#ffffff"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -192,16 +192,16 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:background="@drawable/border"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
+                    android:background="@drawable/border"
                     android:drawableRight="@drawable/icon_phone"
-                    android:paddingRight="12dp"
-                    android:paddingLeft="15dp"
                     android:hint="Mobile No."
                     android:inputType="text"
-                    android:textColorHint="#ffffff"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="12dp"
                     android:textColor="#000000"
+                    android:textColorHint="#ffffff"
                     android:textStyle="bold" />
 
             </LinearLayout>

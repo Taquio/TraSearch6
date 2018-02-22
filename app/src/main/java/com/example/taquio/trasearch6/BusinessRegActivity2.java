@@ -35,6 +35,7 @@ import java.util.UUID;
 
 public class BusinessRegActivity2 extends AppCompatActivity {
 
+    private final int PICK_IMAGE_REQUEST = 71;
     String bsnMail,
             bsnPass,
             bsnConPass,
@@ -45,7 +46,6 @@ public class BusinessRegActivity2 extends AppCompatActivity {
     Button busRegister, busUpload;
     ImageView imagePermit;
     private Uri filePath;
-    private final int PICK_IMAGE_REQUEST = 71;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
     private DatabaseReference databaseReference;
@@ -65,9 +65,9 @@ public class BusinessRegActivity2 extends AppCompatActivity {
         bsnPhone = bundle.getString("PHONE");
         bsnMobile = bundle.getString("MOBILE");
 
-        busRegister = (Button) findViewById(R.id.registerBtn1);
-        busUpload = (Button) findViewById(R.id.busUpload);
-        imagePermit = (ImageView) findViewById(R.id.imagePermit);
+        busRegister = findViewById(R.id.registerBtn1);
+        busUpload = findViewById(R.id.busUpload);
+        imagePermit = findViewById(R.id.imagePermit);
 
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -80,7 +80,8 @@ public class BusinessRegActivity2 extends AppCompatActivity {
 //                if(!bsnPass.equals(bsnConPass)){
 //                    Toast.makeText(BusinessRegActivity2.this, "Password does not match!", Toast.LENGTH_SHORT).show();
 //                }
-                mAuth.createUserWithEmailAndPassword(bsnMail, bsnPass).addOnCompleteListener(BusinessRegActivity2.this, new OnCompleteListener<AuthResult>() {
+                mAuth.createUserWithEmailAndPassword(bsnMail, bsnPass)
+                        .addOnCompleteListener(BusinessRegActivity2.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()) {
@@ -89,8 +90,6 @@ public class BusinessRegActivity2 extends AppCompatActivity {
                             String user_id = mAuth.getCurrentUser().getUid();
                             DatabaseReference current_user_db = databaseReference.child("Users");
                             String deviceToken = FirebaseInstanceId.getInstance().getToken();
-
-
 
                             Map userDetails = new HashMap();
                             userDetails.put("BusinessName", bsnBusinessName);
