@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 
 /**
- * Created by User on 5/28/2017.
+ * Created by Edward on 2018.
  */
 
 public class GalleryFragment extends Fragment {

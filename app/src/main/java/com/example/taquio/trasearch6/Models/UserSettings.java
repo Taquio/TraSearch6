@@ -1,7 +1,7 @@
 package com.example.taquio.trasearch6.Models;
 
 /**
- * Created by User on 6/30/2017.
+ * Created by Edward 2018.
  */
 
 public class UserSettings {

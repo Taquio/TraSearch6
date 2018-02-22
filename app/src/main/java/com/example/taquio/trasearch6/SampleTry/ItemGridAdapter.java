@@ -15,7 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.taquio.trasearch6.HomeActivity2;
+import com.example.taquio.trasearch6.MessageActivity;
 import com.example.taquio.trasearch6.Models.Comment;
 import com.example.taquio.trasearch6.Models.Like;
 import com.example.taquio.trasearch6.Models.Photo;
@@ -23,7 +23,6 @@ import com.example.taquio.trasearch6.Models.User;
 import com.example.taquio.trasearch6.MyProfileActivity;
 import com.example.taquio.trasearch6.R;
 import com.example.taquio.trasearch6.Utils.Likes;
-import com.example.taquio.trasearch6.Utils.MainFeedListAdapter;
 import com.example.taquio.trasearch6.Utils.SquareImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -56,6 +55,7 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
     }
     OnLoadMoreItemsListener mOnLoadMoreItemsListener;
 
+
     private LayoutInflater mInflater;
         private int mLayoutResource;
         private Context mContext;
@@ -77,7 +77,7 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
         String likesString;
         TextView username, timeDetla, caption, likes, comments;
         SquareImageView image;
-        ImageView heartRed, heartWhite, comment;
+        ImageView likegreen, likeblack, comment, dm;
 
         User user  = new User();
         StringBuilder users;
@@ -91,7 +91,7 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        Log.d(TAG, "getView: CHECCCCKKKKK >>> " + getItem(position).getCaption().toString() );
+        Log.d(TAG, "getView: TRYING TO GET THE  VIEW >>> " + getItem(position).getCaption().toString() );
         final ViewHolder holder;
 
         if(convertView == null){
@@ -100,14 +100,17 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
 
             holder.username = (TextView) convertView.findViewById(R.id.username);
             holder.image = (SquareImageView) convertView.findViewById(R.id.post_image);
-            holder.heartRed = (ImageView) convertView.findViewById(R.id.image_heart_red);
-            holder.heartWhite = (ImageView) convertView.findViewById(R.id.image_heart);
-            holder.comment = (ImageView) convertView.findViewById(R.id.speech_bubble);
-            holder.likes = (TextView) convertView.findViewById(R.id.image_likes);
-            holder.comments = (TextView) convertView.findViewById(R.id.image_comments_link);
             holder.caption = (TextView) convertView.findViewById(R.id.image_caption);
             holder.timeDetla = (TextView) convertView.findViewById(R.id.image_time_posted);
+            holder.likegreen = (ImageView) convertView.findViewById(R.id.image_heart_red);
+            holder.likeblack = (ImageView) convertView.findViewById(R.id.image_heart);
+//            holder.comment = (ImageView) convertView.findViewById(R.id.speech_bubble);
+            holder.likes = (TextView) convertView.findViewById(R.id.image_likes);
+            holder.comments = (TextView) convertView.findViewById(R.id.image_comments_link);
+
             holder.mprofileImage = (CircleImageView) convertView.findViewById(R.id.profile_photo);
+            holder.dm =convertView.findViewById(R.id.direct_message);
+
 
             convertView.setTag(holder);
         }
@@ -118,7 +121,7 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
         holder.photo = getItem(position);
         holder.detector = new GestureDetector(mContext, new GestureListener(holder));
         holder.users = new StringBuilder();
-        holder.liker = new Likes(holder.heartWhite, holder.heartRed);
+        holder.liker = new Likes(holder.likeblack, holder.likegreen);
 
         //get the current users username (need for checking likes string)
         getCurrentUsername();
@@ -131,6 +134,7 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
 
         //set the comment
         List<Comment> comments = getItem(position).getComments();
+        holder.comments.setText("#" + comments.size());
 //        holder.comments.setText("View all " + comments.size() + " comments");
 //        holder.comments.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -206,10 +210,16 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
                             mContext.startActivity(intent);
                         }
                     });
+                    holder.image.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
 
 
 
-//                    holder.user = singleSnapshot.getValue(User.class);
+                    holder.user = singleSnapshot.getValue(User.class);
 //                    holder.comment.setOnClickListener(new View.OnClickListener() {
 //                        @Override
 //                        public void onClick(View v) {
@@ -243,6 +253,15 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
                             singleSnapshot.getValue(User.class).getUserName());
 
                     holder.user = singleSnapshot.getValue(User.class);
+                    holder.dm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(mContext, MessageActivity.class);
+                            i.putExtra("user_Id", holder.photo.getUser_id());
+                            i.putExtra("user_name", holder.user.getUserName());
+                            mContext.startActivity(i);
+                        }
+                    });
                 }
 
             }
@@ -277,6 +296,7 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
             Log.e(TAG, "loadMoreData: ClassCastException: " +e.getMessage() );
         }
     }
+
     public class GestureListener extends GestureDetector.SimpleOnGestureListener{
 
         ViewHolder mHolder;
@@ -419,7 +439,7 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
                         Query query = reference
                                 .child("Users")
-                                .orderByKey()
+                                .orderByChild("userID")
                                 .equalTo(singleSnapshot.getValue(Like.class).getUser_id());
                         query.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -434,13 +454,15 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
 
                                 String[] splitUsers = holder.users.toString().split(",");
 
-//                                if(holder.users.toString().contains(currentUsername + ",")){//ed, edward
-//                                    holder.likeByCurrentUser = true;
-//                                }else{
-//                                    holder.likeByCurrentUser = false;
-//                                }
-//
-//                                int length = splitUsers.length;
+                                if(holder.users.toString().contains(currentUsername + ",")){//ed, edward
+                                    holder.likeByCurrentUser = true;
+                                    }
+                                  else{
+                                    holder.likeByCurrentUser = false;
+                                }
+
+                                int length = splitUsers.length;
+                                holder.likesString = ""+length;
 //                                if(length == 1){
 //                                    holder.likesString = "Liked by " + splitUsers[0];
 //                                }
@@ -505,9 +527,9 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
         Log.d(TAG, "setupLikesString: photo id: " + holder.photo.getPhoto_id());
         if(holder.likeByCurrentUser){
             Log.d(TAG, "setupLikesString: photo is liked by current user");
-            holder.heartWhite.setVisibility(View.GONE);
-            holder.heartRed.setVisibility(View.VISIBLE);
-            holder.heartRed.setOnTouchListener(new View.OnTouchListener() {
+            holder.likeblack.setVisibility(View.GONE);
+            holder.likegreen.setVisibility(View.VISIBLE);
+            holder.likegreen.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     return holder.detector.onTouchEvent(event);
@@ -515,9 +537,9 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
             });
         }else{
             Log.d(TAG, "setupLikesString: photo is not liked by current user");
-            holder.heartWhite.setVisibility(View.VISIBLE);
-            holder.heartRed.setVisibility(View.GONE);
-            holder.heartWhite.setOnTouchListener(new View.OnTouchListener() {
+            holder.likeblack.setVisibility(View.VISIBLE);
+            holder.likegreen.setVisibility(View.GONE);
+            holder.likeblack.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     return holder.detector.onTouchEvent(event);

@@ -21,7 +21,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 
 /**
- * Created by Del Mar on 2/7/2018.
+ * Created by Edward on 2/7/2018.
  */
 
 public class CameraActivity extends AppCompatActivity {

@@ -27,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 
 /**
- * Created by User on 7/24/2017.
+ * Created by Edward on 2018.
  */
 
 public class NextActivity extends AppCompatActivity {

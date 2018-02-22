@@ -44,7 +44,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
- * Created by User on 9/22/2017.
+ * Created by Edward 2018.
  */
 
 public class MainFeedListAdapter extends ArrayAdapter<Photo> {
