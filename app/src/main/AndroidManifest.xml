@@ -161,6 +161,7 @@
         <activity android:name=".BusinessMessages.BusinessMessages">
         </activity>
         <activity android:name=".BusinessProfile.BusinessProfile"/>
+
     </application>
 
 </manifest>
