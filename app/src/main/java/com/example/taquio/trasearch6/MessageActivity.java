@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -37,6 +38,8 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -53,6 +56,7 @@ public class  MessageActivity extends AppCompatActivity {
 
     private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private static final int GALLERY_PICK = 1;
+    private static final String TAG = "MessageActivity";
     private final List<Chats> mChatList = new ArrayList<>();
     private String mChatUser;
     private Toolbar mChatToolbar;
@@ -73,22 +77,17 @@ public class  MessageActivity extends AppCompatActivity {
     // Storage Firebase
     private StorageReference mImageStorage;
     private ProgressDialog progressDialog;
-
-
     //New Solution
     private int itemPos = 0;
-
     private String mLastKey = "";
     private String mPrevKey = "";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        refIDs();
 
+        mLinearLayout = new LinearLayoutManager(MessageActivity.this);
         mChatToolbar = findViewById(R.id.messageAppbar);
         setSupportActionBar(mChatToolbar);
 
@@ -110,21 +109,7 @@ public class  MessageActivity extends AppCompatActivity {
         actionBar.setCustomView(action_bar_view);
 
         // ---- Custom Action bar Items ----
-
-        mTitleView = findViewById(R.id.chatUserName);
-        mLastSeenView = findViewById(R.id.chatUserLastSeen);
-        mProfileImage = findViewById(R.id.chatUserImage);
-
-
-
-        mChatAddBtn = findViewById(R.id.ChatUser_addBtn);
-        mChatSendBtn = findViewById(R.id.ChatUser_sendBtn);
-        mChatMessageView = findViewById(R.id.ChatUser_txtFld);
-
-        mAdapter = new ChatAdapter(mChatList);
-
-        mMessagesList = findViewById(R.id.chatList);
-        mRefreshLayout = findViewById(R.id.swipeUpdate_swipeLayout);
+        refIDs();
         mLinearLayout = new LinearLayoutManager(this);
 
         mMessagesList.setHasFixedSize(true);
@@ -252,12 +237,15 @@ public class  MessageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent galleryIntent = new Intent();
-                galleryIntent.setType("image/*");
-                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-                startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PICK);
-
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setCropShape(CropImageView.CropShape.RECTANGLE)
+                        .setBorderCornerColor(Color.GREEN)
+                        .setBorderLineColor(Color.GREEN)
+                        .setActivityMenuIconColor(Color.GREEN)
+                        .setBorderCornerColor(Color.GREEN)
+                        .setFixAspectRatio(false)
+                        .start(MessageActivity.this);
             }
         });
 
@@ -282,21 +270,22 @@ public class  MessageActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == GALLERY_PICK && resultCode == RESULT_OK){
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK){
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
 
             progressDialog = new ProgressDialog(MessageActivity.this);
             progressDialog.setTitle("Uploading Image...");
-            progressDialog.setMessage("Please wait while we upload the your beautiful image");
+            progressDialog.setMessage("Please wait while we upload your image");
             progressDialog.show();
-            Uri imageUri = data.getData();
+            Uri imageUri = result.getUri();
+
             progressDialog.setCanceledOnTouchOutside(false);
             File image_path = new File(imageUri.getPath());
             Bitmap thumbBitmap;
             try {
                 thumbBitmap = new Compressor(MessageActivity.this)
-                        .setMaxWidth(200).setMaxHeight(200).setQuality(80)
+                        .setMaxWidth(400).setMaxHeight(400).setQuality(90)
                         .compressToBitmap(image_path);
 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -531,8 +520,18 @@ public class  MessageActivity extends AppCompatActivity {
 
     public void refIDs()
     {
+        mTitleView = findViewById(R.id.chatUserName);
+        mLastSeenView = findViewById(R.id.chatUserLastSeen);
+        mProfileImage = findViewById(R.id.chatUserImage);
 
-        mLinearLayout = new LinearLayoutManager(MessageActivity.this);
+        mChatAddBtn = findViewById(R.id.ChatUser_addBtn);
+        mChatSendBtn = findViewById(R.id.ChatUser_sendBtn);
+        mChatMessageView = findViewById(R.id.ChatUser_txtFld);
+
+        mAdapter = new ChatAdapter(mChatList);
+
+        mMessagesList = findViewById(R.id.chatList);
+        mRefreshLayout = findViewById(R.id.swipeUpdate_swipeLayout);
 
     }
 }
