@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.taquio.trasearch6.Models.Comment;
 import com.example.taquio.trasearch6.Models.Like;
@@ -44,7 +45,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 /**
- * Created by User on 8/12/2017.
+ * Created by Edward 2018.
  */
 
 public class ViewPostFragment extends Fragment {
@@ -113,7 +114,8 @@ public class ViewPostFragment extends Fragment {
             UniversalImageLoader.setImage(getPhotoFromBundle().getImage_path(), mPostImage, null, "");
             Log.d(TAG, "init: GETTING BUNDLE >>>>>>>>>>>>> " +getPhotoFromBundle().getImage_path() );
 
-            mActivityNumber = getActivityNumFromBundle();
+//            mActivityNumber = getActivityNumFromBundle();
+            Toast.makeText(getContext(), "ARAA AYY"+ mActivityNumber, Toast.LENGTH_SHORT).show();
             String photo_id = getPhotoFromBundle().getPhoto_id();
 
             Query query = FirebaseDatabase.getInstance().getReference()
@@ -447,7 +449,9 @@ public class ViewPostFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         if(bundle != null) {
+            Toast.makeText(getContext(), "HEREEE >>>>> "+bundle.getInt(getString(R.string.activity_number)), Toast.LENGTH_SHORT).show();
             return bundle.getInt(getString(R.string.activity_number));
+
         }else{
             return 0;
         }
@@ -485,7 +489,7 @@ public class ViewPostFragment extends Fragment {
      */
     private void setupFirebaseAuth(){
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
-
+        mActivityNumber = getActivityNumFromBundle();
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();

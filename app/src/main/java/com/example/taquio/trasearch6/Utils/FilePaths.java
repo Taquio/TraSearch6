@@ -3,7 +3,7 @@ package com.example.taquio.trasearch6.Utils;
 import android.os.Environment;
 
 /**
- * Created by User on 7/24/2017.
+ * Created by Edward 2018.
  */
 
 public class FilePaths {
@@ -13,9 +13,6 @@ public class FilePaths {
 
     public String PICTURES = ROOT_DIR + "/Pictures";
     public String CAMERA = ROOT_DIR + "/DCIM/camera";
-    public String STORIES = ROOT_DIR + "/Stories";
-
-    public String FIREBASE_STORY_STORAGE = "stories/users";
     public String FIREBASE_IMAGE_STORAGE = "Photos/";
 
 }

@@ -33,7 +33,7 @@ public class SliderAdapter extends PagerAdapter{
     };
     //list of description
     public String[] list_desc = {
-            "We are TraSearch.",
+            "An application for Solid Waste Management",
             "Searching is now an inch away.",
             "Videos now are more and less.",
             "Maps lends a hand.",

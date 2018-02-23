@@ -2,13 +2,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@drawable/sign_gradient_background" />
+    android:layout_height="match_parent"
+    android:background="@drawable/login_gradient">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,7 +54,7 @@
                 android:layout_margin="10dp"
                 android:background="@drawable/border"
                 android:drawableRight="@drawable/key"
-                android:hint="Password"
+                android:hint="********"
                 android:inputType="textPassword"
                 android:paddingLeft="15dp"
                 android:paddingRight="10dp"

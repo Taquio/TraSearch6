@@ -16,11 +16,13 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.example.taquio.trasearch6.Models.Photo;
+import com.example.taquio.trasearch6.SampleTry.ItemGridAdapter;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.Utils.ItemsFragment;
 import com.example.taquio.trasearch6.Utils.MainFeedListAdapter;
 import com.example.taquio.trasearch6.Utils.UniversalImageLoader;
 import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
+import com.example.taquio.trasearch6.Utils.ViewPostFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -32,14 +34,20 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class HomeActivity2 extends AppCompatActivity implements
         MainFeedListAdapter.OnLoadMoreItemsListener{
 
-
+    @Override
+    public void onLoadMoreItems() {
+        Log.d(TAG, "onLoadMoreItems: displaying more photos");
+        ItemsFragment fragment = (ItemsFragment)getSupportFragmentManager()
+                .findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
+        if(fragment != null){
+            fragment.displayMorePhotos();
+        }
+    }
     private static final String TAG = "HomeActivity";
+    private Context mContext = HomeActivity2.this;
     private static final int ACTIVITY_NUM = 0;
     private static final int HOME_FRAGMENT = 1;
-    private static final int RESULT_ADD_NEW_STORY = 7891;
-    private final static int CAMERA_RQ = 6969;
-    private static final int REQUEST_ADD_NEW_STORY = 8719;
-    private Context mContext = HomeActivity2.this;
+
     //Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -66,29 +74,7 @@ public class HomeActivity2 extends AppCompatActivity implements
         setupViewPager();
 
     }
-//    public void openNewStoryActivity(){
-//        Intent intent = new Intent(this, NewStoryActivity.class);
-//        startActivityForResult(intent, REQUEST_ADD_NEW_STORY);
-//    }
-//
-//    public void showAddToStoryDialog(){
-//        Log.d(TAG, "showAddToStoryDialog: showing add to story dialog.");
-//        AddToStoryDialog dialog = new AddToStoryDialog();
-//        dialog.show(getFragmentManager(), getString(R.string.dialog_add_to_story));
-//    }
-    private void initImageLoader(){
-        UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
-        ImageLoader.getInstance().init(universalImageLoader.getConfig());
-    }
-    @Override
-    public void onLoadMoreItems() {
-        Log.d(TAG, "onLoadMoreItems: displaying more photos");
-        ItemsFragment fragment = (ItemsFragment)getSupportFragmentManager()
-                .findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
-        if(fragment != null){
-            fragment.displayMorePhotos();
-        }
-    }
+
     public void onCommentThreadSelected(Photo photo, String callingActivity){
         Log.d(TAG, "onCommentThreadSelected: selected a coemment thread");
 
@@ -104,7 +90,20 @@ public class HomeActivity2 extends AppCompatActivity implements
         transaction.commit();
 
     }
+    public void onImageSelected(Photo item, int i) {
+            ViewPostFragment fragment = new ViewPostFragment();
+            Bundle args = new Bundle();
+            args.putParcelable(getString(R.string.photo), item);
+            args.putInt(getString(R.string.activity_number), i);
 
+            fragment.setArguments(args);
+
+            FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frame_container, fragment);
+            transaction.addToBackStack("View Post");
+            transaction.commit();
+
+    }
     public void hideLayout(){
         Log.d(TAG, "hideLayout: hiding layout");
         mRelativeLayout.setVisibility(View.GONE);
@@ -124,37 +123,22 @@ public class HomeActivity2 extends AppCompatActivity implements
             showLayout();
         }
     }
+    private void initImageLoader() {
+        UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
+        ImageLoader.getInstance().init(universalImageLoader.getConfig());
+    }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        Log.d(TAG, "onPause: OnPause Started");
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-    //    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Log.d(TAG, "onActivityResult: incoming result.");
-//        // Received recording or error from MaterialCamera
-//
-//        if (requestCode == REQUEST_ADD_NEW_STORY) {
-//            Log.d(TAG, "onActivityResult: incoming new story.");
-//            if (resultCode == RESULT_ADD_NEW_STORY) {
-//                Log.d(TAG, "onActivityResult: got the new story.");
-//                Log.d(TAG, "onActivityResult: data type: " + data.getType());
-//
-//                final ItemsFragment fragment = (ItemsFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager_container + ":" + 1);
-//                if (fragment != null) {
-//
-//                    FirebaseMethods firebaseMethods = new FirebaseMethods(this);
-//                    firebaseMethods.uploadNewStory(data, fragment);
-//
-//                }
-//                else{
-//                    Log.d(TAG, "onActivityResult: could not communicate with home fragment.");
-//                }
-//
-//
-//
-//            }
+//        if(currentUser!=null) {
+//            Log.d(TAG, "onPause: User Offline");
+//            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
 //        }
-//    }
-
+    }
     private void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new VideosFragment());
@@ -213,6 +197,18 @@ public class HomeActivity2 extends AppCompatActivity implements
     @Override
     public void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart: Started");
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        if(currentUser==null)
+//        {
+//            Log.d(TAG, "onStart: Calling back to start method");
+//            sendToStart();
+//        }
+//        else
+//        {
+//            Log.d(TAG, "onStart: User Online");
+//            mUserRef.child("online").setValue("true");
+//        }
         mAuth.addAuthStateListener(mAuthStateListener);
         if(mAuth.getCurrentUser()!=null)
         {
@@ -228,4 +224,6 @@ public class HomeActivity2 extends AppCompatActivity implements
             mUserDatabase.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
+
+
 }

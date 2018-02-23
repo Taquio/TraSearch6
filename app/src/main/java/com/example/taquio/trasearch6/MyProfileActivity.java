@@ -3,7 +3,6 @@ package com.example.taquio.trasearch6;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,11 +11,14 @@ import android.widget.Toast;
 
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.Models.User;
+import com.example.taquio.trasearch6.Utils.ItemsFragment;
 import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
 import com.example.taquio.trasearch6.Utils.ViewPostFragment;
 import com.example.taquio.trasearch6.Utils.ViewProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -36,16 +38,15 @@ public class MyProfileActivity extends AppCompatActivity implements
     private CircleImageView profilePhoto;
     private DatabaseReference mUserDatabase;
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         init();
-        // ---------------------- Setting up Profile Image --------------------- //
         profilePhoto = findViewById(R.id.myProfile_image);
 
-        // ---------------------- End of Setting up Profile Image --------------------- //
 
     }
     @Override
@@ -99,8 +100,6 @@ public class MyProfileActivity extends AppCompatActivity implements
                     args.putParcelable(getString(R.string.intent_user),
                             intent.getParcelableExtra(getString(R.string.intent_user)));
 
-
-
                     fragment.setArguments(args);
 
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -139,6 +138,28 @@ public class MyProfileActivity extends AppCompatActivity implements
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue("online");
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue(ServerValue.TIMESTAMP);
+        }
     }
 
 }

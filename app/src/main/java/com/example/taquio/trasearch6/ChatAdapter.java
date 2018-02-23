@@ -83,19 +83,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
 
         if(message_type.equals("text")) {
-
-            holder.messageText.setText(c.getMessage());
             holder.messageImage.setVisibility(View.INVISIBLE);
-            holder.chatSingleTime.setText(getDate(c.getTime(),"hh:mm:ss aa"));
-
-
+            holder.messageText.setText(c.getMessage());
+            holder.chatSingleTime.setText(getDate(c.getTime(),"MMM dd, yyyy E hh:mm aa"));
+            holder.messageText.setVisibility(View.VISIBLE);
         } else {
 
             holder.messageText.setVisibility(View.INVISIBLE);
             holder.messageImage.setVisibility(View.VISIBLE);
             Picasso.with(holder.profileImage.getContext()).load(c.getMessage())
                     .placeholder(R.drawable.man).into(holder.messageImage);
-            holder.chatSingleTime.setText(getDate(c.getTime(),"hh:mm:ss aa"));
+            holder.chatSingleTime.setText(getDate(c.getTime(),"MMM dd, yyyy E hh:mm aa"));
 
         }
 

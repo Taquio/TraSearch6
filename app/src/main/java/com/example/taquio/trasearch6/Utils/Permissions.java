@@ -3,7 +3,7 @@ package com.example.taquio.trasearch6.Utils;
 import android.Manifest;
 
 /**
- * Created by User on 7/10/2017.
+ * Created by Edward 2018.
  */
 
 public class Permissions {

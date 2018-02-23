@@ -1,7 +1,10 @@
 package com.example.taquio.trasearch6;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -35,19 +38,25 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.reactivex.annotations.NonNull;
+import id.zelory.compressor.Compressor;
 
 public class  MessageActivity extends AppCompatActivity {
 
     private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private static final int GALLERY_PICK = 1;
+    private static final String TAG = "MessageActivity";
     private final List<Chats> mChatList = new ArrayList<>();
     private String mChatUser;
     private Toolbar mChatToolbar;
@@ -67,22 +76,18 @@ public class  MessageActivity extends AppCompatActivity {
     private int mCurrentPage = 1;
     // Storage Firebase
     private StorageReference mImageStorage;
-
-
+    private ProgressDialog progressDialog;
     //New Solution
     private int itemPos = 0;
-
     private String mLastKey = "";
     private String mPrevKey = "";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        refIDs();
 
+        mLinearLayout = new LinearLayoutManager(MessageActivity.this);
         mChatToolbar = findViewById(R.id.messageAppbar);
         setSupportActionBar(mChatToolbar);
 
@@ -104,21 +109,7 @@ public class  MessageActivity extends AppCompatActivity {
         actionBar.setCustomView(action_bar_view);
 
         // ---- Custom Action bar Items ----
-
-        mTitleView = findViewById(R.id.chatUserName);
-        mLastSeenView = findViewById(R.id.chatUserLastSeen);
-        mProfileImage = findViewById(R.id.chatUserImage);
-
-
-
-        mChatAddBtn = findViewById(R.id.ChatUser_addBtn);
-        mChatSendBtn = findViewById(R.id.ChatUser_sendBtn);
-        mChatMessageView = findViewById(R.id.ChatUser_txtFld);
-
-        mAdapter = new ChatAdapter(mChatList);
-
-        mMessagesList = findViewById(R.id.chatList);
-        mRefreshLayout = findViewById(R.id.swipeUpdate_swipeLayout);
+        refIDs();
         mLinearLayout = new LinearLayoutManager(this);
 
         mMessagesList.setHasFixedSize(true);
@@ -246,12 +237,15 @@ public class  MessageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent galleryIntent = new Intent();
-                galleryIntent.setType("image/*");
-                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-                startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PICK);
-
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setCropShape(CropImageView.CropShape.RECTANGLE)
+                        .setBorderCornerColor(Color.GREEN)
+                        .setBorderLineColor(Color.GREEN)
+                        .setActivityMenuIconColor(Color.GREEN)
+                        .setBorderCornerColor(Color.GREEN)
+                        .setFixAspectRatio(false)
+                        .start(MessageActivity.this);
             }
         });
 
@@ -276,63 +270,82 @@ public class  MessageActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == GALLERY_PICK && resultCode == RESULT_OK){
-
-            Uri imageUri = data.getData();
-
-            final String current_user_ref = "Messages/" + mCurrentUserId + "/" + mChatUser;
-            final String chat_user_ref = "Messages/" + mChatUser + "/" + mCurrentUserId;
-
-            DatabaseReference user_message_push = mRootRef.child("Messages")
-                    .child(mCurrentUserId).child(mChatUser).push();
-
-            final String push_id = user_message_push.getKey();
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK){
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
 
-            StorageReference filepath = mImageStorage.child("Photos").child(mCurrentUserId).child("ConvoImages").child( push_id + ".jpg");
+            progressDialog = new ProgressDialog(MessageActivity.this);
+            progressDialog.setTitle("Uploading Image...");
+            progressDialog.setMessage("Please wait while we upload your image");
+            progressDialog.show();
+            Uri imageUri = result.getUri();
 
-            filepath.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+            progressDialog.setCanceledOnTouchOutside(false);
+            File image_path = new File(imageUri.getPath());
+            Bitmap thumbBitmap;
+            try {
+                thumbBitmap = new Compressor(MessageActivity.this)
+                        .setMaxWidth(400).setMaxHeight(400).setQuality(90)
+                        .compressToBitmap(image_path);
 
-                    if(task.isSuccessful()){
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                thumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] byteData = baos.toByteArray();
 
-                        String download_url = task.getResult().getDownloadUrl().toString();
+                final String current_user_ref = "Messages/" + mCurrentUserId + "/" + mChatUser;
+                final String chat_user_ref = "Messages/" + mChatUser + "/" + mCurrentUserId;
+
+                DatabaseReference user_message_push = mRootRef.child("Messages")
+                        .child(mCurrentUserId).child(mChatUser).push();
+
+                final String push_id = user_message_push.getKey();
 
 
-                        Map messageMap = new HashMap();
-                        messageMap.put("message", download_url);
-                        messageMap.put("seen", false);
-                        messageMap.put("type", "image");
-                        messageMap.put("time", ServerValue.TIMESTAMP);
-                        messageMap.put("from", mCurrentUserId);
+                StorageReference filepath = mImageStorage.child("Photos").child(mCurrentUserId).child("ConvoImages").child( push_id + ".jpg");
 
-                        Map messageUserMap = new HashMap();
-                        messageUserMap.put(current_user_ref + "/" + push_id, messageMap);
-                        messageUserMap.put(chat_user_ref + "/" + push_id, messageMap);
+                UploadTask uploadTask = filepath.putBytes(byteData);
+                uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@android.support.annotation.NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if(task.isSuccessful()){
 
-                        mChatMessageView.setText("");
+                            String download_url = task.getResult().getDownloadUrl().toString();
 
-                        mRootRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
-                                if(databaseError != null){
+                            Map messageMap = new HashMap();
+                            messageMap.put("message", download_url);
+                            messageMap.put("seen", false);
+                            messageMap.put("type", "image");
+                            messageMap.put("time", ServerValue.TIMESTAMP);
+                            messageMap.put("from", mCurrentUserId);
 
-                                    Log.d("CHAT_LOG", databaseError.getMessage().toString());
+                            Map messageUserMap = new HashMap();
+                            messageUserMap.put(current_user_ref + "/" + push_id, messageMap);
+                            messageUserMap.put(chat_user_ref + "/" + push_id, messageMap);
 
+                            mChatMessageView.setText("");
+
+                            mRootRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
+                                    if(databaseError != null){
+
+                                        Log.d("CHAT_LOG", databaseError.getMessage().toString());
+                                        progressDialog.dismiss();
+                                    }else{
+                                        progressDialog.dismiss();
+                                    }
                                 }
-
-                            }
-                        });
-
-
+                            });
+                        }
                     }
+                });
 
-                }
-            });
 
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -507,8 +520,18 @@ public class  MessageActivity extends AppCompatActivity {
 
     public void refIDs()
     {
+        mTitleView = findViewById(R.id.chatUserName);
+        mLastSeenView = findViewById(R.id.chatUserLastSeen);
+        mProfileImage = findViewById(R.id.chatUserImage);
 
-        mLinearLayout = new LinearLayoutManager(MessageActivity.this);
+        mChatAddBtn = findViewById(R.id.ChatUser_addBtn);
+        mChatSendBtn = findViewById(R.id.ChatUser_sendBtn);
+        mChatMessageView = findViewById(R.id.ChatUser_txtFld);
+
+        mAdapter = new ChatAdapter(mChatList);
+
+        mMessagesList = findViewById(R.id.chatList);
+        mRefreshLayout = findViewById(R.id.swipeUpdate_swipeLayout);
 
     }
 }

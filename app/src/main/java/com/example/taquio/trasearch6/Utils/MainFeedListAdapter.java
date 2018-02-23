@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.taquio.trasearch6.HomeActivity2;
+import com.example.taquio.trasearch6.MessageActivity;
 import com.example.taquio.trasearch6.Models.Comment;
 import com.example.taquio.trasearch6.Models.Like;
 import com.example.taquio.trasearch6.Models.Photo;
@@ -44,18 +45,25 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
- * Created by User on 9/22/2017.
+ * Created by Edward 2018.
  */
 
 public class MainFeedListAdapter extends ArrayAdapter<Photo> {
 
+
+    public interface OnFeedImageSelectedListener {
+        void onImageSelected(Photo photo, int activityNumber);
+    }
+    OnFeedImageSelectedListener monFeedImageSelectedListener;
     private static final String TAG = "MainFeedListAdapter";
     OnLoadMoreItemsListener mOnLoadMoreItemsListener;
+
     private LayoutInflater mInflater;
     private int mLayoutResource;
     private Context mContext;
     private DatabaseReference mReference;
     private String currentUsername = "";
+
     public MainFeedListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Photo> objects) {
         super(context, resource, objects);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -63,11 +71,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         this.mContext = context;
         mReference = FirebaseDatabase.getInstance().getReference();
 
-//        for(Photo photo: objects){
-//            Log.d(TAG, "MainFeedListAdapter: photo id: " + photo.getPhoto_id());
-//        }
     }
-
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -78,16 +82,19 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
             convertView = mInflater.inflate(mLayoutResource, parent, false);
             holder = new ViewHolder();
 
-            holder.username = convertView.findViewById(R.id.username);
-            holder.image = convertView.findViewById(R.id.post_image);
-            holder.heartRed = convertView.findViewById(R.id.image_heart_red);
-            holder.heartWhite = convertView.findViewById(R.id.image_heart);
-            holder.comment = convertView.findViewById(R.id.speech_bubble);
-            holder.likes = convertView.findViewById(R.id.image_likes);
-            holder.comments = convertView.findViewById(R.id.image_comments_link);
-            holder.caption = convertView.findViewById(R.id.image_caption);
-            holder.timeDetla = convertView.findViewById(R.id.image_time_posted);
-            holder.mprofileImage = convertView.findViewById(R.id.profile_photo);
+            holder.username = (TextView) convertView.findViewById(R.id.username);
+            holder.image = (SquareImageView) convertView.findViewById(R.id.post_image);
+            holder.caption = (TextView) convertView.findViewById(R.id.image_caption);
+            holder.timeDetla = (TextView) convertView.findViewById(R.id.image_time_posted);
+            holder.likegreen = (ImageView) convertView.findViewById(R.id.image_heart_red);
+            holder.likeblack = (ImageView) convertView.findViewById(R.id.image_heart);
+//            holder.comment = (ImageView) convertView.findViewById(R.id.speech_bubble);
+            holder.likes = (TextView) convertView.findViewById(R.id.image_likes);
+            holder.comments = (TextView) convertView.findViewById(R.id.image_comments_link);
+
+            holder.mprofileImage = (CircleImageView) convertView.findViewById(R.id.profile_photo);
+            holder.dm =convertView.findViewById(R.id.direct_message);
+
 
             convertView.setTag(holder);
         }
@@ -98,7 +105,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         holder.photo = getItem(position);
         holder.detector = new GestureDetector(mContext, new GestureListener(holder));
         holder.users = new StringBuilder();
-        holder.liker = new Likes(holder.heartWhite, holder.heartRed);
+        holder.liker = new Likes(holder.likeblack, holder.likegreen);
 
         //get the current users username (need for checking likes string)
         getCurrentUsername();
@@ -111,19 +118,21 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
 
         //set the comment
         List<Comment> comments = getItem(position).getComments();
-        holder.comments.setText("View all " + comments.size() + " comments");
-        holder.comments.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: loading comment thread for " + getItem(position).getPhoto_id());
-                ((HomeActivity2)mContext).onCommentThreadSelected(getItem(position),
-                        mContext.getString(R.string.home_activity));
-//
-//                //going to need to do something else?
-                ((HomeActivity2)mContext).hideLayout();
-                ((HomeActivity2) mContext).finish();
-            }
-        });
+        holder.comments.setText("#" + comments.size());
+//        holder.comments.setText("View all " + comments.size() + " comments");
+//        holder.comments.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: loading comment thread for " + getItem(position).getPhoto_id());
+//                ((HomeActivity2)mContext).onCommentThreadSelected(getItem(position),
+//                        mContext.getString(R.string.home_activity));
+////
+////                //going to need to do something else?
+//                ((HomeActivity2)mContext).hideLayout();
+//                ((HomeActivity2) mContext).finish();
+//            }
+//        });
+
 
         //set the time it was posted
         String timestampDifference = getTimestampDifference(getItem(position));
@@ -175,7 +184,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                     holder.mprofileImage.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Log.d(TAG, "onClick: navigating to profile of: " +
+                            Log.d(TAG,  "onClick: navigating to profile of: " +
                                     holder.user.getUserName());
 
                             Intent intent = new Intent(mContext, MyProfileActivity.class);
@@ -186,20 +195,26 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                             mContext.startActivity(intent);
                         }
                     });
-
-
-
-                    holder.user = singleSnapshot.getValue(User.class);
-                    holder.comment.setOnClickListener(new View.OnClickListener() {
+                    holder.image.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ((HomeActivity2)mContext).onCommentThreadSelected(getItem(position),
-                                    mContext.getString(R.string.home_activity));
-//
+                            ((HomeActivity2)mContext).onImageSelected(getItem(position),0);
 //                            //another thing?
                             ((HomeActivity2)mContext).hideLayout();
                         }
                     });
+
+                    holder.user = singleSnapshot.getValue(User.class);
+//                    holder.comment.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            ((HomeActivity2)mContext).onCommentThreadSelected(getItem(position),
+//                                    mContext.getString(R.string.home_activity));
+////
+////                            //another thing?
+//                            ((HomeActivity2)mContext).hideLayout();
+//                        }
+//                    });
                 }
 
             }
@@ -223,6 +238,15 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                     singleSnapshot.getValue(User.class).getUserName());
 
                     holder.user = singleSnapshot.getValue(User.class);
+                    holder.dm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(mContext, MessageActivity.class);
+                            i.putExtra("user_Id", holder.photo.getUser_id());
+                            i.putExtra("user_name", holder.user.getUserName());
+                            mContext.startActivity(i);
+                        }
+                    });
                 }
 
             }
@@ -345,31 +369,32 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                             holder.likeByCurrentUser = holder.users.toString().contains(currentUsername + ",");
 
                             int length = splitUsers.length;
-                            if(length == 1){
-                                holder.likesString = "Liked by " + splitUsers[0];
-                            }
-                            else if(length == 2){
-                                holder.likesString = "Liked by " + splitUsers[0]
-                                        + " and " + splitUsers[1];
-                            }
-                            else if(length == 3){
-                                holder.likesString = "Liked by " + splitUsers[0]
-                                        + ", " + splitUsers[1]
-                                        + " and " + splitUsers[2];
-
-                            }
-                            else if(length == 4){
-                                holder.likesString = "Liked by " + splitUsers[0]
-                                        + ", " + splitUsers[1]
-                                        + ", " + splitUsers[2]
-                                        + " and " + splitUsers[3];
-                            }
-                            else if(length > 4){
-                                holder.likesString = "Liked by " + splitUsers[0]
-                                        + ", " + splitUsers[1]
-                                        + ", " + splitUsers[2]
-                                        + " and " + (splitUsers.length - 3) + " others";
-                            }
+                            holder.likesString = ""+length;
+//                                if(length == 1){
+//                                    holder.likesString = "Liked by " + splitUsers[0];
+//                                }
+//                                else if(length == 2){
+//                                    holder.likesString = "Liked by " + splitUsers[0]
+//                                            + " and " + splitUsers[1];
+//                                }
+//                                else if(length == 3){
+//                                    holder.likesString = "Liked by " + splitUsers[0]
+//                                            + ", " + splitUsers[1]
+//                                            + " and " + splitUsers[2];
+//
+//                                }
+//                                else if(length == 4){
+//                                    holder.likesString = "Liked by " + splitUsers[0]
+//                                            + ", " + splitUsers[1]
+//                                            + ", " + splitUsers[2]
+//                                            + " and " + splitUsers[3];
+//                                }
+//                                else if(length > 4){
+//                                    holder.likesString = "Liked by " + splitUsers[0]
+//                                            + ", " + splitUsers[1]
+//                                            + ", " + splitUsers[2]
+//                                            + " and " + (splitUsers.length - 3) + " others";
+//                                }
                             Log.d(TAG, "onDataChange: likes string: " + holder.likesString);
                             //setup likes string
                             setupLikesString(holder, holder.likesString);
@@ -409,9 +434,9 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         Log.d(TAG, "setupLikesString: photo id: " + holder.photo.getPhoto_id());
         if(holder.likeByCurrentUser){
             Log.d(TAG, "setupLikesString: photo is liked by current user");
-            holder.heartWhite.setVisibility(View.GONE);
-            holder.heartRed.setVisibility(View.VISIBLE);
-            holder.heartRed.setOnTouchListener(new View.OnTouchListener() {
+            holder.likeblack.setVisibility(View.GONE);
+            holder.likegreen.setVisibility(View.VISIBLE);
+            holder.likegreen.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     return holder.detector.onTouchEvent(event);
@@ -419,9 +444,9 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
             });
         }else{
             Log.d(TAG, "setupLikesString: photo is not liked by current user");
-            holder.heartWhite.setVisibility(View.VISIBLE);
-            holder.heartRed.setVisibility(View.GONE);
-            holder.heartWhite.setOnTouchListener(new View.OnTouchListener() {
+            holder.likeblack.setVisibility(View.VISIBLE);
+            holder.likegreen.setVisibility(View.GONE);
+            holder.likeblack.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     return holder.detector.onTouchEvent(event);
@@ -465,9 +490,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         String likesString;
         TextView username, timeDetla, caption, likes, comments;
         SquareImageView image;
-        ImageView heartRed, heartWhite, comment;
-
-//        UserAccountSettings settings = new UserAccountSettings();
+        ImageView likegreen, likeblack, comment, dm;
         User user  = new User();
         StringBuilder users;
         String mLikesString;
@@ -517,7 +540,6 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                                     .child(mContext.getString(R.string.field_likes))
                                     .child(keyID)
                                     .removeValue();
-///
                             mReference.child("Users_Photos")
 //                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .child(mHolder.photo.getUser_id())

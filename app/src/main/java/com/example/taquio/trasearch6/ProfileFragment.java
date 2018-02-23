@@ -28,6 +28,7 @@ import com.example.taquio.trasearch6.Models.UserSettings;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.Utils.FirebaseMethods;
 import com.example.taquio.trasearch6.Utils.GridImageAdapter;
+import com.example.taquio.trasearch6.Utils.UniversalImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -56,7 +57,12 @@ public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
     private static final int ACTIVITY_NUM = 4;
     private static final int NUM_GRID_COLUMNS = 3;
+
+    public interface OnGridImageSelectedListener{
+        void onGridImageSelected(Photo photo, int activityNumber);
+    }
     OnGridImageSelectedListener mOnGridImageSelectedListener;
+
     //firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -105,14 +111,6 @@ public class ProfileFragment extends Fragment {
         setupFirebaseAuth();
         setupGridView();
 
-
-//        signOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mAuth.signOut();
-//                getActivity().finish();
-//            }
-//        });
         Button editProfile = view.findViewById(R.id.myProfile_editBtn);
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,26 +220,10 @@ public class ProfileFragment extends Fragment {
         Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getImage());
 
         User user = userSettings.getUser();
-
+        UniversalImageLoader.setImage(user.getImage(), mProfilePhoto, null, "");
         mName.setText(user.getName());
         mEmail.setText(user.getEmail());
         mPhone.setText(user.getPhoneNumber());
-
-        Picasso.with(mContext).load(userSettings.getUser().getImage())
-                .networkPolicy(NetworkPolicy.OFFLINE)
-                .placeholder(R.drawable.man)
-                .into(mProfilePhoto, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                    }
-                    @Override
-                    public void onError() {
-                        Picasso.with(mContext)
-                                .load(userSettings.getUser().getImage())
-                                .placeholder(R.drawable.man)
-                                .into(mProfilePhoto);
-                    }
-                });
     }
 
     /**
@@ -289,32 +271,8 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onDataChange: GETTING DATA FROM DATABASE >>>>>>>>>");
-                //GE RETRIEVE ANG DATA SA USERS GAMIT ANG SNAPSHOT SA DATABASE
 
                 setProfileWidgets(mFirebaseMethods.getUserSettings(dataSnapshot));
-//                Log.d(TAG, "onDataChange: GETTTINGGGG >>>> PICTURE" + dataSnapshot.child("Users").child(mUser.getUid()).child("Image").getValue().toString() );
-//            Picasso.with(mContext).load(dataSnapshot.child("Users")
-//                    .child(uid)
-//                    .child("Image")
-//                    .getValue().toString())
-//            .networkPolicy(NetworkPolicy.OFFLINE)
-//            .placeholder(R.drawable.man)
-//            .into(mProfilePhoto, new Callback() {
-//                @Override
-//                public void onSuccess() {
-//
-//                }
-//
-//                @Override
-//                public void onError() {
-//                    Picasso.with(mContext)
-//                            .load(dataSnapshot.child("Users")
-//                                    .child(mUser.getUid()).child("Image")
-//                                    .getValue().toString())
-//                            .placeholder(R.drawable.man)
-//                            .into(mProfilePhoto);
-//                }
-//            });
             }
 
             @Override
@@ -323,10 +281,6 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-
-      /*
-    ------------------------------------ Firebase ---------------------------------------------
-     */
 
     @Override
     public void onStart() {
@@ -342,7 +296,5 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    public interface OnGridImageSelectedListener{
-        void onGridImageSelected(Photo photo, int activityNumber);
-    }
+
 }

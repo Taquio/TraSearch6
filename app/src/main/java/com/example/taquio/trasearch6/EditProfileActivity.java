@@ -15,7 +15,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -64,7 +65,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Uri resultUri;
     private String newName,newEmail,newPassword,newMobile,mauthEmail,mauthPassword;
-    private ImageButton ediProfile_saveChanges;
+    private ImageView ediProfile_saveChanges;
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
 
     private Boolean name,email,password,mobile,image;
 
@@ -282,6 +285,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     {
                         Toast.makeText(EditProfileActivity.this,"Updated",Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(EditProfileActivity.this,EditProfileActivity.class));
+                        progressDialog.dismiss();
                         finish();
                     }
                 }
@@ -310,6 +314,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             child(mCurrentUser.getUid()).
                             child("ProfilePhoto").
                             child("profile_image");
+
                     final StorageReference thumbFilePath = mImageStorage.
                             child("Photos").
                             child(mCurrentUser.getUid()).
@@ -387,5 +392,29 @@ public class EditProfileActivity extends AppCompatActivity {
         ediProfile_saveChanges = findViewById(R.id.ediProfile_saveChanges);
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue("online");
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue(ServerValue.TIMESTAMP);
+        }
     }
 }

@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
 /**
- * Created by User on 1/15/2018.
+ * Created by Edward 2108.
  */
 
 public class TouchableRelativeLayout extends RelativeLayout {

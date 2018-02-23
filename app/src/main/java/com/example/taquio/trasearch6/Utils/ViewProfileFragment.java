@@ -1,6 +1,7 @@
 package com.example.taquio.trasearch6.Utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.taquio.trasearch6.MessageActivity;
 import com.example.taquio.trasearch6.Models.Comment;
 import com.example.taquio.trasearch6.Models.Like;
 import com.example.taquio.trasearch6.Models.Photo;
@@ -45,7 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
- * Created by User on 6/29/2017.
+ * Created by Edward 2018.
  */
 
 public class ViewProfileFragment extends Fragment {
@@ -178,7 +180,7 @@ public class ViewProfileFragment extends Fragment {
         //set the profile widgets
         DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference();
         Query query1 = reference1.child("Users")
-                .orderByKey().equalTo(mUser.getUserID());
+                .orderByChild("userID").equalTo(mUser.getUserID());
         query1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -418,11 +420,21 @@ public class ViewProfileFragment extends Fragment {
 
         UniversalImageLoader.setImage(user.getImage(), mProfilePhoto, null, "");
 
+        final String nuser = user.getUserID();
+        final String name = user.getUserName();
         mName.setText(user.getUserName());
         mEmail.setText(user.getEmail());
         mPhoneNumber.setText(user.getPhoneNumber());
 
-
+            message.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(mContext, MessageActivity.class);
+                    i.putExtra("user_id",nuser );
+                    i.putExtra("user_name", name);
+                    mContext.startActivity(i);
+                }
+            });
 //        mBackArrow.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

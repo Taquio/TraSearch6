@@ -484,14 +484,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         hideSoftKeyboard();
     }
     //method to load Recycling Center
-    private void loadRecyclingCenters(LatLng latLng)
+    private void loadRecyclingCenters()
     {
         Object dataTransfer[] = new Object[2];
         getNearbyPlacesData = new GetNearbyPlacesData();
 
         String recyclingCenter = "recycling+center+junkyard";
-        String url = getUrl(latLng.latitude, latLng.longitude, recyclingCenter);
-        Toast.makeText(this, "Check lat: "+latLng.latitude+"long: "+latLng.longitude, Toast.LENGTH_SHORT).show();
+        String url = getUrl(latitude, longitude, recyclingCenter);
+        Toast.makeText(this, "Check lat: "+latitude+"long: "+longitude, Toast.LENGTH_SHORT).show();
         dataTransfer[0] = mMap;
         dataTransfer[1] = url;
 
@@ -507,7 +507,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         googlePlaceUrl.append("&location="+latitude+","+longitude);
         googlePlaceUrl.append("&radius=3000");
         googlePlaceUrl.append("&key="+"AIzaSyDvsia0V9CUml-qj5BIhEiOtnMdT27EhMs");
-
+       // AIzaSyDvsia0V9CUml-qj5BIhEiOtnMdT27EhMs
+        // AIzaSyCnoXov8X_8xXBLY-_gDOxnfko3zHSw6fs
         Log.d("MapsActivity", "url = "+googlePlaceUrl.toString());
 
         return googlePlaceUrl.toString();
@@ -565,8 +566,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
 
+                            latitude = currentLocation.getLatitude();
+                            longitude = currentLocation.getLongitude();
+
                             //load recycling centers and junkyard
-                            loadRecyclingCenters(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                            loadRecyclingCenters();
 
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM,

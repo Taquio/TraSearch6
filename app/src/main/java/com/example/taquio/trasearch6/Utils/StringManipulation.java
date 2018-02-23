@@ -1,7 +1,7 @@
 package com.example.taquio.trasearch6.Utils;
 
 /**
- * Created by User on 6/26/2017.
+ * Created by Edward 2018.
  */
 
 public class StringManipulation {
