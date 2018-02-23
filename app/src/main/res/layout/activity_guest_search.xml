@@ -40,6 +40,7 @@
             android:weightSum="100">
 
             <EditText
+                android:id="@+id/searchText"
                 android:layout_width="320dp"
                 android:layout_height="0dp"
                 android:layout_margin="6dp"
@@ -51,6 +52,11 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="5dp"
                 android:textColorHint="#000000"/>
+            <Button
+                android:id="@+id/searchExec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="search"/>
 
             <Button
                 android:id="@+id/guest_SignIn"
@@ -58,10 +64,10 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="50dp"
                 android:layout_weight="10"
-                android:textColor="#ffff"
                 android:background="@drawable/btn"
                 android:stateListAnimator="@null"
-                android:text="Sign In"/>
+                android:text="Sign In"
+                android:textColor="#ffff"/>
 
             <Button
                 android:id="@+id/guest_Reg"
@@ -70,10 +76,10 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="10"
-                android:textColor="#ffff"
                 android:background="@drawable/btn"
                 android:stateListAnimator="@null"
-                android:text="Register"/>
+                android:text="Register"
+                android:textColor="#ffff"/>
 
             <TextView
                 android:layout_width="match_parent"

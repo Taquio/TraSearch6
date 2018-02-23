@@ -285,6 +285,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     {
                         Toast.makeText(EditProfileActivity.this,"Updated",Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(EditProfileActivity.this,EditProfileActivity.class));
+                        progressDialog.dismiss();
                         finish();
                     }
                 }
