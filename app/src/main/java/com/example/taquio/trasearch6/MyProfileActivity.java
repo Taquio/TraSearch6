@@ -36,8 +36,8 @@ public class MyProfileActivity extends AppCompatActivity implements
     private Context mContext = MyProfileActivity.this;
     private ProgressBar mProgressbar;
     private CircleImageView profilePhoto;
-    private DatabaseReference mUserDatabase;
-    private FirebaseAuth mAuth;
+    private FirebaseDatabase mfirebaseDatabase;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DatabaseReference mDatabase;
 
     @Override
@@ -143,7 +143,10 @@ public class MyProfileActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+
+        mfirebaseDatabase = FirebaseDatabase.getInstance();
+//        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+        mDatabase = mfirebaseDatabase.getReference().child(mAuth.getCurrentUser().getUid());
 
         if(mAuth.getCurrentUser()!=null)
         {
