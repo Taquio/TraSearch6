@@ -314,8 +314,8 @@ public class ViewProfileFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(mContext, MessageActivity.class);
-                    i.putExtra("ID",nuser );
-                    i.putExtra("username", name);
+                    i.putExtra("user_id",nuser );
+                    i.putExtra("user_name", name);
                     mContext.startActivity(i);
                 }
             });
