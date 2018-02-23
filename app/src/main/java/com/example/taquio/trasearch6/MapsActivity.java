@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -62,9 +61,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,
-        LocationListener,
-        MapFragmentRecyclingCenter.OnFragmentInteractionListener,
-        MapFragmentJunkyard.OnFragmentInteractionListener{
+        LocationListener{
 
     private static final String TAG = "MapActivity";
 
@@ -85,7 +82,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private RadioButton mRbRecyclingCenter, mRbJunkyard;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
-    private MapPagerAdapter mMapPagerAdapter;
     //vars
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
@@ -109,11 +105,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     /*
     *   Necessary methods that is needed
     * */
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
     @Override
     public void onLocationChanged(Location location)
     {
@@ -411,32 +402,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void init() {
         Log.d(TAG, "init: initializing");
-
-        //tabs
-        mTabLayout.addTab(mTabLayout.newTab().setText("Recycling Center"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("Junkyard"));
-        mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        mViewPager.setAdapter(mMapPagerAdapter);
-        mMapPagerAdapter = new MapPagerAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
-        mViewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-
-        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });//end tabs
 
         // filter the autocomplete suggestion to Philippines only
         AutocompleteFilter filter = new AutocompleteFilter
