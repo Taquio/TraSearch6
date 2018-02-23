@@ -51,19 +51,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainFeedListAdapter extends ArrayAdapter<Photo> {
 
 
-    public interface OnFeedImageSelectedListener {
-        void onImageSelected(Photo photo, int activityNumber);
-    }
-    OnFeedImageSelectedListener monFeedImageSelectedListener;
     private static final String TAG = "MainFeedListAdapter";
+    OnFeedImageSelectedListener monFeedImageSelectedListener;
     OnLoadMoreItemsListener mOnLoadMoreItemsListener;
-
     private LayoutInflater mInflater;
     private int mLayoutResource;
     private Context mContext;
     private DatabaseReference mReference;
     private String currentUsername = "";
-
     public MainFeedListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Photo> objects) {
         super(context, resource, objects);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -72,6 +67,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         mReference = FirebaseDatabase.getInstance().getReference();
 
     }
+
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -82,17 +78,17 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
             convertView = mInflater.inflate(mLayoutResource, parent, false);
             holder = new ViewHolder();
 
-            holder.username = (TextView) convertView.findViewById(R.id.username);
-            holder.image = (SquareImageView) convertView.findViewById(R.id.post_image);
-            holder.caption = (TextView) convertView.findViewById(R.id.image_caption);
-            holder.timeDetla = (TextView) convertView.findViewById(R.id.image_time_posted);
-            holder.likegreen = (ImageView) convertView.findViewById(R.id.image_heart_red);
-            holder.likeblack = (ImageView) convertView.findViewById(R.id.image_heart);
+            holder.username = convertView.findViewById(R.id.username);
+            holder.image = convertView.findViewById(R.id.post_image);
+            holder.caption = convertView.findViewById(R.id.image_caption);
+            holder.timeDetla = convertView.findViewById(R.id.image_time_posted);
+            holder.likegreen = convertView.findViewById(R.id.image_heart_red);
+            holder.likeblack = convertView.findViewById(R.id.image_heart);
 //            holder.comment = (ImageView) convertView.findViewById(R.id.speech_bubble);
-            holder.likes = (TextView) convertView.findViewById(R.id.image_likes);
-            holder.comments = (TextView) convertView.findViewById(R.id.image_comments_link);
+            holder.likes = convertView.findViewById(R.id.image_likes);
+            holder.comments = convertView.findViewById(R.id.image_comments_link);
 
-            holder.mprofileImage = (CircleImageView) convertView.findViewById(R.id.profile_photo);
+            holder.mprofileImage = convertView.findViewById(R.id.profile_photo);
             holder.dm =convertView.findViewById(R.id.direct_message);
 
 
@@ -242,7 +238,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                         @Override
                         public void onClick(View v) {
                             Intent i = new Intent(mContext, MessageActivity.class);
-                            i.putExtra("user_Id", holder.photo.getUser_id());
+                            i.putExtra("user_id", holder.photo.getUser_id());
                             i.putExtra("user_name", holder.user.getUserName());
                             mContext.startActivity(i);
                         }
@@ -479,6 +475,10 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
             difference = "0";
         }
         return difference;
+    }
+
+    public interface OnFeedImageSelectedListener {
+        void onImageSelected(Photo photo, int activityNumber);
     }
 
     public interface OnLoadMoreItemsListener{

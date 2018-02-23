@@ -1,6 +1,7 @@
 package com.example.taquio.trasearch6;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder>{
 
+    private static final String TAG = "ChatAdapter";
     private List<Chats> mMessageList;
     private DatabaseReference mUserDatabase;
 
@@ -62,16 +64,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         String from_user = c.getFrom();
         String message_type = c.getType();
 
-
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(from_user);
 
         mUserDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onBindViewHolder: "+dataSnapshot.child("Image_thumb").getValue().toString());
+
                 String image = dataSnapshot.child("Image_thumb").getValue().toString();
                 Picasso.with(holder.profileImage.getContext()).load(image)
                         .placeholder(R.drawable.man).into(holder.profileImage);
-
             }
 
             @Override

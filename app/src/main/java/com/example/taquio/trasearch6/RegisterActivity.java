@@ -217,6 +217,7 @@ public class RegisterActivity extends AppCompatActivity {
             userDetails.put("Name",name);
             userDetails.put("UserName",username);
             userDetails.put("Image","default");
+            userDetails.put("Image_thumb","default");
             userDetails.put("device_token",deviceToken);
             userDetails.put("PhoneNumber",phonenumber);
             userDetails.put("userID",mAuth.getCurrentUser().getUid());

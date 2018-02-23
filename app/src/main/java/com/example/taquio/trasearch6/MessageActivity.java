@@ -114,20 +114,12 @@ public class  MessageActivity extends AppCompatActivity {
 
         mMessagesList.setHasFixedSize(true);
         mMessagesList.setLayoutManager(mLinearLayout);
-
         mMessagesList.setAdapter(mAdapter);
 
         //------- IMAGE STORAGE ---------
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
-        mRootRef.child("Chat").child(mCurrentUserId).child(mChatUser).child("seen").setValue(true);
-
-        loadMessages();
-
-
-
         mTitleView.setText(userName);
-
 
         mRootRef.child("Users").child(mChatUser).addValueEventListener(new ValueEventListener() {
             @Override
@@ -221,7 +213,6 @@ public class  MessageActivity extends AppCompatActivity {
         });
 
 
-
         mChatSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -264,6 +255,7 @@ public class  MessageActivity extends AppCompatActivity {
 
             }
         });
+        loadMessages();
 
     }
 

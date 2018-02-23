@@ -68,7 +68,7 @@ public class MessagesActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
         if(mAuth.getCurrentUser()!=null)
         {
@@ -81,7 +81,7 @@ public class MessagesActivity extends AppCompatActivity {
         super.onStop();
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
         if(mAuth.getCurrentUser()!=null)
         {
             mDatabase.child("online").setValue(ServerValue.TIMESTAMP);
