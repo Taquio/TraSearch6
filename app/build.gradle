@@ -75,6 +75,8 @@ dependencies {
 
     //BottomNavigationViewEx library
     implementation 'com.github.ittianyu:BottomNavigationViewEx:1.1.9'
+    compile 'q.rorbin:badgeview:1.1.0'
+
 
     //Circle ImageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
@@ -111,5 +113,8 @@ dependencies {
     compile 'id.zelory:compressor:2.1.0'
     compile 'com.android.support:multidex:1.0.2'
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile 'com.aurelhubert:ahbottomnavigation:2.1.0'
+
 }
 apply plugin: 'com.google.gms.google-services'
