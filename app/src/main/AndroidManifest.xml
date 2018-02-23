@@ -159,6 +159,7 @@
         <activity android:name=".MyProfileActivity" />
         <activity
             android:name=".EditProfileActivity"
+            android:configChanges="keyboardHidden|orientation|screenLayout"
             android:parentActivityName=".MyProfileActivity" />
         <activity android:name=".Camera.CameraActivity" />
         <activity android:name=".Camera.NextActivity" />

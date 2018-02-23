@@ -178,7 +178,14 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                             mContext.startActivity(intent);
                         }
                     });
-
+                    holder.image.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ((HomeActivity2)mContext).onImageSelected(getItem(position),0);
+                           //another thing?
+                            ((HomeActivity2)mContext).hideLayout();
+                        }
+                    });
                     imageLoader.displayImage(singleSnapshot.getValue(User.class).getImage(),
                             holder.mprofileImage);
                     holder.mprofileImage.setOnClickListener(new View.OnClickListener() {
@@ -195,14 +202,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                             mContext.startActivity(intent);
                         }
                     });
-                    holder.image.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ((HomeActivity2)mContext).onImageSelected(getItem(position),0);
-//                            //another thing?
-                            ((HomeActivity2)mContext).hideLayout();
-                        }
-                    });
+
 
                     holder.user = singleSnapshot.getValue(User.class);
 //                    holder.comment.setOnClickListener(new View.OnClickListener() {

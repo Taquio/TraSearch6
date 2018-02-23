@@ -60,10 +60,10 @@ public class SpiderLeg {
             Document htmlDocument = connection.get();
             this.htmlDocument = htmlDocument;
             if (this.checkConnection(url)) {
-                System.out.println("\n**Visiting** Received web page at " + url);
+//                System.out.println("\n**Visiting** Received web page at " + url);
 
                 Elements linksOnPage = htmlDocument.select("h3 > a[href]");
-                System.out.println("Found (" + linksOnPage.size() + ") links");
+//                System.out.println("Found (" + linksOnPage.size() + ") links");
 
                 int linkIndex = 0;
                 for(Element link : linksOnPage) {
@@ -93,7 +93,7 @@ public class SpiderLeg {
 //				}
 //
                 Elements nextPageLink = htmlDocument.select("a[href].vve-check");
-                System.out.println("Found (" + nextPageLink.size() + ") next page links");
+//                System.out.println("Found (" + nextPageLink.size() + ") next page links");
                 for(Element nextLink: nextPageLink) {
                     this.nextLinks.add(nextLink.absUrl("href"));
                 }// Crawler for the Next Page Links
@@ -123,12 +123,12 @@ public class SpiderLeg {
                 return true;
             }
             else {
-                System.out.println("**Failure** Retrieved something other than HTML");
+//                System.out.println("**Failure** Retrieved something other than HTML");
                 return false;
             }
         }
         catch(IOException ioe) {
-            System.out.println("Error in out HTTP request " + ioe);
+//            System.out.println("Error in out HTTP request " + ioe);
             return false;
         }
     }
@@ -139,10 +139,10 @@ public class SpiderLeg {
             Document htmlDocument = connection.get();
             this.htmlDocument = htmlDocument;
             if (this.checkConnection(url)) {
-                System.out.println("\n**Visiting** Received web page at " + url);
+//                System.out.println("\n**Visiting** Received web page at " + url);
 
                 Elements linksOnPage = htmlDocument.select("h3 > a[href]");
-                System.out.println("Found (" + linksOnPage.size() + ") links");
+//                System.out.println("Found (" + linksOnPage.size() + ") links");
 
                 int linkIndex = 0;
                 for(Element link : linksOnPage) {
@@ -167,12 +167,12 @@ public class SpiderLeg {
                 return true;
             }
             else {
-                System.out.println("**Failure** Retrieved something other than HTML");
+//                System.out.println("**Failure** Retrieved something other than HTML");
                 return false;
             }
         }
         catch(IOException ioe) {
-            System.out.println("Error in out HTTP request " + ioe);
+//            System.out.println("Error in out HTTP request " + ioe);
             return false;
         }
     }
@@ -180,11 +180,11 @@ public class SpiderLeg {
 
     public boolean searchForWord(String searchWord){
         if (this.htmlDocument == null) {
-            System.out.println("Error! Call crawl() before performing analysis on the document");
+//            System.out.println("Error! Call crawl() before performing analysis on the document");
             return false;
         }
 
-        System.out.println("Searching for the word " + searchWord + "...");
+//        System.out.println("Searching for the word " + searchWord + "...");
         String bodyText = this.htmlDocument.body().text();
         return bodyText.toLowerCase().contains(searchWord.toLowerCase());
     }

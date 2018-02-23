@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.Models.User;
-import com.example.taquio.trasearch6.Utils.ItemsFragment;
 import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
 import com.example.taquio.trasearch6.Utils.ViewPostFragment;
 import com.example.taquio.trasearch6.Utils.ViewProfileFragment;
@@ -36,8 +35,8 @@ public class MyProfileActivity extends AppCompatActivity implements
     private Context mContext = MyProfileActivity.this;
     private ProgressBar mProgressbar;
     private CircleImageView profilePhoto;
-    private DatabaseReference mUserDatabase;
-    private FirebaseAuth mAuth;
+    private FirebaseDatabase mfirebaseDatabase;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DatabaseReference mDatabase;
 
     @Override
@@ -143,7 +142,10 @@ public class MyProfileActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+
+        mfirebaseDatabase = FirebaseDatabase.getInstance();
+//        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+        mDatabase = mfirebaseDatabase.getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
         if(mAuth.getCurrentUser()!=null)
         {
@@ -155,7 +157,7 @@ public class MyProfileActivity extends AppCompatActivity implements
     protected void onStop() {
         super.onStop();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+        mDatabase = mfirebaseDatabase.getReference().child("Users").child(mAuth.getCurrentUser().getUid());
         if(mAuth.getCurrentUser()!=null)
         {
             mDatabase.child("online").setValue(ServerValue.TIMESTAMP);
