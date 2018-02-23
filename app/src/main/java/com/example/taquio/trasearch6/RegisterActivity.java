@@ -195,9 +195,7 @@ public class RegisterActivity extends AppCompatActivity {
         {
             flag=false;
         }
-
         return flag;
-
     }
 
     private void updateUI(FirebaseUser user)
@@ -205,7 +203,6 @@ public class RegisterActivity extends AppCompatActivity {
         if(user !=null)
         {
             Log.d(TAG, "updateUI: Adding User Details to Database");
-
 
             final String username = field_username.getText().toString();
             final String name = field_name.getText().toString().toUpperCase();
@@ -223,7 +220,6 @@ public class RegisterActivity extends AppCompatActivity {
             userDetails.put("device_token",deviceToken);
             userDetails.put("PhoneNumber",phonenumber);
             userDetails.put("userID",mAuth.getCurrentUser().getUid());
-
 
             current_user_db.setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override

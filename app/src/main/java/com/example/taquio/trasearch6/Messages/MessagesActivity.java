@@ -14,6 +14,10 @@ import com.example.taquio.trasearch6.FriendsFragment;
 import com.example.taquio.trasearch6.R;
 import com.example.taquio.trasearch6.SectionsPagerAdapter;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 /**
@@ -24,12 +28,13 @@ public class MessagesActivity extends AppCompatActivity {
     private static final String TAG = "MessagesActivity";
     private static final int ACTIVITY_NUM = 1;
     private Context mContext = MessagesActivity.this;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages);
-
         setupBottomNavigationView();
         setupViewPager();
 
@@ -59,4 +64,27 @@ public class MessagesActivity extends AppCompatActivity {
         menuItem.setChecked(true);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue("online");
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue(ServerValue.TIMESTAMP);
+        }
+    }
 }

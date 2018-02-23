@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="100">
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"
+            android:background="#50C878"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ediProfile_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_below="@+id/linearLayout1"
+            android:layout_gravity="center"
+            android:layout_marginTop="-50dp"
+            android:background="@drawable/background"
+            android:src="@drawable/junkyard" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="70"
+            android:background="@drawable/border_bottom_only"
+            android:orientation="vertical"
+            android:weightSum="100">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="14.2857142857"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="0.5dp"
+                    android:src="@drawable/icon_edit" />
+
+                <TextView
+                    android:id="@+id/ediProfile_changeImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Change Photo"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="14.2857142857"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/ediProfile_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/border"
+                    android:drawableRight="@drawable/icon_user"
+                    android:hint="Business Name"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="12dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#ffffff"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="14.2857142857"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/ediProfile_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/border"
+                    android:drawableRight="@drawable/ic_loc"
+                    android:hint="Location"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="12dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#ffffff"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="14.2857142857"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/ediProfile_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/border"
+                    android:drawableRight="@drawable/key"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="12dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#ffffff"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="14.2857142857"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/ediProfile_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/border"
+                    android:drawableRight="@drawable/key"
+                    android:hint="Confirm Password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="12dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#ffffff"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="14.2857142857"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/border"
+                    android:drawableRight="@drawable/ic_tele"
+                    android:hint="Telephone No."
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="12dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#ffffff"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="14.2857142857"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/border"
+                    android:drawableRight="@drawable/icon_phone"
+                    android:hint="Mobile No."
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="12dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#ffffff"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:background="#FAFAFA"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="17"
+            android:background="#50C878">
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</merge>
