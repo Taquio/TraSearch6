@@ -111,14 +111,6 @@ public class ProfileFragment extends Fragment {
         setupFirebaseAuth();
         setupGridView();
 
-
-//        signOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mAuth.signOut();
-//                getActivity().finish();
-//            }
-//        });
         Button editProfile = view.findViewById(R.id.myProfile_editBtn);
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,22 +224,6 @@ public class ProfileFragment extends Fragment {
         mName.setText(user.getName());
         mEmail.setText(user.getEmail());
         mPhone.setText(user.getPhoneNumber());
-
-//        Picasso.with(mContext).load(userSettings.getUser().getImage())
-//                .networkPolicy(NetworkPolicy.OFFLINE)
-//                .placeholder(R.drawable.man)
-//                .into(mProfilePhoto, new Callback() {
-//                    @Override
-//                    public void onSuccess() {
-//                    }
-//                    @Override
-//                    public void onError() {
-//                        Picasso.with(mContext)
-//                                .load(userSettings.getUser().getImage())
-//                                .placeholder(R.drawable.man)
-//                                .into(mProfilePhoto);
-//                    }
-//                });
     }
 
     /**
