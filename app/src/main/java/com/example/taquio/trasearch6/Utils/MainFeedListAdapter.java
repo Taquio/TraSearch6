@@ -181,7 +181,8 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                     holder.image.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ((HomeActivity2)mContext).onImageSelected(getItem(position),0);
+                            
+                            ((HomeActivity2)mContext).onImageSelected(getItem(position),0, holder.photo.getUser_id());
                            //another thing?
                             ((HomeActivity2)mContext).hideLayout();
                         }
@@ -197,7 +198,6 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                             Intent intent = new Intent(mContext, MyProfileActivity.class);
                             intent.putExtra(mContext.getString(R.string.calling_activity),
                                     mContext.getString(R.string.home_activity));
-                            Log.d(TAG, "onDataChange: GETTTTINGGGGG >> " +  holder.user);
                             intent.putExtra(mContext.getString(R.string.intent_user), holder.user);
                             mContext.startActivity(intent);
                         }

@@ -88,10 +88,7 @@ public class MyProfileActivity extends AppCompatActivity implements
             if(intent.hasExtra(getString(R.string.intent_user))){
                 User user = intent.getParcelableExtra(getString(R.string.intent_user));
                 Log.d(TAG, "init: THIS IS A TEST FOR " +intent.getParcelableExtra(getString(R.string.intent_user)) );
-                /* IF DI EQUAL SA USER NGA GA GAMIT ANG ID
-                    IT MEANS LAIN NGA USERS VIEW ANG E INFLATE
-                    PARA SA VIEW PROFILE
-                */
+
                 if(!user.getUserID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
                     Log.d(TAG, "init: inflating view profile");
                     ViewProfileFragment fragment = new ViewProfileFragment();
