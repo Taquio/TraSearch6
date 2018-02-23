@@ -460,22 +460,22 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         Log.d(TAG, "getTimestampDifference: getting timestamp difference.");
 
         String difference = "";
-//        Calendar c = Calendar.getInstance();
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.CANADA);
-//        sdf.setTimeZone(TimeZone.getTimeZone("Canada/Pacific"));//google 'android list of timezones'
-//        Date today = c.getTime();
-//        sdf.format(today);
-//        Date timestamp;
-//        final String photoTimestamp = photo.getDate_created();
-//        try{
-//            timestamp = sdf.parse(photoTimestamp);
-//            difference = String.valueOf(Math.round(((today.getTime() - timestamp.getTime()) / 1000 / 60 / 60 / 24 )));
-//        }catch (ParseException e){
-//            Log.e(TAG, "getTimestampDifference: ParseException: " + e.getMessage() );
-//            difference = "0";
-//        }
-        Long tsLong = System.currentTimeMillis()/1000;
-        difference = tsLong.toString();
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.CANADA);
+        sdf.setTimeZone(TimeZone.getTimeZone("Canada/Pacific"));//google 'android list of timezones'
+        Date today = c.getTime();
+        sdf.format(today);
+        Date timestamp;
+        final String photoTimestamp = photo.getDate_created();
+        try{
+            timestamp = sdf.parse(photoTimestamp);
+            difference = String.valueOf(Math.round(((today.getTime() - timestamp.getTime()) / 1000 / 60 / 60 / 24 )));
+        }catch (ParseException e){
+            Log.e(TAG, "getTimestampDifference: ParseException: " + e.getMessage() );
+            difference = "0";
+        }
+//        Long tsLong = System.currentTimeMillis()/1000;
+//        difference = tsLong.toString();
         return difference;
     }
 

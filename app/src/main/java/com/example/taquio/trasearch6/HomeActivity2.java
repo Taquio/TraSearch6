@@ -14,9 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.support.v4.app.Fragment;
+
 import com.example.taquio.trasearch6.Models.Photo;
-import com.example.taquio.trasearch6.SampleTry.ItemGridAdapter;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.Utils.ItemsFragment;
 import com.example.taquio.trasearch6.Utils.MainFeedListAdapter;
@@ -36,9 +35,18 @@ public class HomeActivity2 extends AppCompatActivity implements
         MainFeedListAdapter.OnLoadMoreItemsListener{
 
     private static final String TAG = "HomeActivity";
-    private Context mContext = HomeActivity2.this;
     private static final int ACTIVITY_NUM = 0;
     private static final int HOME_FRAGMENT = 1;
+    private Context mContext = HomeActivity2.this;
+    //Firebase
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    //widgets
+    private ViewPager mViewPager;
+    private FrameLayout mFrameLayout;
+    private RelativeLayout mRelativeLayout;
+    private DatabaseReference mUserDatabase;
+
     @Override
     public void onLoadMoreItems() {
         Log.d(TAG, "onLoadMoreItems: displaying more photos");
@@ -49,18 +57,6 @@ public class HomeActivity2 extends AppCompatActivity implements
             fragment.displayMorePhotos();
         }
     }
-
-    //Firebase
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
-
-    //widgets
-    private ViewPager mViewPager;
-    private FrameLayout mFrameLayout;
-    private RelativeLayout mRelativeLayout;
-
-    private DatabaseReference mUserDatabase;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +73,13 @@ public class HomeActivity2 extends AppCompatActivity implements
         setupViewPager();
 
     }
-    public void onImageSelected(Photo item, int i, String user_id) {
+    public void onImageSelected( Photo item,  int i, final String user_id) {
+
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(user_id.equals(currentUser.toString())) {
+
+        if(user_id.equals(currentUser.getUid())) {
+
             ViewPostFragment fragment = new ViewPostFragment();
             Bundle args = new Bundle();
             args.putParcelable(getString(R.string.photo), item);
@@ -105,6 +104,9 @@ public class HomeActivity2 extends AppCompatActivity implements
             transaction.addToBackStack("View Post");
             transaction.commit();
         }
+
+
+
     }
     public void onCommentThreadSelected(Photo photo, String callingActivity){
         Log.d(TAG, "onCommentThreadSelected: selected a coemment thread");

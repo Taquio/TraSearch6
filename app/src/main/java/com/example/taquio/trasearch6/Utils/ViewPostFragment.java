@@ -107,6 +107,30 @@ public class ViewPostFragment extends Fragment {
 
         return view;
     }
+//
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//         inflater = getActivity().getMenuInflater();
+//        inflater.inflate(R.menu.menu_item_post, menu);
+//
+//    }
+//
+//    @Override
+//    public void onPrepareOptionsMenu(Menu menu) {
+//        super.onPrepareOptionsMenu(menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if (item.getItemId() == R.id.itemMarker) {
+//            //dapat ma mark if TAKEN ang item
+//        }
+//        if (item.getItemId() == R.id.delete) {
+//           //dapat madelete ang item
+//            onConfirmDelete();
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     private void init(){
         try{
@@ -530,6 +554,31 @@ public class ViewPostFragment extends Fragment {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+
+    public void onConfirmDelete() {
+
+        Query query = myRef.child("Photos").child(mPhoto.getPhoto_id());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snap : dataSnapshot.getChildren()){
+                    myRef.child("Photos")
+                            .child(mPhoto.getPhoto_id())
+                            .removeValue();
+                    myRef.child("Users_Photos")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child(mPhoto.getPhoto_id())
+                            .removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
