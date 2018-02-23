@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-
+//import android.support.v4.app.Fragment;
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.SampleTry.ItemGridAdapter;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
@@ -34,19 +34,19 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class HomeActivity2 extends AppCompatActivity implements
         MainFeedListAdapter.OnLoadMoreItemsListener{
 
+    private static final String TAG = "HomeActivity";
+    private Context mContext = HomeActivity2.this;
+    private static final int ACTIVITY_NUM = 0;
+    private static final int HOME_FRAGMENT = 1;
     @Override
     public void onLoadMoreItems() {
         Log.d(TAG, "onLoadMoreItems: displaying more photos");
-        ItemsFragment fragment = (ItemsFragment)getSupportFragmentManager()
+        ItemsFragment fragment = (ItemsFragment) getSupportFragmentManager()
                 .findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
         if(fragment != null){
             fragment.displayMorePhotos();
         }
     }
-    private static final String TAG = "HomeActivity";
-    private Context mContext = HomeActivity2.this;
-    private static final int ACTIVITY_NUM = 0;
-    private static final int HOME_FRAGMENT = 1;
 
     //Firebase
     private FirebaseAuth mAuth;
