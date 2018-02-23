@@ -14,12 +14,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-
+import android.support.v4.app.Fragment;
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.SampleTry.ItemGridAdapter;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.Utils.ItemsFragment;
 import com.example.taquio.trasearch6.Utils.MainFeedListAdapter;
+import com.example.taquio.trasearch6.Utils.OtherUserViewPost;
 import com.example.taquio.trasearch6.Utils.UniversalImageLoader;
 import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
 import com.example.taquio.trasearch6.Utils.ViewPostFragment;
@@ -34,19 +35,20 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class HomeActivity2 extends AppCompatActivity implements
         MainFeedListAdapter.OnLoadMoreItemsListener{
 
+    private static final String TAG = "HomeActivity";
+    private Context mContext = HomeActivity2.this;
+    private static final int ACTIVITY_NUM = 0;
+    private static final int HOME_FRAGMENT = 1;
     @Override
     public void onLoadMoreItems() {
         Log.d(TAG, "onLoadMoreItems: displaying more photos");
+
         ItemsFragment fragment = (ItemsFragment)getSupportFragmentManager()
                 .findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
         if(fragment != null){
             fragment.displayMorePhotos();
         }
     }
-    private static final String TAG = "HomeActivity";
-    private Context mContext = HomeActivity2.this;
-    private static final int ACTIVITY_NUM = 0;
-    private static final int HOME_FRAGMENT = 1;
 
     //Firebase
     private FirebaseAuth mAuth;
@@ -68,13 +70,42 @@ public class HomeActivity2 extends AppCompatActivity implements
         mViewPager = findViewById(R.id.container);
         mFrameLayout = findViewById(R.id.frame_container);
         mRelativeLayout = findViewById(R.id.relLayoutParent);
+
         setUpFirebaseAuth();
         initImageLoader();
         setupBottomNavigationView();
         setupViewPager();
 
     }
+    public void onImageSelected(Photo item, int i, String user_id) {
 
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(user_id.equals(currentUser.toString())) {
+            ViewPostFragment fragment = new ViewPostFragment();
+            Bundle args = new Bundle();
+            args.putParcelable(getString(R.string.photo), item);
+            args.putInt(getString(R.string.activity_number), i);
+
+            fragment.setArguments(args);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frame_container, fragment);
+            transaction.addToBackStack("View Post");
+            transaction.commit();
+        }else{
+            OtherUserViewPost fragment = new OtherUserViewPost();
+            Bundle args = new Bundle();
+            args.putParcelable(getString(R.string.photo), item);
+            args.putInt(getString(R.string.activity_number), i);
+
+            fragment.setArguments(args);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frame_container, fragment);
+            transaction.addToBackStack("View Post");
+            transaction.commit();
+        }
+    }
     public void onCommentThreadSelected(Photo photo, String callingActivity){
         Log.d(TAG, "onCommentThreadSelected: selected a coemment thread");
 
@@ -88,20 +119,6 @@ public class HomeActivity2 extends AppCompatActivity implements
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(getString(R.string.view_comments_fragment));
         transaction.commit();
-
-    }
-    public void onImageSelected(Photo item, int i) {
-            ViewPostFragment fragment = new ViewPostFragment();
-            Bundle args = new Bundle();
-            args.putParcelable(getString(R.string.photo), item);
-            args.putInt(getString(R.string.activity_number), i);
-
-            fragment.setArguments(args);
-
-            FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.frame_container, fragment);
-            transaction.addToBackStack("View Post");
-            transaction.commit();
 
     }
     public void hideLayout(){
@@ -224,6 +241,5 @@ public class HomeActivity2 extends AppCompatActivity implements
             mUserDatabase.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
-
 
 }
