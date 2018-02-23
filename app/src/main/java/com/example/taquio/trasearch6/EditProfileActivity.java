@@ -416,4 +416,13 @@ public class EditProfileActivity extends AppCompatActivity {
             mDatabase.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if ((progressDialog != null) && progressDialog.isShowing())
+            progressDialog.dismiss();
+        progressDialog = null;
+    }
+
 }
