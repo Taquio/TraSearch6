@@ -54,22 +54,22 @@ public class Spider {
             leg.crawl(currentUrl);
 
             paganation = leg.getnextLinks().toArray();
-            int x = 0;
-            do{
-                System.out.println("Page " + (x+1) + ": " + paganation[x]);
-                x++;
-            }while(x < paganation.length);
+//            int x = 0;
+//            do{
+//                System.out.println("Page " + (x+1) + ": " + paganation[x]);
+//                x++;
+//            }while(x < paganation.length);
 //			leg.crawl(paganation[0].toString());
 //			System.out.println("Paganation[0]: " + paganation[0]);
 
             boolean success = leg.searchForWord(searchWord);
             if(success) {
-                System.out.println(String.format("**Success** Word %s found at %s", searchWord, currentUrl));
+//                System.out.println(String.format("**Success** Word %s found at %s", searchWord, currentUrl));
                 break;
             }
             this.pagesToVisit.addAll(leg.getLinks());
         }
-        System.out.println(String.format("**Done** Visited %s web page(s)", this.pagesVisited.size()));
+//        System.out.println(String.format("**Done** Visited %s web page(s)", this.pagesVisited.size()));
         return leg.getVideoData();
     }
 
@@ -93,20 +93,20 @@ public class Spider {
                 this.searchedWord.add(searchWord);
             }
 
-            System.out.println("pagesToVisit" + this.pagesToVisit);
-            System.out.println("pagesVisited" + this.pagesVisited);
-            System.out.println("searchedWord" + this.searchedWord);
+//            System.out.println("pagesToVisit" + this.pagesToVisit);
+//            System.out.println("pagesVisited" + this.pagesVisited);
+//            System.out.println("searchedWord" + this.searchedWord);
             leg.crawl(currentUrl);
 
 
             boolean success = leg.searchForWord(searchWord);
             if(success) {
-                System.out.println(String.format("**Success** Word %s found at %s", searchWord, currentUrl));
+//                System.out.println(String.format("**Success** Word %s found at %s", searchWord, currentUrl));
                 break;
             }
             this.pagesToVisit.addAll(leg.getLinks());
         }
-        System.out.println(String.format("**Done** Visited %s web page(s)", this.pagesVisited.size()));
+//        System.out.println(String.format("**Done** Visited %s web page(s)", this.pagesVisited.size()));
         return leg.getVideos();
     }
 
