@@ -79,7 +79,7 @@ public class ProfileFragment extends Fragment {
     private ImageView profileMenu;
     private BottomNavigationViewEx bottomNavigationView;
     private Context mContext;
-    private TextView signOut;
+    private ImageView settings;
     //vars
     private int mFollowersCount = 0;
     private int mFollowingCount = 0;
@@ -99,7 +99,7 @@ public class ProfileFragment extends Fragment {
         gridView = view.findViewById(R.id.gridView);
         toolbar = view.findViewById(R.id.profileToolBar);
         profileMenu = view.findViewById(R.id.profileMenu);
-//        signOut = view.findViewById(R.id.cmdSignout);
+        settings = view.findViewById(R.id.accSetting);
         bottomNavigationView = view.findViewById(R.id.bottomNavViewBar);
         mContext = getActivity();
 
@@ -111,6 +111,12 @@ public class ProfileFragment extends Fragment {
         setupFirebaseAuth();
         setupGridView();
 
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent());
+            }
+        });
         Button editProfile = view.findViewById(R.id.myProfile_editBtn);
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
