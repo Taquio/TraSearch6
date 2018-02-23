@@ -24,6 +24,7 @@ import com.example.taquio.trasearch6.Models.User;
 import com.example.taquio.trasearch6.MyProfileActivity;
 import com.example.taquio.trasearch6.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -59,11 +60,17 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
     private Context mContext;
     private DatabaseReference mReference;
     private String currentUsername = "";
+
+    //firebase
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser currentUser;
+
     public MainFeedListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Photo> objects) {
         super(context, resource, objects);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mLayoutResource = resource;
         this.mContext = context;
+        currentUser = mAuth.getCurrentUser();
         mReference = FirebaseDatabase.getInstance().getReference();
 
     }
@@ -138,6 +145,10 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
             holder.timeDetla.setText("TODAY");
         }
 
+        if(holder.photo.getUser_id().equals(currentUser.getUid())){
+            holder.dm.setVisibility(View.GONE);
+            holder.dm.setEnabled(false);
+        }
         //set the profile image
         final ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.displayImage(getItem(position).getImage_path(), holder.image);
