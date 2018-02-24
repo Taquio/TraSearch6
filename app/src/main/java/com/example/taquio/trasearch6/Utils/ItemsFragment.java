@@ -1,14 +1,19 @@
 package com.example.taquio.trasearch6.Utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 
 import com.eschao.android.widget.elasticlistview.ElasticListView;
@@ -71,7 +76,9 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
     private int resultsCount = 0;
     private MainFeedListAdapter adapter;
     private int ACTIVITY_NUM = 0;
-
+    private EditText openSearch;
+    private Context mContext = getActivity();
+    private Toolbar toolbar;
     private GridView mgridView;
 
 
@@ -81,6 +88,15 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
         View view = inflater.inflate(R.layout.fragment_items, container, false);
         mListView = (ElasticListView) view.findViewById(R.id.listView);
 
+        toolbar = view.findViewById(R.id.profileToolBar);
+
+        openSearch = view.findViewById(R.id.opensearch);
+        openSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                startActivity(new Intent(mContext, SearchActivity.class));
+            }
+        });
         initListViewRefresh();
         getKeys();
 
@@ -276,7 +292,5 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
             Log.e(TAG, "displayPhotos: NullPointerException:" + e.getMessage() );
         }
     }
-
-
 
 }
