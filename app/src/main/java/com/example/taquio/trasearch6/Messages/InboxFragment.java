@@ -150,7 +150,6 @@ public class InboxFragment extends Fragment {
 
                             String userOnline = dataSnapshot.child("online").getValue().toString();
                             convViewHolder.setUserOnline(userOnline);
-
                         }
 
                         convViewHolder.setName(userName);
