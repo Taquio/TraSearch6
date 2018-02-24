@@ -24,6 +24,7 @@ import com.example.taquio.trasearch6.Models.User;
 import com.example.taquio.trasearch6.MyProfileActivity;
 import com.example.taquio.trasearch6.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,27 +52,29 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainFeedListAdapter extends ArrayAdapter<Photo> {
 
 
-    public interface OnFeedImageSelectedListener {
-        void onImageSelected(Photo photo, int activityNumber);
-    }
-    OnFeedImageSelectedListener monFeedImageSelectedListener;
     private static final String TAG = "MainFeedListAdapter";
+    OnFeedImageSelectedListener monFeedImageSelectedListener;
     OnLoadMoreItemsListener mOnLoadMoreItemsListener;
-
     private LayoutInflater mInflater;
     private int mLayoutResource;
     private Context mContext;
     private DatabaseReference mReference;
     private String currentUsername = "";
 
+    //firebase
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser currentUser;
+
     public MainFeedListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Photo> objects) {
         super(context, resource, objects);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mLayoutResource = resource;
         this.mContext = context;
+        currentUser = mAuth.getCurrentUser();
         mReference = FirebaseDatabase.getInstance().getReference();
 
     }
+
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -82,17 +85,17 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
             convertView = mInflater.inflate(mLayoutResource, parent, false);
             holder = new ViewHolder();
 
-            holder.username = (TextView) convertView.findViewById(R.id.username);
-            holder.image = (SquareImageView) convertView.findViewById(R.id.post_image);
-            holder.caption = (TextView) convertView.findViewById(R.id.image_caption);
-            holder.timeDetla = (TextView) convertView.findViewById(R.id.image_time_posted);
-            holder.likegreen = (ImageView) convertView.findViewById(R.id.image_heart_red);
-            holder.likeblack = (ImageView) convertView.findViewById(R.id.image_heart);
+            holder.username = convertView.findViewById(R.id.username);
+            holder.image = convertView.findViewById(R.id.post_image);
+            holder.caption = convertView.findViewById(R.id.image_caption);
+            holder.timeDetla = convertView.findViewById(R.id.image_time_posted);
+            holder.likegreen = convertView.findViewById(R.id.image_heart_red);
+            holder.likeblack = convertView.findViewById(R.id.image_heart);
 //            holder.comment = (ImageView) convertView.findViewById(R.id.speech_bubble);
-            holder.likes = (TextView) convertView.findViewById(R.id.image_likes);
-            holder.comments = (TextView) convertView.findViewById(R.id.image_comments_link);
+            holder.likes = convertView.findViewById(R.id.image_likes);
+            holder.comments = convertView.findViewById(R.id.image_comments_link);
 
-            holder.mprofileImage = (CircleImageView) convertView.findViewById(R.id.profile_photo);
+            holder.mprofileImage = convertView.findViewById(R.id.profile_photo);
             holder.dm =convertView.findViewById(R.id.direct_message);
 
 
@@ -142,6 +145,10 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
             holder.timeDetla.setText("TODAY");
         }
 
+        if(holder.photo.getUser_id().equals(currentUser.getUid())){
+            holder.dm.setVisibility(View.GONE);
+            holder.dm.setEnabled(false);
+        }
         //set the profile image
         final ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.displayImage(getItem(position).getImage_path(), holder.image);
@@ -181,7 +188,8 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                     holder.image.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ((HomeActivity2)mContext).onImageSelected(getItem(position),0);
+                            
+                            ((HomeActivity2)mContext).onImageSelected(getItem(position),0, holder.photo.getUser_id());
                            //another thing?
                             ((HomeActivity2)mContext).hideLayout();
                         }
@@ -197,7 +205,6 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                             Intent intent = new Intent(mContext, MyProfileActivity.class);
                             intent.putExtra(mContext.getString(R.string.calling_activity),
                                     mContext.getString(R.string.home_activity));
-                            Log.d(TAG, "onDataChange: GETTTTINGGGGG >> " +  holder.user);
                             intent.putExtra(mContext.getString(R.string.intent_user), holder.user);
                             mContext.startActivity(intent);
                         }
@@ -242,7 +249,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                         @Override
                         public void onClick(View v) {
                             Intent i = new Intent(mContext, MessageActivity.class);
-                            i.putExtra("user_Id", holder.photo.getUser_id());
+                            i.putExtra("user_id", holder.photo.getUser_id());
                             i.putExtra("user_name", holder.user.getUserName());
                             mContext.startActivity(i);
                         }
@@ -478,7 +485,13 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
             Log.e(TAG, "getTimestampDifference: ParseException: " + e.getMessage() );
             difference = "0";
         }
+//        Long tsLong = System.currentTimeMillis()/1000;
+//        difference = tsLong.toString();
         return difference;
+    }
+
+    public interface OnFeedImageSelectedListener {
+        void onImageSelected(Photo photo, int activityNumber);
     }
 
     public interface OnLoadMoreItemsListener{

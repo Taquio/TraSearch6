@@ -4,61 +4,68 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.taquio.trasearch6.Models.Photo;
-import com.example.taquio.trasearch6.SampleTry.ItemGridAdapter;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.Utils.ItemsFragment;
 import com.example.taquio.trasearch6.Utils.MainFeedListAdapter;
+import com.example.taquio.trasearch6.Utils.OtherUserViewPost;
 import com.example.taquio.trasearch6.Utils.UniversalImageLoader;
 import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
 import com.example.taquio.trasearch6.Utils.ViewPostFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class HomeActivity2 extends AppCompatActivity implements
         MainFeedListAdapter.OnLoadMoreItemsListener{
 
+    private static final String TAG = "HomeActivity";
+    private static final int ACTIVITY_NUM = 0;
+    private static final int HOME_FRAGMENT = 1;
+    private Context mContext = HomeActivity2.this;
+    //Firebase
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    //widgets
+    private ViewPager mViewPager;
+    private FrameLayout mFrameLayout;
+    private RelativeLayout mRelativeLayout;
+    private DatabaseReference mUserDatabase;
+  private  TextView notifications_badgeText;
+
+
     @Override
     public void onLoadMoreItems() {
         Log.d(TAG, "onLoadMoreItems: displaying more photos");
+
         ItemsFragment fragment = (ItemsFragment)getSupportFragmentManager()
                 .findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
         if(fragment != null){
             fragment.displayMorePhotos();
         }
     }
-    private static final String TAG = "HomeActivity";
-    private Context mContext = HomeActivity2.this;
-    private static final int ACTIVITY_NUM = 0;
-    private static final int HOME_FRAGMENT = 1;
-
-    //Firebase
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
-
-    //widgets
-    private ViewPager mViewPager;
-    private FrameLayout mFrameLayout;
-    private RelativeLayout mRelativeLayout;
-
-    private DatabaseReference mUserDatabase;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +75,48 @@ public class HomeActivity2 extends AppCompatActivity implements
         mViewPager = findViewById(R.id.container);
         mFrameLayout = findViewById(R.id.frame_container);
         mRelativeLayout = findViewById(R.id.relLayoutParent);
+
         setUpFirebaseAuth();
         initImageLoader();
         setupBottomNavigationView();
         setupViewPager();
 
     }
+    public void onImageSelected( Photo item,  int i, final String user_id) {
 
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if(user_id.equals(currentUser.getUid())) {
+
+            ViewPostFragment fragment = new ViewPostFragment();
+            Bundle args = new Bundle();
+            args.putParcelable(getString(R.string.photo), item);
+            args.putInt(getString(R.string.activity_number), i);
+
+            fragment.setArguments(args);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frame_container, fragment);
+            transaction.addToBackStack("View Post");
+            transaction.commit();
+        }else{
+            OtherUserViewPost fragment = new OtherUserViewPost();
+            Bundle args = new Bundle();
+            args.putParcelable(getString(R.string.photo), item);
+            args.putInt(getString(R.string.activity_number), i);
+
+            fragment.setArguments(args);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frame_container, fragment);
+            transaction.addToBackStack("View Post");
+            transaction.commit();
+        }
+
+
+
+    }
     public void onCommentThreadSelected(Photo photo, String callingActivity){
         Log.d(TAG, "onCommentThreadSelected: selected a coemment thread");
 
@@ -88,20 +130,6 @@ public class HomeActivity2 extends AppCompatActivity implements
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(getString(R.string.view_comments_fragment));
         transaction.commit();
-
-    }
-    public void onImageSelected(Photo item, int i) {
-            ViewPostFragment fragment = new ViewPostFragment();
-            Bundle args = new Bundle();
-            args.putParcelable(getString(R.string.photo), item);
-            args.putInt(getString(R.string.activity_number), i);
-
-            fragment.setArguments(args);
-
-            FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.frame_container, fragment);
-            transaction.addToBackStack("View Post");
-            transaction.commit();
 
     }
     public void hideLayout(){
@@ -166,7 +194,59 @@ public class HomeActivity2 extends AppCompatActivity implements
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
+
+        Log.d(TAG, "setupBottomNavigationView: Start Notification Badge");
+        BottomNavigationMenuView bottomNavigationMenuView =
+                (BottomNavigationMenuView) bottomNavigationViewEx.getChildAt(0);
+        View v = bottomNavigationMenuView.getChildAt(1);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) v;
+
+        View badge = LayoutInflater.from(this)
+                .inflate(R.layout.notlayout, bottomNavigationMenuView, false);
+        DatabaseReference mSeen = FirebaseDatabase.getInstance().getReference().child("Chat").child(mAuth.getCurrentUser().getUid());
+        Log.d(TAG, "setupBottomNavigationView: Start Counting....");
+
+        mSeen.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int resultCount =0;
+                notifications_badgeText = findViewById(R.id.notifications_badgeText);
+
+                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+//                    Log.d(TAG, "" + childDataSnapshot.getValue()); //displays the key for the node
+                    Log.d(TAG, "" + childDataSnapshot.child("seen").getValue());//gives the value for given keyname
+                    if (childDataSnapshot.child("seen").getValue().toString().equals("false"))
+                    {
+                        Log.d(TAG, "onDataChange: RESULT IS FALSE");
+                        resultCount++;
+                    }
+                }
+                if(resultCount>0)
+                {
+                    notifications_badgeText.setText((resultCount++)+"");
+                    notifications_badgeText.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    notifications_badgeText.setVisibility(View.INVISIBLE);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+        itemView.addView(badge);
+
+
     }
+
+
 
     //  ---------------------- F I R E B A S E -------------------------
     private void checkCurrentUser(FirebaseUser user){
@@ -224,6 +304,5 @@ public class HomeActivity2 extends AppCompatActivity implements
             mUserDatabase.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
-
 
 }

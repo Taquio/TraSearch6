@@ -114,20 +114,12 @@ public class  MessageActivity extends AppCompatActivity {
 
         mMessagesList.setHasFixedSize(true);
         mMessagesList.setLayoutManager(mLinearLayout);
-
         mMessagesList.setAdapter(mAdapter);
 
         //------- IMAGE STORAGE ---------
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
-        mRootRef.child("Chat").child(mCurrentUserId).child(mChatUser).child("seen").setValue(true);
-
-        loadMessages();
-
-
-
         mTitleView.setText(userName);
-
 
         mRootRef.child("Users").child(mChatUser).addValueEventListener(new ValueEventListener() {
             @Override
@@ -181,14 +173,13 @@ public class  MessageActivity extends AppCompatActivity {
 
             }
         });
-
-
         mRootRef.child("Chat").child(mCurrentUserId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if(!dataSnapshot.hasChild(mChatUser)){
 
+                    Log.d(TAG, "onDataChange: IF");
                     Map chatAddMap = new HashMap();
                     chatAddMap.put("seen", false);
                     chatAddMap.put("timestamp", ServerValue.TIMESTAMP);
@@ -204,13 +195,19 @@ public class  MessageActivity extends AppCompatActivity {
                             if(databaseError != null){
 
                                 Log.d("CHAT_LOG", databaseError.getMessage().toString());
-
                             }
-
                         }
                     });
 
                 }
+//                else if(dataSnapshot.child(mChatUser).child("seen").getValue().toString().equals("true"))
+//                {
+//                    Log.d(TAG, "onDataChange: Nothing to do");
+//                }
+//                else if(dataSnapshot.child(mChatUser).child("seen").getValue().toString().equals("false"))
+//                {
+//
+//                }
 
             }
 
@@ -220,6 +217,45 @@ public class  MessageActivity extends AppCompatActivity {
             }
         });
 
+        DatabaseReference mSeen = mRootRef.child("Chat")
+                .child(mCurrentUserId)
+                .child(mChatUser)
+                .child("seen");
+        ValueEventListener valueEventListener = mSeen.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange: Else" + dataSnapshot.getValue().toString());
+                if (!dataSnapshot.getValue( Boolean.class))
+                {
+                    Log.d(TAG, "onDataChange: Else");
+                    Map chatAddMap = new HashMap();
+                    chatAddMap.put("seen", true);
+                    chatAddMap.put("timestamp", ServerValue.TIMESTAMP);
+
+                    Map chatUserMap = new HashMap();
+                    chatUserMap.put("Chat/" + mCurrentUserId + "/" + mChatUser, chatAddMap);
+//                    chatUserMap.put("Chat/" + mChatUser + "/" + mCurrentUserId, chatAddMap);
+
+                    mRootRef.updateChildren(chatUserMap, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
+                            if (databaseError != null) {
+
+                                Log.d("CHAT_LOG", databaseError.getMessage());
+
+                            }
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         mChatSendBtn.setOnClickListener(new View.OnClickListener() {
@@ -265,6 +301,15 @@ public class  MessageActivity extends AppCompatActivity {
             }
         });
 
+        loadMessages();
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -418,7 +463,6 @@ public class  MessageActivity extends AppCompatActivity {
         DatabaseReference messageRef = mRootRef.child("Messages").child(mCurrentUserId).child(mChatUser);
 
         Query messageQuery = messageRef.limitToLast(mCurrentPage * TOTAL_ITEMS_TO_LOAD);
-
 
         messageQuery.addChildEventListener(new ChildEventListener() {
             @Override

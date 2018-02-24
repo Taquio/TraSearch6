@@ -1,6 +1,5 @@
 package com.example.taquio.trasearch6.Utils;
 
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -45,13 +44,13 @@ import java.util.Map;
 import java.util.TimeZone;
 
 /**
- * Created by Edward 2018.
+ * Created by Edward on 24/02/2018.
  */
 
-public class ViewPostFragment extends Fragment {
+public class OtherUserViewPost extends Fragment {
 
     private static final String TAG = "ViewPostFragment";
-    OnCommentThreadSelectedListener mOnCommentThreadSelectedListener;
+    ViewPostFragment.OnCommentThreadSelectedListener mOnCommentThreadSelectedListener;
     //firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -74,7 +73,7 @@ public class ViewPostFragment extends Fragment {
     private StringBuilder mUsers;
     private String mLikesString = "";
     private User mCurrentUser;
-    public ViewPostFragment(){
+    public OtherUserViewPost(){
         super();
         setArguments(new Bundle());
     }
@@ -82,7 +81,7 @@ public class ViewPostFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_view_post, container, false);
+        View view = inflater.inflate(R.layout.fragment_usersview_post, container, false);
         mPostImage = view.findViewById(R.id.post_image);
         bottomNavigationView = view.findViewById(R.id.bottomNavViewBar);
         mBackArrow = view.findViewById(R.id.backArrow);
@@ -90,7 +89,7 @@ public class ViewPostFragment extends Fragment {
         mCaption = view.findViewById(R.id.image_caption);
         mUsername = view.findViewById(R.id.username);
         mTimestamp = view.findViewById(R.id.image_time_posted);
-        mEllipses = view.findViewById(R.id.ivEllipses);
+//        mEllipses = view.findViewById(R.id.ivEllipses);
         mHeartRed = view.findViewById(R.id.image_heart_red);
         mHeartWhite = view.findViewById(R.id.image_heart);
         mProfileImage = view.findViewById(R.id.profile_photo);
@@ -99,7 +98,7 @@ public class ViewPostFragment extends Fragment {
         mComments = view.findViewById(R.id.image_comments_link);
 
         mHeart = new Likes(mHeartWhite, mHeartRed);
-        mGestureDetector = new GestureDetector(getActivity(), new GestureListener());
+        mGestureDetector = new GestureDetector(getActivity(), new OtherUserViewPost.GestureListener());
 
         setupFirebaseAuth();
         setupBottomNavigationView();
@@ -107,34 +106,9 @@ public class ViewPostFragment extends Fragment {
 
         return view;
     }
-//
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//         inflater = getActivity().getMenuInflater();
-//        inflater.inflate(R.menu.menu_item_post, menu);
-//
-//    }
-//
-//    @Override
-//    public void onPrepareOptionsMenu(Menu menu) {
-//        super.onPrepareOptionsMenu(menu);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == R.id.itemMarker) {
-//            //dapat ma mark if TAKEN ang item
-//        }
-//        if (item.getItemId() == R.id.delete) {
-//           //dapat madelete ang item
-//            onConfirmDelete();
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     private void init(){
         try{
-            //mPhoto = getPhotoFromBundle();
             UniversalImageLoader.setImage(getPhotoFromBundle().getImage_path(), mPostImage, null, "");
             Log.d(TAG, "init: GETTING BUNDLE >>>>>>>>>>>>> " +getPhotoFromBundle().getImage_path() );
 
@@ -204,7 +178,7 @@ public class ViewPostFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try{
-            mOnCommentThreadSelectedListener = (OnCommentThreadSelectedListener) getActivity();
+            mOnCommentThreadSelectedListener = (ViewPostFragment.OnCommentThreadSelectedListener) getActivity();
         }catch (ClassCastException e){
             Log.e(TAG, "onAttach: ClassCastException: " + e.getMessage() );
         }
@@ -554,31 +528,6 @@ public class ViewPostFragment extends Fragment {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
-    }
-
-
-    public void onConfirmDelete() {
-
-        Query query = myRef.child("Photos").child(mPhoto.getPhoto_id());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    myRef.child("Photos")
-                            .child(mPhoto.getPhoto_id())
-                            .removeValue();
-                    myRef.child("Users_Photos")
-                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                            .child(mPhoto.getPhoto_id())
-                            .removeValue();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
 
