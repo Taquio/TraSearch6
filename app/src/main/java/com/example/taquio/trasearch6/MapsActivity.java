@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -61,7 +64,9 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,
-        LocationListener{
+        LocationListener,
+        MapsFragmentRecycling.OnFragmentInteractionListener,
+        MapsFragmentJunkyard.OnFragmentInteractionListener{
 
     private static final String TAG = "MapActivity";
 
@@ -92,6 +97,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleApiClient mGoogleClient; // for loading all the recycling center
     private PlaceInfo mPlace;
     private Marker mMarker;
+    private View bottomSheet;
+    private BottomSheetBehavior mBottomSheetBehavior;
     //store lat lang in firebase and retrieve
     private DatabaseReference mDatabase;
     private DatabaseReference refDatabase;
@@ -105,6 +112,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     /*
     *   Necessary methods that is needed
     * */
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
     @Override
     public void onLocationChanged(Location location)
     {
@@ -160,7 +172,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMap = googleMap;
 
-//        loadStaticMarker();//static location
+        loadStaticMarker();//static location
 
         /*
         * create firebase for receiving latitude longitude values
@@ -243,6 +255,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         refId();
 
+        //bottom sheet
+        setupBottomSheetView();
+
+
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
@@ -270,6 +286,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //for the Tabs
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
+        bottomSheet = findViewById(R.id.bottom_sheet);
     }
 
     private void loadStaticMarker() {
@@ -409,6 +426,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .setTypeFilter(Place.TYPE_ESTABLISHMENT)
                 .setCountry("PH")
                 .build();
+        
+        //bottomsheet
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        Toast.makeText(MapsActivity.this, "Collapsed", Toast.LENGTH_SHORT).show();
+                        break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        Toast.makeText(MapsActivity.this, "Expanded", Toast.LENGTH_SHORT).show();
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
 
         //set Autocompletelistener to AutocompleteTextView
 //        mSearchText.setOnItemClickListener(mAutocompleteClickListener);
@@ -506,7 +549,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         googlePlaceUrl.append("query="+nearbyPlace);
         googlePlaceUrl.append("&location="+latitude+","+longitude);
         googlePlaceUrl.append("&radius=3000");
-        googlePlaceUrl.append("&key="+"AIzaSyDvsia0V9CUml-qj5BIhEiOtnMdT27EhMs");
+        googlePlaceUrl.append("&key="+"AIzaSyBgBgls2M2SoakI70MhTqnKlctI6kFlIl8");
        // AIzaSyDvsia0V9CUml-qj5BIhEiOtnMdT27EhMs
         // AIzaSyCnoXov8X_8xXBLY-_gDOxnfko3zHSw6fs
         Log.d("MapsActivity", "url = "+googlePlaceUrl.toString());
@@ -763,7 +806,43 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     };
 
     /*
-    * buttom navigation
+    * bootom sheet
+    * */
+    private void setupBottomSheetView() {
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+        TabLayout tabLayout = findViewById(R.id.maps_tab);
+        tabLayout.addTab(tabLayout.newTab().setText("Recycling Center"), 0);
+        tabLayout.addTab(tabLayout.newTab().setText("Junkyard"),1);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        PagerAdapter pagerAdapter = new MapsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(pagerAdapter);
+
+        viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+    }
+
+    /*
+    * bottom navigation
     * */
     private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
@@ -774,4 +853,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
+
+
 }
