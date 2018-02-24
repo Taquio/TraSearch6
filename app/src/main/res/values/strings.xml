@@ -19,6 +19,10 @@
     <!--web services api key-->
     <string name="web_services">AIzaSyDvsia0V9CUml-qj5BIhEiOtnMdT27EhMs</string>
 
+    <!--tabs in MapsActivity Bottom Sheet-->
+    <string name="maps_tab_recycling">Recycling Centers</string>
+    <string name="maps_tab_junkyard">Junkyards</string>
+
     <string name="menu_profile">Profile</string>
     <string name="menu_chat">Chat</string>
     <string name="menu_contact">Contact</string>
