@@ -114,7 +114,7 @@ public class ProfileFragment extends Fragment {
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent());
+                startActivity(new Intent(mContext, SettingsActivity.class));
             }
         });
         Button editProfile = view.findViewById(R.id.myProfile_editBtn);

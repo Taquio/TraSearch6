@@ -352,23 +352,24 @@ public class OtherUserViewPost extends Fragment {
         mLikes.setText(mLikesString);
         mCaption.setText(mPhoto.getCaption());
 
-        if(mPhoto.getComments().size() > 0){
-            mComments.setText("View all " + mPhoto.getComments().size() + " comments");
-        }else if(mPhoto.getComments().size() == 0){
-            mComments.setText("");
-        }else{
-            mComments.setText("");
-        }
+        mComments.setText("#" + mPhoto.getComments().size());
+//        if(mPhoto.getComments().size() > 0){
+//            mComments.setText("View all " + mPhoto.getComments().size() + " comments");
+//        }else if(mPhoto.getComments().size() == 0){
+//            mComments.setText("");
+//        }else{
+//            mComments.setText("");
+//        }
 
-        mComments.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: navigating to comments thread");
-
-                mOnCommentThreadSelectedListener.onCommentThreadSelectedListener(mPhoto);
-
-            }
-        });
+//        mComments.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: navigating to comments thread");
+//
+//                mOnCommentThreadSelectedListener.onCommentThreadSelectedListener(mPhoto);
+//
+//            }
+//        });
 
         mBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -378,14 +379,14 @@ public class OtherUserViewPost extends Fragment {
             }
         });
 
-        mComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: navigating back");
-                mOnCommentThreadSelectedListener.onCommentThreadSelectedListener(mPhoto);
-
-            }
-        });
+//        mComment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: navigating back");
+//                mOnCommentThreadSelectedListener.onCommentThreadSelectedListener(mPhoto);
+//
+//            }
+//        });
 
         if(mLikedByCurrentUser){
             mHeartWhite.setVisibility(View.GONE);
@@ -556,9 +557,11 @@ public class OtherUserViewPost extends Fragment {
                         String keyID = singleSnapshot.getKey();
 
                         //case1: Then user already liked the photo
-                        if(mLikedByCurrentUser &&
-                                singleSnapshot.getValue(Like.class).getUser_id()
-                                        .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                        if(mLikedByCurrentUser
+//                                &&
+//                                singleSnapshot.getValue(Like.class).getUser_id()
+//                                        .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                ){
 
                             myRef.child("Photos")
                                     .child(mPhoto.getPhoto_id())

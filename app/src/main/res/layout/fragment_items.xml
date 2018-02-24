@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relLayout1">
+
+        <include layout="@layout/snippet_searchbar"/>
+    </RelativeLayout>
     <com.eschao.android.widget.elasticlistview.ElasticListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
@@ -18,5 +25,6 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:scrollbars="none"
+        android:layout_below="@+id/relatLayout1"
         />
 </RelativeLayout>
