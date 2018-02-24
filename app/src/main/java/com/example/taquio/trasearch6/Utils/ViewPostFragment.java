@@ -2,10 +2,14 @@ package com.example.taquio.trasearch6.Utils;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -18,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.taquio.trasearch6.HomeActivity2;
 import com.example.taquio.trasearch6.Models.Comment;
 import com.example.taquio.trasearch6.Models.Like;
 import com.example.taquio.trasearch6.Models.Photo;
@@ -74,6 +79,7 @@ public class ViewPostFragment extends Fragment {
     private StringBuilder mUsers;
     private String mLikesString = "";
     private User mCurrentUser;
+    private Context mContext = getActivity();
     public ViewPostFragment(){
         super();
         setArguments(new Bundle());
@@ -83,6 +89,7 @@ public class ViewPostFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_post, container, false);
+
         mPostImage = view.findViewById(R.id.post_image);
         bottomNavigationView = view.findViewById(R.id.bottomNavViewBar);
         mBackArrow = view.findViewById(R.id.backArrow);
@@ -101,37 +108,82 @@ public class ViewPostFragment extends Fragment {
         mHeart = new Likes(mHeartWhite, mHeartRed);
         mGestureDetector = new GestureDetector(getActivity(), new GestureListener());
 
+        mEllipses.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayAlertDialog();
+            }
+        });
         setupFirebaseAuth();
         setupBottomNavigationView();
 
-
         return view;
     }
-//
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//         inflater = getActivity().getMenuInflater();
-//        inflater.inflate(R.menu.menu_item_post, menu);
-//
-//    }
-//
-//    @Override
-//    public void onPrepareOptionsMenu(Menu menu) {
-//        super.onPrepareOptionsMenu(menu);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == R.id.itemMarker) {
-//            //dapat ma mark if TAKEN ang item
-//        }
-//        if (item.getItemId() == R.id.delete) {
-//           //dapat madelete ang item
-//            onConfirmDelete();
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+    private void displayAlertDialog() {
 
+        Context context = getActivity();
+        String title = "";
+        String message = "Choose an action.";
+        final String button1String = "Mark Item";
+        String button2String = "Delete Item";
+        String button3String = "Cancel";
+
+       AlertDialog.Builder ad = new AlertDialog.Builder(context);
+        ad.setTitle(title);
+        ad.setMessage(message);
+
+        ad.setPositiveButton(
+                button1String,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
+                       // eatenByGrue();
+
+                    }
+                }
+        );
+        ad.setPositiveButton(button2String, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                Query query = myRef.child("Photos").child(mPhoto.getPhoto_id());
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(DataSnapshot snap : dataSnapshot.getChildren()){
+                            myRef.child("Photos")
+                                    .child(mPhoto.getPhoto_id())
+                                    .removeValue();
+                            myRef.child("Users_Photos")
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .child(mPhoto.getPhoto_id())
+                                    .removeValue();
+
+                        }
+                        startActivity(new Intent(getContext(), HomeActivity2.class));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+        ad.setNegativeButton(
+                button3String,
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        // do nothing
+
+                            dialog.dismiss();
+                    }
+                }
+        );
+
+        //
+        ad.show();
+    }
     private void init(){
         try{
             //mPhoto = getPhotoFromBundle();
@@ -246,31 +298,32 @@ public class ViewPostFragment extends Fragment {
                             mLikedByCurrentUser = mUsers.toString().contains(mCurrentUser.getUserName() + ",");
 
                             int length = splitUsers.length;
-                            if(length == 1){
-                                mLikesString = "Liked by " + splitUsers[0];
-                            }
-                            else if(length == 2){
-                                mLikesString = "Liked by " + splitUsers[0]
-                                        + " and " + splitUsers[1];
-                            }
-                            else if(length == 3){
-                                mLikesString = "Liked by " + splitUsers[0]
-                                        + ", " + splitUsers[1]
-                                        + " and " + splitUsers[2];
-
-                            }
-                            else if(length == 4){
-                                mLikesString = "Liked by " + splitUsers[0]
-                                        + ", " + splitUsers[1]
-                                        + ", " + splitUsers[2]
-                                        + " and " + splitUsers[3];
-                            }
-                            else if(length > 4){
-                                mLikesString = "Liked by " + splitUsers[0]
-                                        + ", " + splitUsers[1]
-                                        + ", " + splitUsers[2]
-                                        + " and " + (splitUsers.length - 3) + " others";
-                            }
+                            mLikesString = ""+length;
+//                            if(length == 1){
+//                                mLikesString = "Liked by " + splitUsers[0];
+//                            }
+//                            else if(length == 2){
+//                                mLikesString = "Liked by " + splitUsers[0]
+//                                        + " and " + splitUsers[1];
+//                            }
+//                            else if(length == 3){
+//                                mLikesString = "Liked by " + splitUsers[0]
+//                                        + ", " + splitUsers[1]
+//                                        + " and " + splitUsers[2];
+//
+//                            }
+//                            else if(length == 4){
+//                                mLikesString = "Liked by " + splitUsers[0]
+//                                        + ", " + splitUsers[1]
+//                                        + ", " + splitUsers[2]
+//                                        + " and " + splitUsers[3];
+//                            }
+//                            else if(length > 4){
+//                                mLikesString = "Liked by " + splitUsers[0]
+//                                        + ", " + splitUsers[1]
+//                                        + ", " + splitUsers[2]
+//                                        + " and " + (splitUsers.length - 3) + " others";
+//                            }
                             Log.d(TAG, "onDataChange: likes string: " + mLikesString);
                             setupWidgets();
                         }
@@ -378,23 +431,35 @@ public class ViewPostFragment extends Fragment {
         mLikes.setText(mLikesString);
         mCaption.setText(mPhoto.getCaption());
 
-        if(mPhoto.getComments().size() > 0){
-            mComments.setText("View all " + mPhoto.getComments().size() + " comments");
-        }else if(mPhoto.getComments().size() == 0){
-            mComments.setText("");
-        }else{
-            mComments.setText("");
-        }
+        mComments.setText("#" + mPhoto.getComments().size());
+//        if(mPhoto.getComments().size() > 0){
+//            mComments.setText("View all " + mPhoto.getComments().size() + " comments");
+//        }else if(mPhoto.getComments().size() == 0){
+//            mComments.setText("");
+//        }else{
+//            mComments.setText("");
+//        }
 
-        mComments.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: navigating to comments thread");
+//        mComments.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: navigating to comments thread");
+//
+//                mOnCommentThreadSelectedListener.onCommentThreadSelectedListener(mPhoto);
+//
+//            }
+//        });
 
-                mOnCommentThreadSelectedListener.onCommentThreadSelectedListener(mPhoto);
 
-            }
-        });
+//        mComments.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: navigating to comments thread");
+//
+//                mOnCommentThreadSelectedListener.onCommentThreadSelectedListener(mPhoto);
+//
+//            }
+//        });
 
         mBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -404,14 +469,14 @@ public class ViewPostFragment extends Fragment {
             }
         });
 
-        mComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: navigating back");
-                mOnCommentThreadSelectedListener.onCommentThreadSelectedListener(mPhoto);
-
-            }
-        });
+//        mComment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: navigating back");
+//                mOnCommentThreadSelectedListener.onCommentThreadSelectedListener(mPhoto);
+//
+//            }
+//        });
 
         if(mLikedByCurrentUser){
             mHeartWhite.setVisibility(View.GONE);
@@ -555,33 +620,6 @@ public class ViewPostFragment extends Fragment {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
-
-    public void onConfirmDelete() {
-
-        Query query = myRef.child("Photos").child(mPhoto.getPhoto_id());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    myRef.child("Photos")
-                            .child(mPhoto.getPhoto_id())
-                            .removeValue();
-                    myRef.child("Users_Photos")
-                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                            .child(mPhoto.getPhoto_id())
-                            .removeValue();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-
     public interface OnCommentThreadSelectedListener{
         void onCommentThreadSelectedListener(Photo photo);
     }
@@ -607,9 +645,11 @@ public class ViewPostFragment extends Fragment {
                         String keyID = singleSnapshot.getKey();
 
                         //case1: Then user already liked the photo
-                        if(mLikedByCurrentUser &&
-                                singleSnapshot.getValue(Like.class).getUser_id()
-                                        .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                        if(mLikedByCurrentUser
+//                                &&
+//                                singleSnapshot.getValue(Like.class).getUser_id()
+//                                        .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            ){
 
                             myRef.child("Photos")
                                     .child(mPhoto.getPhoto_id())
