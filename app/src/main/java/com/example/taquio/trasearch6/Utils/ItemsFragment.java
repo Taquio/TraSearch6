@@ -1,18 +1,14 @@
 package com.example.taquio.trasearch6.Utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 
@@ -23,17 +19,12 @@ import com.eschao.android.widget.elasticlistview.OnUpdateListener;
 import com.example.taquio.trasearch6.Models.Comment;
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.Models.User;
-import com.example.taquio.trasearch6.MyProfileActivity;
-import com.example.taquio.trasearch6.ProfileFragment;
 import com.example.taquio.trasearch6.R;
-import com.example.taquio.trasearch6.SampleTry.ItemGridAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,22 +41,6 @@ import java.util.Map;
 public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoadListener {
 
     private static final String TAG = "HomeFragment";
-
-    @Override
-    public void onUpdate() {
-        Log.d(TAG, "ElasticListView: updating list view...");
-
-        getKeys();
-    }
-    @Override
-    public void onLoad() {
-        Log.d(TAG, "ElasticListView: loading...");
-
-        // Notify load is done
-        mListView.notifyLoaded();
-    }
-
-
     //vars
     private ArrayList<Photo> mPhotos;
     private ArrayList<Photo> mPaginatedPhotos;
@@ -81,12 +56,26 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
     private Toolbar toolbar;
     private GridView mgridView;
 
+    @Override
+    public void onUpdate() {
+        Log.d(TAG, "ElasticListView: updating list view...");
+
+        getKeys();
+    }
+
+    @Override
+    public void onLoad() {
+        Log.d(TAG, "ElasticListView: loading...");
+
+        // Notify load is done
+        mListView.notifyLoaded();
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_items, container, false);
-        mListView = (ElasticListView) view.findViewById(R.id.listView);
+        mListView = view.findViewById(R.id.listView);
 
         toolbar = view.findViewById(R.id.profileToolBar);
 
