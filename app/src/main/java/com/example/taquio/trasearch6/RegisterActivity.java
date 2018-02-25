@@ -221,6 +221,8 @@ public class RegisterActivity extends AppCompatActivity {
             userDetails.put("device_token",deviceToken);
             userDetails.put("PhoneNumber",phonenumber);
             userDetails.put("userID",mAuth.getCurrentUser().getUid());
+            userDetails.put("userType","free");
+            userDetails.put("isVerify",false);
 
             current_user_db.setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
