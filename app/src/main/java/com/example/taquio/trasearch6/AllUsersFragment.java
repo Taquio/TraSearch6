@@ -52,10 +52,9 @@ public class AllUsersFragment extends Fragment {
         mMainView = inflater
                 .inflate(R.layout.fragment_all_users,container,false);
         mFriendList = mMainView
-                .findViewById(R.id.friendsList);
+                .findViewById(R.id.userList);
         mAuth = FirebaseAuth
                 .getInstance();
-
         mCurrent_user_id = mAuth.
                 getCurrentUser()
                 .getUid();
@@ -76,14 +75,14 @@ public class AllUsersFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        final FirebaseRecyclerAdapter<Friends,AllUsersFragment.AdminViewHolder> friendRecyclerAdapter = new FirebaseRecyclerAdapter<Friends, AllUsersFragment.AdminViewHolder>(
-                Friends.class,
+        final FirebaseRecyclerAdapter<AllUsers,AdminViewHolder> friendRecyclerAdapter = new FirebaseRecyclerAdapter<AllUsers,AdminViewHolder>(
+                AllUsers.class,
                 R.layout.all_users,
                 AllUsersFragment.AdminViewHolder.class,
-                mFriendsDatabase
+                mUsersDatabase
         ) {
             @Override
-            protected void populateViewHolder(final AllUsersFragment.AdminViewHolder viewHolder, Friends model, int position) {
+            protected void populateViewHolder(final AdminViewHolder viewHolder, AllUsers model, int position) {
 //                viewHolder.setDate(model.getDate());
 
                 final String list_user_Id = getRef(position).getKey();

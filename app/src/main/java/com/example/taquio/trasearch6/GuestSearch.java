@@ -123,15 +123,8 @@ public class GuestSearch extends AppCompatActivity {
 
                     }
                 });
-
-
-
-
-
             }
         });
-
-
     }
 
     @Override

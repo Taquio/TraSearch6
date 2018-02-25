@@ -47,35 +47,6 @@ public class ActivityLogin extends AppCompatActivity {
 
         refIDs();
 
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//        ActionBar actionBar = getSupportActionBar();
-//        if(actionBar != null){
-//            actionBar.hide();
-//        }
-
-//        btn_register.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick: register clicked");
-//                final String email = Lfield_email.getText().toString();
-//
-//                Intent startActivityIntent = new Intent(ActivityLogin.this, RegisterActivity.class);
-//
-//                if(email.length()<=0)
-//                {
-//                    startActivity(startActivityIntent);
-//                    ActivityLogin.this.finish();
-//                }
-//                else
-//                {
-//                    Log.d(TAG, "onClick: Passing: "+email+" to Reg Act");
-//                    startActivityIntent.putExtra("emailPass",email);
-//                    startActivity(startActivityIntent);
-//                    ActivityLogin.this.finish();
-//                }
-//            }
-//        });
-
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,8 +134,6 @@ public class ActivityLogin extends AppCompatActivity {
             }
         });
     }
-
-
 
     private boolean hasRegError()
     {
