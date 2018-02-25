@@ -173,11 +173,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BusinessMessages.BusinessMessages"></activity>
+        <activity android:name=".BusinessMessages.BusinessMessages" />
         <activity android:name=".BusinessProfile.BusinessProfile" />
         <activity android:name=".BusinessRegActivity" />
-        <activity android:name=".SettingsActivity">
-        </activity>
+        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".AdminActivity"></activity>
     </application>
 
 </manifest>

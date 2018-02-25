@@ -16,8 +16,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 /**
@@ -31,7 +34,7 @@ public class ActivityLogin extends AppCompatActivity {
     Button btn_register,btn_login;
     EditText Lfield_email,Lfield_password,traSearch_bar;
     private FirebaseAuth mAuth;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference,mUserType;
     private DatabaseReference mUserRef;
 
     @Override
@@ -105,14 +108,39 @@ public class ActivityLogin extends AppCompatActivity {
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if(task.isSuccessful())
                                                 {
-//                                                    mUserRef.child("online").setValue(true);
-                                                    Log.d(TAG, "signInWithEmail:success");
-                                                    mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
-//                                                    checkUserExists();
-                                                    Intent startActivityIntent = new Intent(ActivityLogin.this, HomeActivity2.class);
-                                                    startActivity(startActivityIntent);
-                                                    ActivityLogin.this.finish();
+                                                    DatabaseReference mUserType = FirebaseDatabase.getInstance().getReference().child("Users")
+                                                            .child(mAuth.getCurrentUser().getUid());
 
+                                                    mUserType.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            String userType = dataSnapshot.child("userType").getValue().toString();
+                                                            Log.d(TAG, "onDataChange: UserType: "+userType);
+                                                            if(dataSnapshot.child("userType").getValue().toString().equals("free"))
+                                                            {
+                                                                Log.d(TAG, "signInWithEmail:success");
+                                                                mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+//
+                                                                Intent startActivityIntent = new Intent(ActivityLogin.this, HomeActivity2.class);
+                                                                startActivity(startActivityIntent);
+                                                                ActivityLogin.this.finish();
+                                                            }
+                                                            else if(dataSnapshot.child("userType").getValue().toString().equals("admin"))
+                                                            {
+                                                                Log.d(TAG, "signInWithEmail:success");
+                                                                mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+//
+                                                                Intent startActivityIntent = new Intent(ActivityLogin.this, AdminActivity.class);
+                                                                startActivity(startActivityIntent);
+                                                                ActivityLogin.this.finish();
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(DatabaseError databaseError) {
+
+                                                        }
+                                                    });
                                                 }else{
 
                                                 }
