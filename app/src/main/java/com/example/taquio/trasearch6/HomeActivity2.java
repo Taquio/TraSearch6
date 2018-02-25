@@ -158,7 +158,7 @@ public class HomeActivity2 extends AppCompatActivity implements
 //            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
 //        }
     }
-    private void setupViewPager() {
+    public void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new VideosFragment());
         adapter.addFragment(new ArticlesFragment());

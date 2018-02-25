@@ -165,9 +165,6 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
 
-                   // currentUsername = singleSnapshot.getValue(UserAccountSettings.class).getUsername();
-
-
                     Log.d(TAG, "onDataChange: found user: "
                             + singleSnapshot.getValue(User.class).getUserName());
 

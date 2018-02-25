@@ -59,7 +59,17 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/relLayout1"
                 android:scaleType="centerCrop"/>
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/ivtaken"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="350dp"
+        android:visibility="invisible"
+        android:src="@drawable/taken"/>
+</RelativeLayout>
             <RelativeLayout
                 android:id="@+id/relLayout2"
                 android:layout_width="match_parent"

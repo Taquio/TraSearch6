@@ -53,7 +53,7 @@ import java.util.TimeZone;
  * Created by Edward 2018.
  */
 
-public class ViewPostFragment extends Fragment {
+public class ViewPostFragment extends Fragment{
 
     private static final String TAG = "ViewPostFragment";
     OnCommentThreadSelectedListener mOnCommentThreadSelectedListener;
@@ -67,7 +67,7 @@ public class ViewPostFragment extends Fragment {
     private SquareImageView mPostImage;
     private BottomNavigationViewEx bottomNavigationView;
     private TextView mBackLabel, mCaption, mUsername, mTimestamp, mLikes, mComments;
-    private ImageView mBackArrow, mEllipses, mHeartRed, mHeartWhite, mProfileImage, mComment;
+    private ImageView mBackArrow, mEllipses, mHeartRed, mHeartWhite, mProfileImage, mComment, markAsTaken;
     //vars
     private Photo mPhoto;
     private int mActivityNumber = 0;
@@ -84,12 +84,12 @@ public class ViewPostFragment extends Fragment {
         super();
         setArguments(new Bundle());
     }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_post, container, false);
 
+        markAsTaken = view.findViewById(R.id.ivtaken);
         mPostImage = view.findViewById(R.id.post_image);
         bottomNavigationView = view.findViewById(R.id.bottomNavViewBar);
         mBackArrow = view.findViewById(R.id.backArrow);
@@ -111,6 +111,7 @@ public class ViewPostFragment extends Fragment {
         mEllipses.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 displayAlertDialog();
             }
         });
@@ -124,24 +125,43 @@ public class ViewPostFragment extends Fragment {
         Context context = getActivity();
         String title = "";
         String message = "Choose an action.";
-        final String button1String = "Mark Item";
-        String button2String = "Delete Item";
-        String button3String = "Cancel";
 
        AlertDialog.Builder ad = new AlertDialog.Builder(context);
         ad.setTitle(title);
         ad.setMessage(message);
 
-        ad.setPositiveButton(
-                button1String,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int arg1) {
-                       // eatenByGrue();
+        ad.setNeutralButton("Mark as Taken", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Query query = myRef.child("Photos").child(mPhoto.getPhoto_id());
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(DataSnapshot snap : dataSnapshot.getChildren()){
+                            markAsTaken.setVisibility(View.VISIBLE);
+                            myRef.child("Photos")
+                                    .child(mPhoto.getPhoto_id())
+                                    .child("item_status")
+                                    .setValue(true);
+                            myRef.child("Users_Photos")
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .child(mPhoto.getPhoto_id())
+                                    .child("item_status")
+                                    .setValue(true);
+
+                        }
+                        startActivity(new Intent(getContext(), HomeActivity2.class));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
                     }
-                }
-        );
-        ad.setPositiveButton(button2String, new DialogInterface.OnClickListener() {
+                });
+            }
+        });
+        ad.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -171,7 +191,7 @@ public class ViewPostFragment extends Fragment {
             }
         });
         ad.setNegativeButton(
-                button3String,
+                "Cancel",
                 new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int arg1) {
                         // do nothing
@@ -181,8 +201,8 @@ public class ViewPostFragment extends Fragment {
                 }
         );
 
-        //
-        ad.show();
+        AlertDialog dialog = ad.create();
+        dialog.show();
     }
     private void init(){
         try{
@@ -620,6 +640,7 @@ public class ViewPostFragment extends Fragment {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+
     public interface OnCommentThreadSelectedListener{
         void onCommentThreadSelectedListener(Photo photo);
     }

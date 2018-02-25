@@ -220,10 +220,6 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setProfileWidgets(final UserSettings userSettings) {
-        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getEmail() );
-        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getName() );
-        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getPhoneNumber());
-        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getImage());
 
         User user = userSettings.getUser();
         UniversalImageLoader.setImage(user.getImage(), mProfilePhoto, null, "");
