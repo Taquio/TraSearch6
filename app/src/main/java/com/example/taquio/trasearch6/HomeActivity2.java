@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class HomeActivity2 extends AppCompatActivity {
@@ -79,7 +80,7 @@ public class HomeActivity2 extends AppCompatActivity {
 
         if(currentUser!=null) {
             Log.d(TAG, "onPause: User Offline");
-            mUserRef.child("online").setValue(false);
+            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
 

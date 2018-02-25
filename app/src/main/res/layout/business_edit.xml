@@ -25,6 +25,7 @@
             android:layout_height="100dp"
             android:layout_below="@+id/linearLayout1"
             android:layout_marginTop="-50dp"
+            android:layout_marginBottom="-10dp"
             android:layout_gravity="center"
             android:src="@drawable/junkyard"
             android:background="@drawable/background" />
@@ -44,13 +45,6 @@
                 android:orientation="horizontal"
                 android:gravity="center">
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="0.5dp"
-                    android:layout_marginRight="3dp"
-                    android:src="@drawable/icon_edit" />
-
                 <TextView
                     android:id="@+id/ediProfile_changeImage"
                     android:layout_width="wrap_content"
@@ -59,7 +53,8 @@
                     android:textSize="20dp"
                     android:gravity="center"
                     android:textColor="@color/black"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:drawableLeft="@drawable/editicon" />
 
             </LinearLayout>
 
@@ -70,11 +65,10 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/ediProfile_name"
+                    android:id="@+id/bsnEditName"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/border"
-
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:drawableRight="@drawable/icon_user"
@@ -95,7 +89,7 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/ediProfile_email"
+                    android:id="@+id/bsnEditLoc"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/border"
@@ -128,7 +122,7 @@
                     android:drawableRight="@drawable/key"
                     android:paddingRight="12dp"
                     android:paddingLeft="15dp"
-                    android:hint="Password"
+                    android:hint="New Password"
                     android:inputType="textPassword"
                     android:textColorHint="#ffffff"
                     android:textColor="#000000"
@@ -152,7 +146,7 @@
                     android:drawableRight="@drawable/key"
                     android:paddingRight="12dp"
                     android:paddingLeft="15dp"
-                    android:hint="Confirm Password"
+                    android:hint="Confirm New Password"
                     android:inputType="textPassword"
                     android:textColorHint="#ffffff"
                     android:textColor="#000000"
@@ -167,15 +161,16 @@
                 android:orientation="horizontal">
 
                 <EditText
+                    android:id="@+id/bsnEditMobile"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/border"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:drawableRight="@drawable/ic_tele"
+                    android:drawableRight="@drawable/icon_phone"
                     android:paddingRight="12dp"
                     android:paddingLeft="15dp"
-                    android:hint="Telephone No."
+                    android:hint="Mobile No."
                     android:inputType="text"
                     android:textColorHint="#ffffff"
                     android:textColor="#000000"
@@ -190,15 +185,16 @@
                 android:orientation="horizontal">
 
                 <EditText
+                    android:id="@+id/bsnEditTele"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/border"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:drawableRight="@drawable/icon_phone"
+                    android:drawableRight="@drawable/ic_tele"
                     android:paddingRight="12dp"
                     android:paddingLeft="15dp"
-                    android:hint="Mobile No."
+                    android:hint="Telephone No."
                     android:inputType="text"
                     android:textColorHint="#ffffff"
                     android:textColor="#000000"

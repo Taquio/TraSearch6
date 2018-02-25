@@ -1,6 +1,7 @@
 package com.example.taquio.trasearch6.BusinessProfile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -9,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 
 import com.example.taquio.trasearch6.BusinessMessages.BusinessInboxFragment;
@@ -16,6 +20,13 @@ import com.example.taquio.trasearch6.Messages.FriendsListFragment;
 import com.example.taquio.trasearch6.R;
 import com.example.taquio.trasearch6.SectionsPagerAdapter;
 import com.example.taquio.trasearch6.Utils.BusinessBottomNavigationViewHelper;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 /**
@@ -28,6 +39,11 @@ public class BusinessProfile extends AppCompatActivity {
     private Context mContext = BusinessProfile.this;
     private static final int ACTIVITY_NUM = 2;
 
+    TextView tvName, tvEmail, tvMobile, tvPhone, tvLocation;
+    Button btnBuy, btnSell, btnEdit;
+    private DatabaseReference databaseReference;
+    private FirebaseUser currentUser;
+    String user_id;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,23 +51,75 @@ public class BusinessProfile extends AppCompatActivity {
 
         setupBottomNavigationView();
 
-        setupViewPager();
+//        setupViewPager();
+        tvName = (TextView) findViewById(R.id.busEditUser);
+        tvEmail = (TextView) findViewById(R.id.busUserEmail);
+        tvMobile = (TextView) findViewById(R.id.busUserNumber);
+        tvPhone = (TextView) findViewById(R.id.busTele);
+        tvLocation = (TextView) findViewById(R.id.busLoc);
+        btnBuy = (Button) findViewById(R.id.btnBuy);
+        btnSell = (Button) findViewById(R.id.btnSell);
+        btnEdit = (Button) findViewById(R.id.busBtnEdit);
+
+        btnBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(BusinessProfile.this, BusinessBuy.class);
+                startActivity(i);
+            }
+        });
+
+        btnSell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(BusinessProfile.this, BusinessBuy.class);
+                startActivity(i);
+            }
+        });
+
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(mContext, BusinessEdit.class);
+                startActivity(i);
+            }
+        });
+
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        user_id = currentUser.getUid();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                tvName.setText(dataSnapshot.child("bsnBusinessName").getValue().toString());
+                tvEmail.setText(dataSnapshot.child("bsnEmail").getValue().toString());
+                tvMobile.setText(dataSnapshot.child("bsnMobile").getValue().toString());
+                tvPhone.setText(dataSnapshot.child("bsnPhone").getValue().toString());
+                tvLocation.setText(dataSnapshot.child("bsnLocation").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
-    private void setupViewPager() {
-        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new BusinessInboxFragment());
-        adapter.addFragment(new FriendsListFragment());
-        ViewPager viewPager = (ViewPager) findViewById(R.id.businessProfileContainer);
-        viewPager.setAdapter(adapter);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.busProfileTabLayout);
-        tabLayout.setupWithViewPager(viewPager);
-
-        tabLayout.getTabAt(0).setText("Selling");
-        tabLayout.getTabAt(1).setText("Buying");
-    }
+//    private void setupViewPager() {
+//        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
+//        adapter.addFragment(new BusinessInboxFragment());
+//        adapter.addFragment(new FriendsListFragment());
+//        ViewPager viewPager = (ViewPager) findViewById(R.id.businessProfileContainer);
+//        viewPager.setAdapter(adapter);
+//
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.busProfileTabLayout);
+//        tabLayout.setupWithViewPager(viewPager);
+//
+//        tabLayout.getTabAt(0).setText("Selling");
+//        tabLayout.getTabAt(1).setText("Buying");
+//    }
 
     private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");

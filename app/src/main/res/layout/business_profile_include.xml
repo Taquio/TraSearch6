@@ -46,11 +46,11 @@
                     android:layout_height="wrap_content"
                     android:text="Taylor's Junk Yard"
                     android:textSize="20dp"
-                    android:gravity="center"
                     android:textColor="@color/black"
                     android:textStyle="bold"/>
 
                 <ImageView
+                    android:id="@+id/imVerify"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_marginLeft="3dp"
@@ -117,11 +117,11 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginTop="1dp"
-                    android:src="@drawable/business_fb"
+                    android:src="@drawable/ic_tele"
                     android:layout_marginRight="3dp"/>
 
                 <TextView
-                    android:id="@+id/busFacebook"
+                    android:id="@+id/busTele"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="facebook/taylorjunkshop"
@@ -140,11 +140,11 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginTop="3dp"
-                    android:src="@drawable/business_twit"
+                    android:src="@drawable/ic_loc"
                     android:layout_marginRight="3dp"/>
 
                 <TextView
-                    android:id="@+id/busTwit"
+                    android:id="@+id/busLoc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="twitter/officialtaylorjunkshop"

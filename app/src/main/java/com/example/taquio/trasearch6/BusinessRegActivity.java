@@ -47,16 +47,21 @@ public class BusinessRegActivity extends AppCompatActivity{
                 if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(pass) && !TextUtils.isEmpty(conpass) && !TextUtils.isEmpty(businessname)
                         && !TextUtils.isEmpty(location) && !TextUtils.isEmpty(phone) && !TextUtils.isEmpty(mobile)) {
 
-                    Intent i = new Intent (mContext, BusinessRegActivity2.class);
-                    i.putExtra("EMAIL",email);
-                    i.putExtra("PASS",pass);
-                    i.putExtra("BUSINESSNAME",businessname);
-                    i.putExtra("LOCATION",location);
-                    i.putExtra("PHONE",phone);
-                    i.putExtra("MOBILE",mobile);
-                    startActivity(i);
+                    if(pass.equals(conpass)) {
+                        Intent i = new Intent (mContext, BusinessRegActivity2.class);
+                        i.putExtra("EMAIL",email);
+                        i.putExtra("PASS",pass);
+                        i.putExtra("BUSINESSNAME",businessname);
+                        i.putExtra("LOCATION",location);
+                        i.putExtra("PHONE",phone);
+                        i.putExtra("MOBILE",mobile);
+                        startActivity(i);
+                        BusinessRegActivity.this.finish();
+                    }else {
+                        Toast.makeText(mContext, "Password does not match.", Toast.LENGTH_SHORT).show();
+                    }
                 }else {
-                    Toast.makeText(mContext, "Please fill up all fields!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Please fill up all fields.", Toast.LENGTH_SHORT).show();
                 }
 
             }
