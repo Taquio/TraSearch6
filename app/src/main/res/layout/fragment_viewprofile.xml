@@ -29,7 +29,21 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="80dp"
             android:layout_toRightOf="@+id/viewedProfile"
-            android:background="@drawable/add_friend" />
+            android:background="@drawable/add_friend"
+            />
+        <Button
+        android:id="@+id/declineRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Decline Friend Request"
+            android:visibility="invisible"/>
+    <Button
+        android:id="@+id/vProfile_sendFriequest_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/declineRequest"
+        android:text="Send Friend REquest"
+        />
 
         <LinearLayout
             android:id="@+id/relLog"
