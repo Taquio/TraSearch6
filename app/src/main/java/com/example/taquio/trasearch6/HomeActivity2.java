@@ -41,7 +41,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class HomeActivity2 extends AppCompatActivity implements
         MainFeedListAdapter.OnLoadMoreItemsListener{
 
-    private static final String TAG = "HomeActivity";
+    private static final String TAG = "HomeActivity2";
     private static final int ACTIVITY_NUM = 0;
     private static final int HOME_FRAGMENT = 1;
     private Context mContext = HomeActivity2.this;

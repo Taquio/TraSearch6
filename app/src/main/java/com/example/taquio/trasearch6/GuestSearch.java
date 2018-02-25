@@ -141,7 +141,7 @@ public class GuestSearch extends AppCompatActivity {
             DatabaseReference userType = FirebaseDatabase.getInstance().getReference().child("Users")
                     .child(mAuth.getCurrentUser().getUid());
 
-            userType.addListenerForSingleValueEvent(new ValueEventListener() {
+            userType.child("userType").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String userType = dataSnapshot.getValue().toString();
