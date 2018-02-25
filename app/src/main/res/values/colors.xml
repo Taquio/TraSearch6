@@ -23,6 +23,7 @@
     <color name="black">#000000</color>
     <color name="link_blue">#4d94ff</color>
     <color name="transparent">#00000000</color>
+    <color name="fadedGreenBackground">	#f0ffff</color>
 
 
 </resources>

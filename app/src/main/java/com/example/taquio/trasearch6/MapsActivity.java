@@ -14,7 +14,6 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,7 +24,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
@@ -84,7 +82,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //widgets
     private AutoCompleteTextView mSearchText;
     private ImageButton mGps, mInfo, mPlacePicker;
-    private RadioButton mRbRecyclingCenter, mRbJunkyard;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     //vars
@@ -287,6 +284,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         bottomSheet = findViewById(R.id.bottom_sheet);
+
     }
 
     private void loadStaticMarker() {
@@ -557,7 +555,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return googlePlaceUrl.toString();
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(this, data);
@@ -739,7 +738,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         }
-    }
+    }//end onRequestPermission
 
     private void hideSoftKeyboard(){
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -806,20 +805,58 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     };
 
     /*
+    TODO: make a phone call to business from firebase or placeId Info
+    */
+    private void makePhoneCall()
+    {
+        /*
+        TODO: get phone number and put to String dial
+        */
+
+//        if (number.trim().length() > 0) {
+//
+//            if (ContextCompat.checkSelfPermission(MapsActivity.this,
+//                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(MapsActivity.this,
+//                        new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+//            } else {
+//                String dial = "tel:" + number;//phone number here
+//                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+//            }
+//
+//        } else {
+//            Toast.makeText(MapsActivity.this, "Enter Phone Number", Toast.LENGTH_SHORT).show();
+//        }
+    }
+
+    /*
     * bootom sheet
     * */
-    private void setupBottomSheetView() {
+    private void setupBottomSheetView()
+    {
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-        TabLayout tabLayout = findViewById(R.id.maps_tab);
-        tabLayout.addTab(tabLayout.newTab().setText("Recycling Center"), 0);
-        tabLayout.addTab(tabLayout.newTab().setText("Junkyard"),1);
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+//        TabLayout tabLayout = findViewById(R.id.maps_tab);
+//        tabLayout.addTab(tabLayout.newTab().setText("Recycling Center"), 0);
+//        tabLayout.addTab(tabLayout.newTab().setText("Junkyard"),1);
+//        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+//
+//        final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+//        PagerAdapter pagerAdapter = new MapsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+//        viewPager.setAdapter(pagerAdapter);
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-        PagerAdapter pagerAdapter = new MapsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(pagerAdapter);
+        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new MapsFragmentRecycling());
+        adapter.addFragment(new MapsFragmentJunkyard());
+        final ViewPager viewPager = findViewById(R.id.view_pager);
+        viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = findViewById(R.id.maps_tab);
+        tabLayout.setupWithViewPager(viewPager);
+
+        tabLayout.getTabAt(0).setText("Recycling Center");
+        tabLayout.getTabAt(1).setText("Junkyard");
 
         viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
@@ -844,7 +881,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     /*
     * bottom navigation
     * */
-    private void setupBottomNavigationView() {
+    private void setupBottomNavigationView()
+    {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
         BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);

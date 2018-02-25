@@ -101,6 +101,7 @@ dependencies {
     compile 'com.android.support:support-v4:27.0.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile 'com.github.TreesAreOP:android-swipe-actions:+'
 
     //image cropper
     compile 'com.theartofdev.edmodo:android-image-cropper:2.6.0'
