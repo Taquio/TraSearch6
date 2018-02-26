@@ -179,6 +179,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                 else
                                 {
 
+
                                     AuthCredential credential = EmailAuthProvider
                                             .getCredential(mauthEmail, mauthPassword);
                                     mCurrentUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
