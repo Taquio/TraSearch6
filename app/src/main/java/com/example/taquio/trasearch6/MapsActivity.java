@@ -2,11 +2,12 @@ package com.example.taquio.trasearch6;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,12 +17,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -30,17 +31,9 @@ import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.modal.PlaceInfo;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -52,8 +45,25 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ARVN 02-16-2018.
@@ -62,9 +72,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,
-        LocationListener,
-        MapsFragmentRecycling.OnFragmentInteractionListener,
-        MapsFragmentJunkyard.OnFragmentInteractionListener{
+        LocationListener{
 
     private static final String TAG = "MapActivity";
 
@@ -84,6 +92,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ImageButton mGps, mInfo, mPlacePicker;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+    private RecyclerView mRecycling, mJunkyard;
+    private LinearLayoutManager mLinearLayout;
     //vars
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
@@ -94,8 +104,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleApiClient mGoogleClient; // for loading all the recycling center
     private PlaceInfo mPlace;
     private Marker mMarker;
+    private FirebaseAuth mAuth;
+    private String mCurrentUserId;
     private View bottomSheet;
     private BottomSheetBehavior mBottomSheetBehavior;
+    private MapsRecyclerAdapter mAdapter;
+    private final List<MapsRecyclerListValues> mMapsList = new ArrayList<>();
     //store lat lang in firebase and retrieve
     private DatabaseReference mDatabase;
     private DatabaseReference refDatabase;
@@ -109,11 +123,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     /*
     *   Necessary methods that is needed
     * */
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
     @Override
     public void onLocationChanged(Location location)
     {
@@ -169,52 +178,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMap = googleMap;
 
-        loadStaticMarker();//static location
-
-        /*
-        * create firebase for receiving latitude longitude values
-        * */
-
-        //load latitude longitude from database and put markers
-//        refDatabase.addChildEventListener(new ChildEventListener()
-//        {
-//              @Override
-//              public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey)
-//              {
-//                  LatLng newLocation = new LatLng(
-//                          dataSnapshot.child("latitude").getValue(Long.class),
-//                          dataSnapshot.child("longitude").getValue(Long.class)
-//                  );
-//                  mMap.addMarker(new MarkerOptions()
-//                          .position(newLocation)
-//                          .title(dataSnapshot.getKey()));
-//              }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {}
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {}
-//        });//end refDatabase
-//
-//        //when map is clicked store latitude and longitude to firebase
-//        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-//            @Override
-//            public void onMapClick(LatLng latLng) {
-//                Marker marker = mMap.addMarker(new MarkerOptions()
-//                .position(latLng));
-//                final LatLng latlng = marker.getPosition();
-//
-//                DatabaseReference newPost = mDatabase.push();
-//                newPost.setValue(latlng);
-//            }
-//        });//end
-
         if (mLocationPermissionsGranted) {
-//            loadStaticMarker();
             getDeviceLocation();
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -224,9 +188,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return;
             }
             mMap.setMyLocationEnabled(true);
-
-            init();
         }
+
+        getBusinessLocation();
     }//end onMapReady
 
     protected synchronized void buildGoogleApiClient() {
@@ -247,25 +211,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        //buttom navigation method
-        setupBottomNavigationView();
-
         refId();
 
-        //bottom sheet
-        setupBottomSheetView();
+        refDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+        mCurrentUserId = mAuth.getCurrentUser().getUid();
 
-
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, this)
-                .build();
-
-//        firebase retrieval latitude and longitude
-//        mDatabase = FirebaseDatabase.getInstance().getReference().child("Navigation");
-//        refDatabase = FirebaseDatabase.getInstance().getReference().child("Location");
+        //buttom navigation method
+        setupBottomNavigationView();
 
         getLocationPermission();
 
@@ -281,263 +234,54 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         //for the Tabs
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        mTabLayout = (TabLayout) findViewById(R.id.tabs);
-        bottomSheet = findViewById(R.id.bottom_sheet);
+        mViewPager = findViewById(R.id.view_pager);
+        mTabLayout = findViewById(R.id.maps_tab);
+        mRecycling = findViewById(R.id.rvrecycling);
+        mJunkyard = findViewById(R.id.rvjunkyard);
+        //mAdapter = new MapsRecyclerAdapter(mMapsList);
 
     }
 
-    private void loadStaticMarker() {
-        //preset marker
+    private void getBusinessLocation()
+    {
+        Log.d(TAG, "getBusinessLocation");
 
-        //Ma-Vill
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3540675, 123.9208625))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Ma-Vill")
-//                .visible(false)
-                .snippet("Recycling Center"));
-        //E & J Scrap Buyer
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3744345, 123.9138125))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("E & J Scrap Buyer")
-//                .visible(false)
-                .snippet("Recycling Center"));
-        //TSL Enterprises
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.33493, 123.9316495))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("TSL Enterprises")
-//                .visible(false)
-                .snippet("Recycling Center"));
-        //Naturefress
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3540562, 123.9208624))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Naturefress")
-//                .visible(false)
-                .snippet("Bottle & Can Redemption Center"));
-        //Bakilid Junk Shop Corner
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3469118, 123.9289209))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Bakilid Junk Shop Corner")
-//                .visible(false)
-                .snippet("Junkyard"));
-        //Thes Junk Shop
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3532373, 123.9422024))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Thes Junk Shop")
-//                .visible(false)
-                .snippet("Junkyard"));
-        //Pables Junk Shop
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3532307, 123.9422023))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Pables Junk Shop")
-//                .visible(false)
-                .snippet("Junkyard"));
-        //Elica Junk Shop
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3830479, 123.9456331))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Elica Junk Shop")
-//                .visible(false)
-                .snippet("Junkyard"));
-        //Cindy's Enterprises
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3830158, 123.8408229))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Cindy's Enterprises")
-//                .visible(false)
-                .snippet("Junkyard"));
-        //Roadside Junk Shop
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3396889, 123.9293173))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Roadside Junk Shop")
-//                .visible(false)
-                .snippet("Junkyard"));
-        //Pab Les Junk Shop
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3261964, 123.9522611))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Pab Les Junk Shop")
-//                .visible(false)
-                .snippet("Junkyard"));
-        //Meme Junk Shop
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3141685, 123.9235954))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Meme Junk Shop")
-//                .visible(false)
-                .snippet("Junkyard"));
-        //Kerjaspher Junk Shop
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3119518, 123.9091465))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Kerjaspher Junk Shop")
-//                .visible(false)
-                .snippet("Junkyard"));
-        //Ajj Junk Shop
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3164531, 123.9130684))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Ajj Junk Shop")
-//                .visible(false)
-                .snippet("Junkyard"));
-        //Montejo Junk Shop
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3216555, 123.9222994))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Montejo Junk Shop")
-//                .visible(false)
-                .snippet("Junkyard"));
-        //Bakilid Junk Shop Corner
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3381261, 123.9354665))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Bakilid Junk Shop Corner")
-//                .visible(false)
-                .snippet("Junkyard"));
-        //Jr Cabato Junk Shop
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10.3021436, 123.9037193))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .title("Jr Cabato Junk Shopr")
-//                .visible(false)
-                .snippet("Junkyard"));
+//        refDatabase.orderbyChild("userType").equalTo("business")
+        //only business are fetch
+        final Query myBusinessQuery = refDatabase.child("Users")
+                .orderByChild("userType").equalTo("business");
 
-        //camera zoom
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(10.3532373, 123.9422024)
-                , DEFAULT_ZOOM));
-    }
-
-    private void init() {
-        Log.d(TAG, "init: initializing");
-
-        // filter the autocomplete suggestion to Philippines only
-        AutocompleteFilter filter = new AutocompleteFilter
-                .Builder()
-                .setTypeFilter(Place.TYPE_ESTABLISHMENT)
-                .setCountry("PH")
-                .build();
-        
-        //bottomsheet
-        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        myBusinessQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        Toast.makeText(MapsActivity.this, "Collapsed", Toast.LENGTH_SHORT).show();
-                        break;
-                    case BottomSheetBehavior.STATE_DRAGGING:
-                        break;
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                        Toast.makeText(MapsActivity.this, "Expanded", Toast.LENGTH_SHORT).show();
-                        break;
-                    case BottomSheetBehavior.STATE_HIDDEN:
-                        break;
-                    case BottomSheetBehavior.STATE_SETTLING:
-                        break;
-                }
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+//                ArrayList<String> location = new ArrayList<>();
+//                for(int i = 0; i < refDatabase.getKey().c; i++)
+//                {
+//                    location.add(dataSnapshot.getValue().toString());
+//                }
             }
 
             @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
-
-        //set Autocompletelistener to AutocompleteTextView
-//        mSearchText.setOnItemClickListener(mAutocompleteClickListener);
-
-        //passing of necessary objects to AutocompleteAdaper
-        mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter
-                (this,
-                        mGoogleApiClient,
-                        LAT_LNG_BOUNDS,
-                        filter);
-
-        //set AutocompleteAdapter as adapter in AutocompleteTextView
-//        mSearchText.setAdapter(mPlaceAutocompleteAdapter);
-
-//        mSearchText.setOnKeyListener(new View.OnKeyListener() {
-//            @Override
-//            public boolean onKey(View v, int actionId, KeyEvent event) {
-//                if (actionId == EditorInfo.IME_ACTION_SEARCH
-//                        || actionId == EditorInfo.IME_ACTION_DONE
-//                        || actionId == KeyEvent.KEYCODE_SEARCH
-//                        || actionId == KeyEvent.KEYCODE_ENTER) {
-//
-//                    hideSoftKeyboard();
-//                    //execute our method for searching
-//                    geoLocate();
-//                }
-//                return false;
-//            }
-//        });
-
-//        mGps.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.d(TAG, "onClick: clicked gps icon");
-//
-//                getDeviceLocation();
-//            }
-//        });
-
-//        mInfo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.d(TAG, "onClick: clicked place info");
-//                try{
-//                    if(mMarker.isInfoWindowShown()){
-//                        mMarker.hideInfoWindow();
-//                    }else{
-//                        Log.d(TAG, "onClick: place info: " + mPlace.toString());
-//                        mMarker.showInfoWindow();
-//                    }
-//                }catch (NullPointerException e){
-//                    Log.e(TAG, "onClick: NullPointerException: " + e.getMessage() );
-//                }
-//            }
-//        });
-
-//        mPlacePicker.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-//
-//                try {
-//                    startActivityForResult(builder.build(MapsActivity.this), PLACE_PICKER_REQUEST);
-//                } catch (GooglePlayServicesRepairableException e) {
-//                    Log.e(TAG, "onClick: GooglePlayServicesRepairableException: " + e.getMessage());
-//                } catch (GooglePlayServicesNotAvailableException e) {
-//                    Log.e(TAG, "onClick: GooglePlayServicesNotAvailableException: " + e.getMessage());
-//                }
-//            }
-//        });
-
-        hideSoftKeyboard();
     }
+
     //method to load Recycling Center
     private void loadRecyclingCenters()
     {
         Object dataTransfer[] = new Object[2];
         getNearbyPlacesData = new GetNearbyPlacesData();
 
-        String recyclingCenter = "recycling+center+junkyard";
+        String recyclingCenter = "recycling+center";
         String url = getUrl(latitude, longitude, recyclingCenter);
         Toast.makeText(this, "Check lat: "+latitude+"long: "+longitude, Toast.LENGTH_SHORT).show();
         dataTransfer[0] = mMap;
         dataTransfer[1] = url;
 
         getNearbyPlacesData.execute(dataTransfer);
-        Toast.makeText(MapsActivity.this, "Showing Nearby Recycling Centers", Toast.LENGTH_SHORT).show();
     }
 
     private String getUrl(double latitude , double longitude , String nearbyPlace)
@@ -546,51 +290,42 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/textsearch/json?");
         googlePlaceUrl.append("query="+nearbyPlace);
         googlePlaceUrl.append("&location="+latitude+","+longitude);
-        googlePlaceUrl.append("&radius=3000");
-        googlePlaceUrl.append("&key="+"AIzaSyBgBgls2M2SoakI70MhTqnKlctI6kFlIl8");
+        googlePlaceUrl.append("&radius=5000");
+        googlePlaceUrl.append("&key="+"AIzaSyArgfcJtKzWU25v2loAihj62ppvrpcc0nE");
        // AIzaSyDvsia0V9CUml-qj5BIhEiOtnMdT27EhMs
         // AIzaSyCnoXov8X_8xXBLY-_gDOxnfko3zHSw6fs
+       // AIzaSyBgBgls2M2SoakI70MhTqnKlctI6kFlIl8
+        // AIzaSyDvsia0V9CUml-qj5BIhEiOtnMdT27EhMs
+        //AIzaSyArgfcJtKzWU25v2loAihj62ppvrpcc0nE*
         Log.d("MapsActivity", "url = "+googlePlaceUrl.toString());
 
         return googlePlaceUrl.toString();
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (requestCode == PLACE_PICKER_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(this, data);
+    private void geoLocate(ArrayList<String> locations) {
+        Log.d(TAG, "geoLocate: geolocating");
 
-                PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                        .getPlaceById(mGoogleApiClient, place.getId());
-                placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-            }
+        String searchString = mSearchText.getText().toString();
+
+        Geocoder geocoder = new Geocoder(MapsActivity.this);
+        List<Address> list = new ArrayList<>();
+        try {
+            list = geocoder.getFromLocationName(searchString, 1);
+        } catch (IOException e) {
+            Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
+        }
+
+
+        if (list.size() > 0) {
+            Address address = list.get(0);
+
+            Log.d(TAG, "geoLocate: found a location: " + address.toString());
+            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
+
+            moveCamera(new LatLng(address.getLatitude(),address.getLongitude()), DEFAULT_ZOOM,
+                    address.getAddressLine(0));
         }
     }
-
-//    private void geoLocate() {
-//        Log.d(TAG, "geoLocate: geolocating");
-//
-//        String searchString = mSearchText.getText().toString();
-//
-//        Geocoder geocoder = new Geocoder(MapsActivity.this);
-//        List<Address> list = new ArrayList<>();
-//        try {
-//            list = geocoder.getFromLocationName(searchString, 1);
-//        } catch (IOException e) {
-//            Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
-//        }
-//
-//        if (list.size() > 0) {
-//            Address address = list.get(0);
-//
-//            Log.d(TAG, "geoLocate: found a location: " + address.toString());
-//            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
-//
-//            moveCamera(new LatLng(address.getLatitude(),address.getLongitude()), DEFAULT_ZOOM,
-//                    address.getAddressLine(0));
-//        }
-//    }
 
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
@@ -608,11 +343,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
 
-                            latitude = currentLocation.getLatitude();
-                            longitude = currentLocation.getLongitude();
+//                            latitude = currentLocation.getLatitude();
+//                            longitude = currentLocation.getLongitude();
 
-                            //load recycling centers and junkyard
-                            loadRecyclingCenters();
+
+//                            loadRecyclingCenters();
 
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM,
@@ -631,49 +366,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private void moveCamera(LatLng latLng, float zoom, PlaceInfo placeInfo) {
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
-        mMap.clear();
-
-        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(MapsActivity.this));
-
-        if (placeInfo != null) {
-            try {
-                String snippet = "Address: " + placeInfo.getAddress() + "\n" +
-                        "Phone Number: " + placeInfo.getPhoneNumber() + "\n" +
-                        "Website: " + placeInfo.getWebsiteUri() + "\n" +
-                        "Price Rating: " + placeInfo.getRating() + "\n";
-
-                MarkerOptions options = new MarkerOptions()
-                        .position(latLng)
-                        .title(placeInfo.getName())
-                        .snippet(snippet);
-                mMarker = mMap.addMarker(options);
-
-            } catch (NullPointerException e) {
-                Log.e(TAG, "moveCamera: NullPointerException: " + e.getMessage());
-            }
-        } else {
-            mMap.addMarker(new MarkerOptions().position(latLng));
-        }
-
-        hideSoftKeyboard();
-    }
-
     private void moveCamera(LatLng latLng, float zoom, String title) {
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
-        if (!title.equals("My Location")) {
+
             MarkerOptions options = new MarkerOptions()
                     .position(latLng)
                     .title(title);
             mMap.addMarker(options);
-        }
 
-        hideSoftKeyboard();
     }
 
     private void initMap() {
@@ -740,144 +442,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }//end onRequestPermission
 
-    private void hideSoftKeyboard(){
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-    }
-
-    /*
-        ---------------------------Autocomplete suggestions -----------------
-     */
-
-    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            hideSoftKeyboard();
-
-            final AutocompletePrediction item = mPlaceAutocompleteAdapter.getItem(i);
-            final String placeId = item.getPlaceId();
-
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                    .getPlaceById(mGoogleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-        }
-    };
-
-    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
-        @Override
-        public void onResult(@NonNull PlaceBuffer places) {
-            if(!places.getStatus().isSuccess()){
-                Log.d(TAG, "onResult: Place query did not complete successfully: " + places.getStatus().toString());
-                places.release();
-                return;
-            }
-            final Place place = places.get(0);
-
-            try{
-                mPlace = new PlaceInfo();
-                mPlace.setName(place.getName().toString());
-                Log.d(TAG, "onResult: name: " + place.getName());
-                mPlace.setAddress(place.getAddress().toString());
-                Log.d(TAG, "onResult: address: " + place.getAddress());
-                mPlace.setType(place.getAttributions().toString());
-                Log.d(TAG, "onResult: attributions: " + place.getPlaceTypes());
-                mPlace.setId(place.getId());
-                Log.d(TAG, "onResult: id:" + place.getId());
-                mPlace.setLatLng(place.getLatLng());
-                Log.d(TAG, "onResult: latlng: " + place.getLatLng());
-                mPlace.setRating(place.getRating());
-                Log.d(TAG, "onResult: rating: " + place.getRating());
-                mPlace.setPhoneNumber(place.getPhoneNumber().toString());
-                Log.d(TAG, "onResult: phone number: " + place.getPhoneNumber());
-                mPlace.setWebsiteUri(place.getWebsiteUri());
-                Log.d(TAG, "onResult: website uri: " + place.getWebsiteUri());
-
-                Log.d(TAG, "onResult: place: " + mPlace.toString());
-
-            }catch (NullPointerException e){
-                Log.e(TAG, "onResult: NullPointerException: " + e.getMessage() );
-            }
-
-            moveCamera(new LatLng(place.getViewport().getCenter().latitude,
-                    place.getViewport().getCenter().longitude), DEFAULT_ZOOM, mPlace);
-
-            places.release();
-        }
-    };
-
-    /*
-    TODO: make a phone call to business from firebase or placeId Info
-    */
-    private void makePhoneCall()
-    {
-        /*
-        TODO: get phone number and put to String dial
-        */
-
-//        if (number.trim().length() > 0) {
-//
-//            if (ContextCompat.checkSelfPermission(MapsActivity.this,
-//                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(MapsActivity.this,
-//                        new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
-//            } else {
-//                String dial = "tel:" + number;//phone number here
-//                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
-//            }
-//
-//        } else {
-//            Toast.makeText(MapsActivity.this, "Enter Phone Number", Toast.LENGTH_SHORT).show();
-//        }
-    }
-
-    /*
-    * bootom sheet
-    * */
-    private void setupBottomSheetView()
-    {
-        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
-//        TabLayout tabLayout = findViewById(R.id.maps_tab);
-//        tabLayout.addTab(tabLayout.newTab().setText("Recycling Center"), 0);
-//        tabLayout.addTab(tabLayout.newTab().setText("Junkyard"),1);
-//        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-//
-//        final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-//        PagerAdapter pagerAdapter = new MapsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-//        viewPager.setAdapter(pagerAdapter);
-
-        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new MapsFragmentRecycling());
-        adapter.addFragment(new MapsFragmentJunkyard());
-        final ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(adapter);
-
-        TabLayout tabLayout = findViewById(R.id.maps_tab);
-        tabLayout.setupWithViewPager(viewPager);
-
-        tabLayout.getTabAt(0).setText("Recycling Center");
-        tabLayout.getTabAt(1).setText("Junkyard");
-
-        viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-    }
-
     /*
     * bottom navigation
     * */
@@ -890,6 +454,117 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
+    }
+
+    public void getLatLongFromPlace(String place) {
+        try {
+            Geocoder selected_place_geocoder = new Geocoder(MapsActivity.this);
+            List<Address> address;
+
+            address = selected_place_geocoder.getFromLocationName(place, 5);
+
+            if (address != null) {
+                Address location = address.get(0);
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fetchLatLongFromService fetch_latlng_from_service_abc = new fetchLatLongFromService(
+                    place.replaceAll("\\s+", ""));
+            fetch_latlng_from_service_abc.execute();
+
+        }
+
+    }
+
+
+//Sometimes happens that device gives location = null
+
+    public class fetchLatLongFromService extends
+            AsyncTask<Void, Void, StringBuilder> {
+        String place;
+
+
+        public fetchLatLongFromService(String place) {
+            super();
+            this.place = place;
+
+        }
+
+        @Override
+        protected void onCancelled() {
+            // TODO Auto-generated method stub
+            super.onCancelled();
+            this.cancel(true);
+        }
+
+        @Override
+        protected StringBuilder doInBackground(Void... params) {
+            // TODO Auto-generated method stub
+            try {
+                HttpURLConnection conn = null;
+                StringBuilder jsonResults = new StringBuilder();
+                String googleMapUrl = "http://maps.googleapis.com/maps/api/geocode/json?address="
+                        + this.place + "&sensor=false";
+
+                URL url = new URL(googleMapUrl);
+                conn = (HttpURLConnection) url.openConnection();
+                InputStreamReader in = new InputStreamReader(
+                        conn.getInputStream());
+                int read;
+                char[] buff = new char[1024];
+                while ((read = in.read(buff)) != -1) {
+                    jsonResults.append(buff, 0, read);
+                }
+                String a = "";
+                return jsonResults;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(StringBuilder result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            try {
+                JSONObject jsonObj = new JSONObject(result.toString());
+                JSONArray resultJsonArray = jsonObj.getJSONArray("results");
+
+                // Extract the Place descriptions from the results
+                // resultList = new ArrayList<String>(resultJsonArray.length());
+
+                JSONObject before_geometry_jsonObj = resultJsonArray
+                        .getJSONObject(0);
+
+                JSONObject geometry_jsonObj = before_geometry_jsonObj
+                        .getJSONObject("geometry");
+
+                JSONObject location_jsonObj = geometry_jsonObj
+                        .getJSONObject("location");
+
+                String lat_helper = location_jsonObj.getString("lat");
+                double lat = Double.valueOf(lat_helper);
+
+
+                String lng_helper = location_jsonObj.getString("lng");
+                double lng = Double.valueOf(lng_helper);
+
+
+                LatLng point = new LatLng(lat, lng);
+
+
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+
+            }
+        }
     }
 
 
