@@ -99,7 +99,7 @@ public class AllUsersFragment extends Fragment {
                                     {
                                         String email = dataSnapshot.child("Email").getValue().toString();
                                         String Name = dataSnapshot.child("Name").getValue().toString();
-                                        String profile_thuumb = dataSnapshot.getValue().toString();
+                                        String profile_thuumb = dataSnapshot.child("Image_thumb").getValue().toString();
                                         String isOnline =  dataSnapshot.child("online").getValue().toString();
                                         boolean isVerify = dataSnapshot.child("isVerify").getValue(Boolean.class);
                                         viewHolder.setEmail(email);
@@ -120,16 +120,46 @@ public class AllUsersFragment extends Fragment {
                                     else if (userType.equals("business"))
                                     {
                                         Log.d(TAG, "onDataChange: BusinessType");
+                                        String email = dataSnapshot.child("bsnEmail").getValue().toString();
+                                        String Name = dataSnapshot.child("bsnBusinessName").getValue().toString();
+                                        String profile_thuumb = dataSnapshot.child("image").getValue().toString();
+//                                        String isOnline =  dataSnapshot.child("online").getValue().toString();
+                                        boolean isVerify = dataSnapshot.child("isVerify").getValue(Boolean.class);
+                                        viewHolder.setEmail(email);
+                                        viewHolder.setName(Name);
+                                        viewHolder.setProfileImage(profile_thuumb,getContext());
+
+                                        viewHolder.isVerify(isVerify);
+
+//                                        if(isOnline.equals("online"))
+//                                        {
+//                                            viewHolder.setuserOnline(true);
+//                                        }else
+//                                        {
+//                                            viewHolder.setuserOnline(false);
+//                                        }
                                     }
                                     else if(userType.equals("free"))
                                     {
                                         Log.d(TAG, "onDataChange: Free Type");
                                         String email = dataSnapshot.child("Email").getValue().toString();
                                         String Name = dataSnapshot.child("Name").getValue().toString();
-                                        String profile_thuumb = dataSnapshot.getValue().toString();
+                                        String profile_thuumb = dataSnapshot.child("Image_thumb").getValue().toString();
+                                        String isOnline =  dataSnapshot.child("online").getValue().toString();
+                                        boolean isVerify = dataSnapshot.child("isVerify").getValue(Boolean.class);
                                         viewHolder.setEmail(email);
                                         viewHolder.setName(Name);
                                         viewHolder.setProfileImage(profile_thuumb,getContext());
+
+                                        viewHolder.isVerify(isVerify);
+
+                                        if(isOnline.equals("online"))
+                                        {
+                                            viewHolder.setuserOnline(true);
+                                        }else
+                                        {
+                                            viewHolder.setuserOnline(false);
+                                        }
                                     }
                                     else {
                                         Log.d(TAG, "onDataChange: NoType");
