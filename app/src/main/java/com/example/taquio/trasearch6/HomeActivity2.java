@@ -38,6 +38,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.ServerValue;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -50,7 +51,8 @@ public class HomeActivity2 extends AppCompatActivity implements
     private static final int ACTIVITY_NUM = 0;
     private static final int HOME_FRAGMENT = 1;
     private Context mContext = HomeActivity2.this;
-    //Firebase
+
+    private DatabaseReference mUserRef;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     //widgets
@@ -83,7 +85,9 @@ public class HomeActivity2 extends AppCompatActivity implements
         mViewPager = findViewById(R.id.container);
         mFrameLayout = findViewById(R.id.frame_container);
         mRelativeLayout = findViewById(R.id.relLayoutParent);
+        mAuth = FirebaseAuth.getInstance();
 
+        mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
         Toolbar toolbar =  findViewById(R.id.mytoolbar);
         setSupportActionBar(toolbar);
         setUpFirebaseAuth();
@@ -238,18 +242,40 @@ public class HomeActivity2 extends AppCompatActivity implements
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: Started");
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser==null)
+        {
+            Log.d(TAG, "onStart: Calling back to start method");
+            sendToStart();
+        }
+        else
+        {
+            Log.d(TAG, "onStart: User Online");
+            mUserRef.child("online").setValue(true);
+        }
+    }
     @Override
     protected void onPause(){
         super.onPause();
         Log.d(TAG, "onPause: OnPause Started");
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-//        if(currentUser!=null) {
-//            Log.d(TAG, "onPause: User Offline");
-//            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
-//        }
+        if(currentUser!=null) {
+            Log.d(TAG, "onPause: User Offline");
+            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
+        }
     }
+    private void sendToStart()
+    {
+        Log.d(TAG, "sendToStart: Back to login page");
+        startActivity(new Intent(HomeActivity2.this,ActivityLogin.class));
+        finish();
+    }
+
     public void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new VideosFragment());

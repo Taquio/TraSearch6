@@ -171,12 +171,25 @@
         <activity android:name=".RegisterOptions" />
         <activity android:name=".RegisterBusinessActivity" />
         <activity android:name=".BusinessHome.BusinessHome">
+
+        </activity>
+        <activity android:name=".BusinessMessages.BusinessMessages">
+        </activity>
+        <activity android:name=".BusinessProfile.BusinessProfile"/>
+        <activity android:name=".BusinessRegActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".BusinessRegActivity2"/>
+        <activity android:name=".BusinessProfile.BusinessBuy"/>
+        <activity android:name=".BusinessProfile.BusinessSell"/>
+        <activity android:name=".BusinessProfile.BusinessPrice"/>
+        <activity android:name=".BusinessProfile.BusinessSPrice"/>
+        <activity android:name=".BusinessProfile.BusinessEdit">
+        </activity>
+
         <activity android:name=".BusinessMessages.BusinessMessages" />
         <activity android:name=".BusinessProfile.BusinessProfile" />
         <activity android:name=".BusinessRegActivity" />
