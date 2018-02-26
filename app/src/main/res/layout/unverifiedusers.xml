@@ -11,7 +11,7 @@
         android:background="#FAFAFA">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/allUsersImg"
+            android:id="@+id/unverifiedImg"
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_centerVertical="true"
@@ -19,26 +19,26 @@
             android:src="@drawable/images"/>
 
         <LinearLayout
-            android:id="@+id/allUsersLayout"
+            android:id="@+id/unverifiedLayout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/allUsersImg"
+            android:layout_toRightOf="@+id/unverifiedImg"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/allUsersName"
+                android:id="@+id/unverifiedName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@+id/userProfile"
+                android:layout_marginStart="15dp"
                 android:text="Sean Daniel Del Mar"
                 android:textColor="#000000"
                 android:textSize="15sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/allUsersEmail"
+                android:id="@+id/unverifiedEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
@@ -49,13 +49,13 @@
 
         </LinearLayout>
         <ImageView
-            android:id="@+id/isVerify"
+            android:id="@+id/unverifiedisVerify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/allUsersLayout"
+            android:layout_toRightOf="@+id/unverifiedLayout"
             android:src="@drawable/verify"/>
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/stat_icon"
+            android:id="@+id/unverifiedstat_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center"

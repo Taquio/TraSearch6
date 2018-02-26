@@ -176,8 +176,10 @@
         <activity android:name=".BusinessMessages.BusinessMessages" />
         <activity android:name=".BusinessProfile.BusinessProfile" />
         <activity android:name=".BusinessRegActivity" />
-        <activity android:name=".SettingsActivity"></activity>
-        <activity android:name=".AdminActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".AdminActivity" />
+        <activity android:name=".ForVerification" />
+        <activity android:name=".AdminVerification"></activity>
         <activity android:name=".EditPostItem"/>
     </application>
 
