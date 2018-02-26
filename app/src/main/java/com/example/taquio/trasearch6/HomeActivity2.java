@@ -38,7 +38,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.ServerValue;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -242,22 +241,7 @@ public class HomeActivity2 extends AppCompatActivity implements
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: Started");
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser==null)
-        {
-            Log.d(TAG, "onStart: Calling back to start method");
-            sendToStart();
-        }
-        else
-        {
-            Log.d(TAG, "onStart: User Online");
-            mUserRef.child("online").setValue(true);
-        }
-    }
+
     @Override
     protected void onPause(){
         super.onPause();

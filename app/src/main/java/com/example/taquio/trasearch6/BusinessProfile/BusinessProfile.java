@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -15,12 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import com.example.taquio.trasearch6.BusinessMessages.BusinessInboxFragment;
-import com.example.taquio.trasearch6.Messages.FriendsListFragment;
-import com.example.taquio.trasearch6.Profile.ProfileActivity;
 import com.example.taquio.trasearch6.R;
-import com.example.taquio.trasearch6.SectionsPagerAdapter;
 import com.example.taquio.trasearch6.Utils.BusinessBottomNavigationViewHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

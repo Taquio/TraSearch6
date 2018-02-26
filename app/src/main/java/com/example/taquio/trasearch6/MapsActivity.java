@@ -108,8 +108,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String mCurrentUserId;
     private View bottomSheet;
     private BottomSheetBehavior mBottomSheetBehavior;
-    private MapsRecyclerAdapter mAdapter;
-    private final List<MapsRecyclerListValues> mMapsList = new ArrayList<>();
+//    private MapsRecyclerAdapter mAdapter;
+//    private final List<MapsRecyclerListValues> mMapsList = new ArrayList<>();
     //store lat lang in firebase and retrieve
     private DatabaseReference mDatabase;
     private DatabaseReference refDatabase;
