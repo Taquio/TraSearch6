@@ -79,13 +79,13 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
 
         toolbar = view.findViewById(R.id.profileToolBar);
 
-        openSearch = view.findViewById(R.id.opensearch);
-        openSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                startActivity(new Intent(mContext, SearchActivity.class));
-            }
-        });
+//        openSearch = view.findViewById(R.id.opensearch);
+//        openSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                startActivity(new Intent(mContext, SearchActivity.class));
+//            }
+//        });
         initListViewRefresh();
         getKeys();
 
@@ -236,7 +236,7 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
                     resultsCount++;
                     Log.d(TAG, "displayPhotos: adding a photo to paginated list: " + mPhotos.get(i).getPhoto_id());
                 }
-                adapter = new MainFeedListAdapter(getActivity(), R.layout.try_gridview, mPaginatedPhotos);
+                adapter = new MainFeedListAdapter(getActivity(), R.layout.layout_mainfeed_listitem, mPaginatedPhotos);
                 mListView.setAdapter(adapter);
 
                 // Notify update is done

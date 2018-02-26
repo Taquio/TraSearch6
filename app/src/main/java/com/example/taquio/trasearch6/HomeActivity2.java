@@ -8,8 +8,10 @@ import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,10 +35,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.ArrayList;
 
 public class HomeActivity2 extends AppCompatActivity implements
         MainFeedListAdapter.OnLoadMoreItemsListener{
@@ -53,8 +58,11 @@ public class HomeActivity2 extends AppCompatActivity implements
     private FrameLayout mFrameLayout;
     private RelativeLayout mRelativeLayout;
     private DatabaseReference mUserDatabase;
-  private  TextView notifications_badgeText;
+    private  TextView notifications_badgeText;
+    private ArrayList<String> myLikes;
 
+    TextView textCartItemCount;
+    int mCartItemCount = 10;
 
     @Override
     public void onLoadMoreItems() {
@@ -76,11 +84,86 @@ public class HomeActivity2 extends AppCompatActivity implements
         mFrameLayout = findViewById(R.id.frame_container);
         mRelativeLayout = findViewById(R.id.relLayoutParent);
 
+        Toolbar toolbar =  findViewById(R.id.mytoolbar);
+        setSupportActionBar(toolbar);
         setUpFirebaseAuth();
         initImageLoader();
         setupBottomNavigationView();
         setupViewPager();
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.notif_menu, menu);
+
+        final MenuItem menuItem = menu.findItem(R.id.action_notif);
+
+        View actionView = MenuItemCompat.getActionView(menuItem);
+        textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
+        myLikes = new ArrayList<>();
+        setupBadge();
+
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(menuItem);
+            }
+        });
+
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.action_notif: {
+                // Do something
+
+                if (textCartItemCount != null) {
+                    if (mCartItemCount == 0) {
+                        if (textCartItemCount.getVisibility() != View.GONE) {
+                            textCartItemCount.setVisibility(View.GONE);
+                        }
+                    } else {
+                        textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
+                        if (textCartItemCount.getVisibility() != View.VISIBLE) {
+                            textCartItemCount.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setupBadge() {
+
+        Query query = mUserDatabase.child("AllLikes")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+
+                    myLikes.add(singleSnapshot.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        if(myLikes.size()!=0&&myLikes.size()>0)
+        {
+            mCartItemCount = myLikes.size();
+        }else
+            mCartItemCount = 0;
+
+
+        //end
     }
     public void onImageSelected( Photo item,  int i, final String user_id) {
 

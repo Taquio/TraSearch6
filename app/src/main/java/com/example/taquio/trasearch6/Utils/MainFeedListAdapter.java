@@ -1,10 +1,12 @@
 package com.example.taquio.trasearch6.Utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -14,7 +16,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.taquio.trasearch6.EditPostItem;
 import com.example.taquio.trasearch6.HomeActivity2;
 import com.example.taquio.trasearch6.MessageActivity;
 import com.example.taquio.trasearch6.Models.Comment;
@@ -93,8 +97,8 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
             holder.likeblack = convertView.findViewById(R.id.image_heart);
 //            holder.comment = (ImageView) convertView.findViewById(R.id.speech_bubble);
             holder.likes = convertView.findViewById(R.id.image_likes);
-            holder.comments = convertView.findViewById(R.id.image_comments_link);
-
+//            holder.comments = convertView.findViewById(R.id.image_comments_link);
+            holder.ellipsis = convertView.findViewById(R.id.ivEllipses);
             holder.mprofileImage = convertView.findViewById(R.id.profile_photo);
             holder.dm =convertView.findViewById(R.id.direct_message);
 
@@ -121,7 +125,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
 
         //set the comment
         List<Comment> comments = getItem(position).getComments();
-        holder.comments.setText("#" + comments.size());
+//        holder.comments.setText("#" + comments.size());
 //        holder.comments.setText("View all " + comments.size() + " comments");
 //        holder.comments.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -264,10 +268,102 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         if(reachedEndOfList(position)){
             loadMoreData();
         }
+        holder.ellipsis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayAlertDialog(holder);
+            }
+        });
 
         return convertView;
     }
+    private void displayAlertDialog(final ViewHolder holder) {
 
+        if(holder.photo.getUser_id().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//        builder.setTitle("CHOOSE AN ACTION");
+            builder.setItems(new CharSequence[]
+                            {"Edit", "Delete"},
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // The 'which' argument contains the index position
+                            // of the selected item
+                            switch (which) {
+                                case 0:
+                                    Intent i = new Intent(getContext(), EditPostItem.class);
+                                    i.putExtra("user", holder.user);
+                                    i.putExtra("photo", holder.photo);
+                                    getContext().startActivity(i);
+                                    break;
+                                case 1:
+                                    Query query = mReference.child("Photos").child(holder.photo.getPhoto_id());
+                                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            for(DataSnapshot snap : dataSnapshot.getChildren()){
+
+                                                mReference.child("Photos")
+                                                        .child(holder.photo.getPhoto_id())
+                                                        .removeValue();
+                                                mReference.child("Users_Photos")
+                                                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                        .child(holder.photo.getPhoto_id())
+                                                        .removeValue();
+                                            }
+                                            getContext().startActivity(new Intent(getContext(), HomeActivity2.class));
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                    break;
+                            }
+                        }
+                    });
+            builder.create().show();
+        }else{
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//        builder.setTitle("CHOOSE AN ACTION");
+            builder.setItems(new CharSequence[]
+                            {"Report"},
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // The 'which' argument contains the index position
+                            // of the selected item
+                            switch (which) {
+                                case 0:
+                                    Query query = mReference.child("Photos").child(holder.photo.getPhoto_id());
+                                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            for(DataSnapshot snap : dataSnapshot.getChildren()){
+
+                                                mReference.child("Photos")
+                                                        .child(holder.photo.getPhoto_id())
+                                                        .removeValue();
+                                                mReference.child("Users_Photos")
+                                                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                        .child(holder.photo.getPhoto_id())
+                                                        .removeValue();
+                                            }
+                                            getContext().startActivity(new Intent(getContext(), HomeActivity2.class));
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                    break;
+                            }
+                        }
+                    });
+            builder.create().show();
+        }
+
+    }
     private boolean reachedEndOfList(int position){
         return position == getCount() - 1;
     }
@@ -306,6 +402,12 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                 .child(mContext.getString(R.string.field_likes))
                 .child(newLikeID)
                 .setValue(like);
+        mReference.child("AllLikes")
+                .child(holder.photo.getUser_id())
+                .child(newLikeID)
+                .child(holder.photo.getPhoto_id())
+                .setValue(like);
+
 
         holder.liker.toggleLike();
         getLikesString(holder);
@@ -373,7 +475,9 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                             holder.likeByCurrentUser = holder.users.toString().contains(currentUsername + ",");
 
                             int length = splitUsers.length;
-                            holder.likesString = ""+length;
+
+                            holder.likesString = length + " interested!";
+
 //                                if(length == 1){
 //                                    holder.likesString = "Liked by " + splitUsers[0];
 //                                }
@@ -500,7 +604,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         String likesString;
         TextView username, timeDetla, caption, likes, comments;
         SquareImageView image;
-        ImageView likegreen, likeblack, comment, dm;
+        ImageView likegreen, likeblack, comment, dm, ellipsis;
         User user  = new User();
         StringBuilder users;
         String mLikesString;
@@ -556,6 +660,11 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                                     .child(mHolder.photo.getPhoto_id())
                                     .child(mContext.getString(R.string.field_likes))
                                     .child(keyID)
+                                    .removeValue();
+                            mReference.child("AllLikes")
+                                    .child(mHolder.photo.getUser_id())
+                                    .child(keyID)
+                                    .child(mHolder.photo.getPhoto_id())
                                     .removeValue();
 
                             mHolder.liker.toggleLike();

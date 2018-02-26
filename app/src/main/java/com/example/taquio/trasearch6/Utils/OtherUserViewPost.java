@@ -94,8 +94,8 @@ public class OtherUserViewPost extends Fragment {
         mHeartWhite = view.findViewById(R.id.image_heart);
         mProfileImage = view.findViewById(R.id.profile_photo);
         mLikes = view.findViewById(R.id.image_likes);
-        mComment = view.findViewById(R.id.speech_bubble);
-        mComments = view.findViewById(R.id.image_comments_link);
+//        mComment = view.findViewById(R.id.speech_bubble);
+//        mComments = view.findViewById(R.id.image_comments_link);
 
         mHeart = new Likes(mHeartWhite, mHeartRed);
         mGestureDetector = new GestureDetector(getActivity(), new OtherUserViewPost.GestureListener());
@@ -352,7 +352,7 @@ public class OtherUserViewPost extends Fragment {
         mLikes.setText(mLikesString);
         mCaption.setText(mPhoto.getCaption());
 
-        mComments.setText("#" + mPhoto.getComments().size());
+//        mComments.setText("#" + mPhoto.getComments().size());
 //        if(mPhoto.getComments().size() > 0){
 //            mComments.setText("View all " + mPhoto.getComments().size() + " comments");
 //        }else if(mPhoto.getComments().size() == 0){

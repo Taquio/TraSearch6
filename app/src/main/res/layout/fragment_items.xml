@@ -3,18 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/relLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/relLayout1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
 
-        <include layout="@layout/snippet_searchbar"/>
-    </RelativeLayout>
+        <!--<include layout="@layout/snippet_searchbar"/>-->
+    <!--</RelativeLayout>-->
     <com.eschao.android.widget.elasticlistview.ElasticListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/relatLayout1"
         android:background="@null"
         android:cacheColorHint="#00000000"
         android:divider="@null"
@@ -24,6 +23,5 @@
         android:overScrollMode="never"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:scrollbars="none"
-        />
+        android:scrollbars="none" />
 </RelativeLayout>
