@@ -172,7 +172,6 @@ public class GuestSearch extends AppCompatActivity {
 
                 }
             });
-
         }
     }
 

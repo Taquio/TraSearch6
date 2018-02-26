@@ -132,12 +132,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         .start(EditProfileActivity.this);
             }
         });
-
-
-
         name=false;email=false;password=false;mobile=false;image=false;
-
-
         ediProfile_saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
