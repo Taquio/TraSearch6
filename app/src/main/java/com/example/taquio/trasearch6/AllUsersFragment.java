@@ -78,7 +78,7 @@ public class AllUsersFragment extends Fragment {
                 AllUsers.class,
                 R.layout.all_users,
                 AllUsersFragment.AdminViewHolder.class,
-                mUsersDatabase
+                mUsersDatabase.orderByChild("isVerify")
         ) {
             @Override
             protected void populateViewHolder(final AdminViewHolder viewHolder, final AllUsers model, int position) {

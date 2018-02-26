@@ -144,8 +144,8 @@ public class GuestSearch extends AppCompatActivity {
             userType.child("userType").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.hasChild("userType"))
-                    {
+//                    if (dataSnapshot.hasChild("userType"))
+//                    {
                         String userType = dataSnapshot.getValue().toString();
                         if(userType.equals("free"))
                         {
@@ -164,7 +164,7 @@ public class GuestSearch extends AppCompatActivity {
                         }else{
                             Toast.makeText(GuestSearch.this,"UserType is null",Toast.LENGTH_LONG).show();
                         }
-                    }
+//                    }
                 }
 
                 @Override
