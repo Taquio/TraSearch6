@@ -12,11 +12,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
 import com.example.taquio.trasearch6.BusinessMessages.BusinessInboxFragment;
 import com.example.taquio.trasearch6.Messages.FriendsListFragment;
+import com.example.taquio.trasearch6.Profile.ProfileActivity;
 import com.example.taquio.trasearch6.R;
 import com.example.taquio.trasearch6.SectionsPagerAdapter;
 import com.example.taquio.trasearch6.Utils.BusinessBottomNavigationViewHelper;
@@ -28,6 +30,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Del Mar on 2/16/2018.
@@ -41,9 +48,12 @@ public class BusinessProfile extends AppCompatActivity {
 
     TextView tvName, tvEmail, tvMobile, tvPhone, tvLocation;
     Button btnBuy, btnSell, btnEdit;
+    ImageView verify, notVerify;
+    CircleImageView profPicImage;
     private DatabaseReference databaseReference;
     private FirebaseUser currentUser;
     String user_id;
+    String verifier;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +70,10 @@ public class BusinessProfile extends AppCompatActivity {
         btnBuy = (Button) findViewById(R.id.btnBuy);
         btnSell = (Button) findViewById(R.id.btnSell);
         btnEdit = (Button) findViewById(R.id.busBtnEdit);
+
+        verify = (ImageView) findViewById(R.id.imVerify);
+        notVerify = (ImageView) findViewById(R.id.imNotVerify);
+        profPicImage = (CircleImageView) findViewById(R.id.busImageView10);
 
         btnBuy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,12 +105,40 @@ public class BusinessProfile extends AppCompatActivity {
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(final DataSnapshot dataSnapshot) {
                 tvName.setText(dataSnapshot.child("bsnBusinessName").getValue().toString());
                 tvEmail.setText(dataSnapshot.child("bsnEmail").getValue().toString());
                 tvMobile.setText(dataSnapshot.child("bsnMobile").getValue().toString());
                 tvPhone.setText(dataSnapshot.child("bsnPhone").getValue().toString());
                 tvLocation.setText(dataSnapshot.child("bsnLocation").getValue().toString());
+                Picasso.with(BusinessProfile.this).load(dataSnapshot.child("image").getValue().toString())
+                        .networkPolicy(NetworkPolicy.OFFLINE)
+                        .placeholder(R.drawable.man)
+                        .into(profPicImage, new Callback() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onError() {
+                                Picasso.with(BusinessProfile.this)
+                                        .load(dataSnapshot
+                                                .child("image").getValue().toString())
+                                        .placeholder(R.drawable.man)
+                                        .into(profPicImage);
+
+                            }
+                        });
+                verifier = dataSnapshot.child("isVerify").getValue().toString();
+
+                if(verifier.equals("true")) {
+                    verify.setVisibility(View.VISIBLE);
+                    notVerify.setVisibility(View.GONE);
+                }else if (verifier.equals("false")) {
+                    verify.setVisibility(View.GONE);
+                    notVerify.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -130,4 +172,5 @@ public class BusinessProfile extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
+
 }

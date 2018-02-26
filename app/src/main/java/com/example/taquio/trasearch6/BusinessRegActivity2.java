@@ -115,7 +115,7 @@ public class BusinessRegActivity2 extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                                        BusinessInfo businessInfo = new BusinessInfo(bsnMail,bsnBusinessName,bsnLocation,bsnMobile,bsnPhone,taskSnapshot.getDownloadUrl().toString(),"none",deviceToken,user_id,"business",true);
+                                        BusinessInfo businessInfo = new BusinessInfo(bsnMail,bsnBusinessName,bsnLocation,bsnMobile,bsnPhone,taskSnapshot.getDownloadUrl().toString(),"none", "none", deviceToken,user_id,"business", true);
                                         current_user_db.setValue(businessInfo);
                                         progressDialog.dismiss();
                                         Toast.makeText(getApplicationContext(),"Welcome to TraSearch!",Toast.LENGTH_LONG).show();
@@ -139,19 +139,8 @@ public class BusinessRegActivity2 extends AppCompatActivity {
                                     }
                                 });
                             } else {
-                                Toast.makeText(getApplicationContext(),"Please select data first",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),"Select image first",Toast.LENGTH_SHORT).show();
                             }
-//                            Map newPost = new HashMap();
-//                            newPost.put("BusinessName", bsnBusinessName);
-//                            newPost.put("BusinessLocation", bsnLocation);
-//                            newPost.put("BusinessTelephone", bsnPhone);
-//                            newPost.put("BusinessMobile", bsnMobile);
-//                            uploadImage();
-//                            String newPhotoKey = current_user_db.child("Photos").push().getKey();
-//                            current_user_db.child(FirebaseAuth.getInstance().getCurrentUser()
-//                                    .getUid()).child(newPhotoKey).setValue(newPost);
-
-//                            current_user_db.child("Users").setValue(newPost);
                         }
                     }
                 });
@@ -171,7 +160,7 @@ public class BusinessRegActivity2 extends AppCompatActivity {
                             final ProgressDialog progressDialog = new ProgressDialog(BusinessRegActivity2.this);
                             progressDialog.setTitle("Creating account...");
 
-                            BusinessInfo businessInfo = new BusinessInfo(bsnMail,bsnBusinessName,bsnLocation,bsnMobile,bsnPhone,"none","none",deviceToken,user_id,"business", false);
+                            BusinessInfo businessInfo = new BusinessInfo(bsnMail,bsnBusinessName,bsnLocation,bsnMobile,bsnPhone,"none","none", "none", deviceToken,user_id,"business", false);
                             progressDialog.show();
                             current_user_db.setValue(businessInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
