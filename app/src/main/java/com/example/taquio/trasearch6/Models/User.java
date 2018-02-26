@@ -4,17 +4,42 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by User on 6/26/2017.
+ * Created by Edward 2018.
  */
 
 public class User implements Parcelable {
 
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
     private String userID, Email, Name, Image,
             Image_thumb, UserName, device_token, PhoneNumber;
 
-
     public User() {
 
+    }
+
+    protected User(Parcel in) {
+        userID = in.readString();
+        Email = in.readString();
+        Name = in.readString();
+        Image = in.readString();
+        Image_thumb = in.readString();
+        UserName = in.readString();
+        device_token = in.readString();
+        PhoneNumber = in.readString();
+    }
+
+    public static Creator<User> getCREATOR() {
+        return CREATOR;
     }
 
     public String getUserID() {
@@ -80,33 +105,6 @@ public class User implements Parcelable {
     public void setPhoneNumber(String phoneNumber) {
         PhoneNumber = phoneNumber;
     }
-
-    public static Creator<User> getCREATOR() {
-        return CREATOR;
-    }
-
-    protected User(Parcel in) {
-        userID = in.readString();
-        Email = in.readString();
-        Name = in.readString();
-        Image = in.readString();
-        Image_thumb = in.readString();
-        UserName = in.readString();
-        device_token = in.readString();
-        PhoneNumber = in.readString();
-    }
-
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
 
     @Override
     public int describeContents() {

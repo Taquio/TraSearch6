@@ -3,7 +3,7 @@ package com.example.taquio.trasearch6.Models;
 import java.util.List;
 
 /**
- * Created by User on 8/22/2017.
+ * Created by Edward on 2018.
  */
 
 public class Comment {

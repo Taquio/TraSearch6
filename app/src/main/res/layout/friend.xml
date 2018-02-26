@@ -52,9 +52,8 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center"
-            android:layout_toLeftOf="@+id/allUsersName"
             android:src="@drawable/online_stat"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
         <ImageView
             android:layout_width="wrap_content"

@@ -4,23 +4,24 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
@@ -30,8 +31,6 @@ import android.widget.Toast;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.modal.PlaceInfo;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -58,10 +57,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by ARVN 02-16-2018.
  */
@@ -69,7 +64,9 @@ import java.util.List;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,
-        LocationListener {
+        LocationListener,
+        MapsFragmentRecycling.OnFragmentInteractionListener,
+        MapsFragmentJunkyard.OnFragmentInteractionListener{
 
     private static final String TAG = "MapActivity";
 
@@ -88,6 +85,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private AutoCompleteTextView mSearchText;
     private ImageButton mGps, mInfo, mPlacePicker;
     private RadioButton mRbRecyclingCenter, mRbJunkyard;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
     //vars
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
@@ -98,6 +97,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleApiClient mGoogleClient; // for loading all the recycling center
     private PlaceInfo mPlace;
     private Marker mMarker;
+    private View bottomSheet;
+    private BottomSheetBehavior mBottomSheetBehavior;
     //store lat lang in firebase and retrieve
     private DatabaseReference mDatabase;
     private DatabaseReference refDatabase;
@@ -111,6 +112,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     /*
     *   Necessary methods that is needed
     * */
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
     @Override
     public void onLocationChanged(Location location)
     {
@@ -166,7 +172,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMap = googleMap;
 
-//        loadStaticMarker();//static location
+        loadStaticMarker();//static location
 
         /*
         * create firebase for receiving latitude longitude values
@@ -249,6 +255,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         refId();
 
+        //bottom sheet
+        setupBottomSheetView();
+
+
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
@@ -267,10 +277,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void refId()
     {
-        mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
+//        mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
 //        mGps = (ImageButton) findViewById(R.id.ic_gps);
 //        mInfo = (ImageButton) findViewById(R.id.place_info);
-        mPlacePicker = (ImageButton) findViewById(R.id.place_picker);
+//        mPlacePicker = (ImageButton) findViewById(R.id.place_picker);
+//        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        //for the Tabs
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mTabLayout = (TabLayout) findViewById(R.id.tabs);
+        bottomSheet = findViewById(R.id.bottom_sheet);
     }
 
     private void loadStaticMarker() {
@@ -410,9 +426,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .setTypeFilter(Place.TYPE_ESTABLISHMENT)
                 .setCountry("PH")
                 .build();
+        
+        //bottomsheet
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        Toast.makeText(MapsActivity.this, "Collapsed", Toast.LENGTH_SHORT).show();
+                        break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        Toast.makeText(MapsActivity.this, "Expanded", Toast.LENGTH_SHORT).show();
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
 
         //set Autocompletelistener to AutocompleteTextView
-        mSearchText.setOnItemClickListener(mAutocompleteClickListener);
+//        mSearchText.setOnItemClickListener(mAutocompleteClickListener);
 
         //passing of necessary objects to AutocompleteAdaper
         mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter
@@ -422,23 +464,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         filter);
 
         //set AutocompleteAdapter as adapter in AutocompleteTextView
-        mSearchText.setAdapter(mPlaceAutocompleteAdapter);
+//        mSearchText.setAdapter(mPlaceAutocompleteAdapter);
 
-        mSearchText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH
-                        || actionId == EditorInfo.IME_ACTION_DONE
-                        || actionId == KeyEvent.KEYCODE_SEARCH
-                        || actionId == KeyEvent.KEYCODE_ENTER) {
-
-                    hideSoftKeyboard();
-                    //execute our method for searching
-                    geoLocate();
-                }
-                return false;
-            }
-        });
+//        mSearchText.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int actionId, KeyEvent event) {
+//                if (actionId == EditorInfo.IME_ACTION_SEARCH
+//                        || actionId == EditorInfo.IME_ACTION_DONE
+//                        || actionId == KeyEvent.KEYCODE_SEARCH
+//                        || actionId == KeyEvent.KEYCODE_ENTER) {
+//
+//                    hideSoftKeyboard();
+//                    //execute our method for searching
+//                    geoLocate();
+//                }
+//                return false;
+//            }
+//        });
 
 //        mGps.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -466,21 +508,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //            }
 //        });
 
-        mPlacePicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
-                try {
-                    startActivityForResult(builder.build(MapsActivity.this), PLACE_PICKER_REQUEST);
-                } catch (GooglePlayServicesRepairableException e) {
-                    Log.e(TAG, "onClick: GooglePlayServicesRepairableException: " + e.getMessage());
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    Log.e(TAG, "onClick: GooglePlayServicesNotAvailableException: " + e.getMessage());
-                }
-            }
-        });
+//        mPlacePicker.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+//
+//                try {
+//                    startActivityForResult(builder.build(MapsActivity.this), PLACE_PICKER_REQUEST);
+//                } catch (GooglePlayServicesRepairableException e) {
+//                    Log.e(TAG, "onClick: GooglePlayServicesRepairableException: " + e.getMessage());
+//                } catch (GooglePlayServicesNotAvailableException e) {
+//                    Log.e(TAG, "onClick: GooglePlayServicesNotAvailableException: " + e.getMessage());
+//                }
+//            }
+//        });
 
         hideSoftKeyboard();
     }
@@ -506,9 +548,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/textsearch/json?");
         googlePlaceUrl.append("query="+nearbyPlace);
         googlePlaceUrl.append("&location="+latitude+","+longitude);
-        googlePlaceUrl.append("&radius="+PROXIMITY_RADIUS);
-        googlePlaceUrl.append("&key="+"AIzaSyDvsia0V9CUml-qj5BIhEiOtnMdT27EhMs");
-
+        googlePlaceUrl.append("&radius=3000");
+        googlePlaceUrl.append("&key="+"AIzaSyBgBgls2M2SoakI70MhTqnKlctI6kFlIl8");
+       // AIzaSyDvsia0V9CUml-qj5BIhEiOtnMdT27EhMs
+        // AIzaSyCnoXov8X_8xXBLY-_gDOxnfko3zHSw6fs
         Log.d("MapsActivity", "url = "+googlePlaceUrl.toString());
 
         return googlePlaceUrl.toString();
@@ -526,29 +569,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private void geoLocate() {
-        Log.d(TAG, "geoLocate: geolocating");
-
-        String searchString = mSearchText.getText().toString();
-
-        Geocoder geocoder = new Geocoder(MapsActivity.this);
-        List<Address> list = new ArrayList<>();
-        try {
-            list = geocoder.getFromLocationName(searchString, 1);
-        } catch (IOException e) {
-            Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
-        }
-
-        if (list.size() > 0) {
-            Address address = list.get(0);
-
-            Log.d(TAG, "geoLocate: found a location: " + address.toString());
-            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
-
-            moveCamera(new LatLng(address.getLatitude(),address.getLongitude()), DEFAULT_ZOOM,
-                    address.getAddressLine(0));
-        }
-    }
+//    private void geoLocate() {
+//        Log.d(TAG, "geoLocate: geolocating");
+//
+//        String searchString = mSearchText.getText().toString();
+//
+//        Geocoder geocoder = new Geocoder(MapsActivity.this);
+//        List<Address> list = new ArrayList<>();
+//        try {
+//            list = geocoder.getFromLocationName(searchString, 1);
+//        } catch (IOException e) {
+//            Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
+//        }
+//
+//        if (list.size() > 0) {
+//            Address address = list.get(0);
+//
+//            Log.d(TAG, "geoLocate: found a location: " + address.toString());
+//            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
+//
+//            moveCamera(new LatLng(address.getLatitude(),address.getLongitude()), DEFAULT_ZOOM,
+//                    address.getAddressLine(0));
+//        }
+//    }
 
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
@@ -569,12 +612,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             latitude = currentLocation.getLatitude();
                             longitude = currentLocation.getLongitude();
 
+                            //load recycling centers and junkyard
+                            loadRecyclingCenters();
+
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM,
                                     "My Location");
-
-                            //load all recycling centers in first load of map
-                            loadRecyclingCenters();
+                            mMap.setMyLocationEnabled(true);
 
                         } else {
                             Log.d(TAG, "onComplete: current location is null");
@@ -762,7 +806,43 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     };
 
     /*
-    * buttom navigation
+    * bootom sheet
+    * */
+    private void setupBottomSheetView() {
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+        TabLayout tabLayout = findViewById(R.id.maps_tab);
+        tabLayout.addTab(tabLayout.newTab().setText("Recycling Center"), 0);
+        tabLayout.addTab(tabLayout.newTab().setText("Junkyard"),1);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        PagerAdapter pagerAdapter = new MapsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(pagerAdapter);
+
+        viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+    }
+
+    /*
+    * bottom navigation
     * */
     private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
@@ -773,5 +853,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
+
 
 }

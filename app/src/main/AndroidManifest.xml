@@ -79,12 +79,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBgBgls2M2SoakI70MhTqnKlctI6kFlIl8" />
-        <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".SplashActivity"
@@ -96,7 +96,9 @@
             </intent-filter>
         </activity>
         <!-- <activity android:name=".AppStart" /> -->
-        <activity android:name=".RegisterActivity" />
+        <activity
+            android:name=".RegisterActivity"
+            android:parentActivityName=".ChooseLayout" />
 
         <!-- <activity -->
         <!-- android:name=".Profile.EditActivity" -->
@@ -116,7 +118,6 @@
             android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name=".ActivityLogin" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".chatActivity" />
         <activity android:name=".UserProfileActivity" />
         <activity android:name=".BusinessProfileActivity" />
         <activity android:name=".Profile.ProfileActivity">
@@ -137,23 +138,34 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/. 
         -->
-        <activity android:name=".MapsActivity"
-                  android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".HomeActivity2" />
         <activity android:name=".Utils.Donate" />
         <activity
             android:name=".ViewProfile"
             android:parentActivityName=".Profile.ProfileActivity" />
         <activity
-            android:name=".MessageActivity"
+            android:name=".Messages.MessagesActivity"
             android:parentActivityName=".HomeActivity2" />
         <activity android:name=".GuestSearch" />
+        <activity
+            android:name=".MessageActivity"
+            android:parentActivityName=".Messages.MessagesActivity" />
         <activity
             android:name=".ChooseLayout"
             android:parentActivityName=".GuestSearch" />
         <activity android:name=".MyProfileActivity" />
-        <activity android:name=".EditProfileActivity"
-            android:parentActivityName=".MyProfileActivity"/>
+        <activity
+            android:name=".EditProfileActivity"
+            android:configChanges="keyboardHidden|orientation|screenLayout"
+            android:parentActivityName=".MyProfileActivity" />
+        <activity android:name=".Camera.CameraActivity" />
+        <activity android:name=".Camera.NextActivity" />
+        <activity android:name=".RegisterOptions" />
+        <activity android:name=".RegisterBusinessActivity" />
         <activity android:name=".BusinessHome.BusinessHome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -161,13 +173,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BusinessMessages.BusinessMessages">
-        </activity>
-        <activity android:name=".BusinessProfile.BusinessProfile"/>
-        <activity android:name=".Camera.CameraActivity"/>
-        <activity android:name=".Camera.NextActivity"/>
-        <activity android:name=".BusinessRegActivity"/>
-
+        <activity android:name=".BusinessMessages.BusinessMessages" />
+        <activity android:name=".BusinessProfile.BusinessProfile" />
+        <activity android:name=".BusinessRegActivity" />
+        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".AdminActivity"></activity>
+        <activity android:name=".EditPostItem"/>
     </application>
 
 </manifest>

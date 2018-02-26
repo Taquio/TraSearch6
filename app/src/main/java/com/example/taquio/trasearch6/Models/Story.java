@@ -1,7 +1,7 @@
 package com.example.taquio.trasearch6.Models;
 
 /**
- * Created by User on 1/7/2018.
+ * Created by Edward 2018.
  */
 
 public class Story {

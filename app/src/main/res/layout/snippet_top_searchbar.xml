@@ -7,9 +7,12 @@
         android:layout_height="50dp">
 
         <android.support.v7.widget.Toolbar
+            android:id="@+id/mytoolbar"
             android:background="#009688"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -33,11 +36,11 @@
                     <!--android:layout_marginRight="20dp"-->
                     <!--android:layout_toRightOf="@+id/searchV"-->
                     <!--android:src="@drawable/ts"/>-->
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_weight="30"
-                    android:layout_height="50dp"
-                    android:src="@drawable/trash"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_weight="30"-->
+                    <!--android:layout_height="50dp"-->
+                    <!--android:src="@drawable/trash"/>-->
 
             </LinearLayout>
 

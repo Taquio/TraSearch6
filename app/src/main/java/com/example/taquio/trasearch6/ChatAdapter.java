@@ -1,21 +1,18 @@
 package com.example.taquio.trasearch6;
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -31,13 +28,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder>{
 
-    private List<Chats> mChatList;
-    private FirebaseAuth mAuth;
+    private static final String TAG = "ChatAdapter";
+    private List<Chats> mMessageList;
     private DatabaseReference mUserDatabase;
 
+    public ChatAdapter(List<Chats> mMessageList) {
 
-    public ChatAdapter(List<Chats> mChatList) {
-        this.mChatList = mChatList;
+        this.mMessageList = mMessageList;
+
     }
 
     public static String getDate(long milliSeconds, String dateFormat)
@@ -53,15 +51,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
     @Override
     public ChatViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_single_layout,parent,false);
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.chat_single_layout ,parent, false);
+
         return new ChatViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(final ChatViewHolder holder, int position) {
-        Chats c = mChatList.get(position);
-        mAuth = FirebaseAuth.getInstance();
-        String currentUserID = mAuth.getCurrentUser().getUid();
+        Chats c = mMessageList.get(position);
+
         String from_user = c.getFrom();
         String message_type = c.getType();
 
@@ -69,29 +68,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
         mUserDatabase.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(final DataSnapshot dataSnapshot) {
-                String name = dataSnapshot.child("Name").getValue().toString();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onBindViewHolder: "+dataSnapshot.child("Image_thumb").getValue().toString());
+
                 String image = dataSnapshot.child("Image_thumb").getValue().toString();
-
-                Picasso.with(holder.chatSingleConvImage.getContext())
-                        .load(dataSnapshot.child("Image_thumb").getValue().toString())
-                        .networkPolicy(NetworkPolicy.OFFLINE)
-                        .placeholder(R.drawable.man)
-                        .into(holder.chatSingleConvImage, new Callback() {
-                            @Override
-                            public void onSuccess() {
-
-                            }
-
-                            @Override
-                            public void onError() {
-                                Picasso.with(holder.chatSingleConvImage.getContext())
-                                        .load(dataSnapshot
-                                                .child("Image_thumb").getValue().toString())
-                                        .placeholder(R.drawable.man)
-                                        .into(holder.chatSingleConvImage);
-                            }
-                        });
+                Picasso.with(holder.profileImage.getContext()).load(image)
+                        .placeholder(R.drawable.man).into(holder.profileImage);
             }
 
             @Override
@@ -100,34 +82,20 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             }
         });
 
-        if(message_type.equals("text"))
-        {
-            holder.chatSingleText.setText(c.getMessage());
-            holder.chatSingleTime.setText(getDate(c.getTime(),"hh:mm:ss aa"));
-            holder.chatSingleConvImage.setVisibility(View.INVISIBLE);
-        }
-        else
-        {
-            holder.chatSingleText.setVisibility(View.INVISIBLE);
-            holder.chatSingleConvImage.setVisibility(View.VISIBLE);
-
-            Picasso.with(holder.chatSingleConvImage.getContext()).load(c.getMessage())
-                    .placeholder(R.drawable.man).into(holder.chatSingleConvImage);
-
-        }
 
 
+        if(message_type.equals("text")) {
+            holder.messageImage.setVisibility(View.INVISIBLE);
+            holder.messageText.setText(c.getMessage());
+            holder.chatSingleTime.setText(getDate(c.getTime(),"MMM dd, yyyy E hh:mm aa"));
+            holder.messageText.setVisibility(View.VISIBLE);
+        } else {
 
-        if(from_user.equals(currentUserID))
-        {
-            holder.chatSingleText.setBackgroundColor(Color.WHITE);
-            holder.chatSingleText.setTextColor(Color.BLACK);
-            holder.chatSingleImage.setVisibility(View.INVISIBLE);
-        }
-        else
-        {
-            holder.chatSingleText.setBackgroundResource(R.drawable.chat_text_background);
-            holder.chatSingleText.setTextColor(Color.WHITE);
+            holder.messageText.setVisibility(View.INVISIBLE);
+            holder.messageImage.setVisibility(View.VISIBLE);
+            Picasso.with(holder.profileImage.getContext()).load(c.getMessage())
+                    .placeholder(R.drawable.man).into(holder.messageImage);
+            holder.chatSingleTime.setText(getDate(c.getTime(),"MMM dd, yyyy E hh:mm aa"));
 
         }
 
@@ -136,23 +104,22 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
     @Override
     public int getItemCount() {
-        return mChatList.size();
+        return mMessageList.size();
     }
 
     public class ChatViewHolder extends RecyclerView.ViewHolder
     {
-        public TextView chatSingleText;
-        public TextView chatSingleTime;
-        public CircleImageView chatSingleImage;
-        public ImageView chatSingleConvImage;
+        public TextView messageText,chatSingleTime;
+        public CircleImageView profileImage;
+        public ImageView messageImage;
 
-        public ChatViewHolder(View itemView) {
-            super(itemView);
-            chatSingleText = itemView.findViewById(R.id.chatSingleText);
-            chatSingleTime = itemView.findViewById(R.id.chatSingleTime);
-            chatSingleImage = itemView.findViewById(R.id.chatSingleImage);
-            chatSingleConvImage = itemView.findViewById(R.id.chatSingleConvImage);
+        public ChatViewHolder(View view) {
+            super(view);
 
+            messageText = view.findViewById(R.id.chatSingleText);
+            profileImage = view.findViewById(R.id.chatSingleImage);
+            messageImage = view.findViewById(R.id.chatSingleConvImage);
+            chatSingleTime = view.findViewById(R.id.chatSingleTime);
 
         }
     }

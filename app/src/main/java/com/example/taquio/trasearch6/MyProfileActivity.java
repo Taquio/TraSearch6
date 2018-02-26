@@ -3,19 +3,11 @@ package com.example.taquio.trasearch6;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.Models.User;
@@ -23,10 +15,11 @@ import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
 import com.example.taquio.trasearch6.Utils.ViewPostFragment;
 import com.example.taquio.trasearch6.Utils.ViewProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
-import java.util.ArrayList;
-
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -41,14 +34,19 @@ public class MyProfileActivity extends AppCompatActivity implements
     private static final String TAG = "ProfileActivity";
     private Context mContext = MyProfileActivity.this;
     private ProgressBar mProgressbar;
-    private ImageView profilePhoto;
+    private CircleImageView profilePhoto;
+    private FirebaseDatabase mfirebaseDatabase;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
         init();
+        profilePhoto = findViewById(R.id.myProfile_image);
+
+
     }
     @Override
     public void onGridImageSelected(Photo photo, int activityNumber) {
@@ -90,16 +88,14 @@ public class MyProfileActivity extends AppCompatActivity implements
             if(intent.hasExtra(getString(R.string.intent_user))){
                 User user = intent.getParcelableExtra(getString(R.string.intent_user));
                 Log.d(TAG, "init: THIS IS A TEST FOR " +intent.getParcelableExtra(getString(R.string.intent_user)) );
-                /* IF DI EQUAL SA USER NGA GA GAMIT ANG ID
-                    IT MEANS LAIN NGA USERS VIEW ANG E INFLATE
-                    PARA SA VIEW PROFILE
-                */
+
                 if(!user.getUserID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
                     Log.d(TAG, "init: inflating view profile");
                     ViewProfileFragment fragment = new ViewProfileFragment();
                     Bundle args = new Bundle();
                     args.putParcelable(getString(R.string.intent_user),
                             intent.getParcelableExtra(getString(R.string.intent_user)));
+
                     fragment.setArguments(args);
 
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -138,6 +134,31 @@ public class MyProfileActivity extends AppCompatActivity implements
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mfirebaseDatabase = FirebaseDatabase.getInstance();
+//        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+        mDatabase = mfirebaseDatabase.getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue("online");
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mDatabase = mfirebaseDatabase.getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue(ServerValue.TIMESTAMP);
+        }
     }
 
 }

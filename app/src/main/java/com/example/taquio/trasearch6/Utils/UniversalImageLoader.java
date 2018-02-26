@@ -20,7 +20,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 
 /**
- * Created by User on 6/4/2017.
+ * Created by Edward 2018.
  */
 
 public class UniversalImageLoader {
@@ -30,25 +30,6 @@ public class UniversalImageLoader {
 
     public UniversalImageLoader(Context context) {
         mContext = context;
-    }
-
-    public ImageLoaderConfiguration getConfig(){
-        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(defaultImage)
-                .showImageForEmptyUri(defaultImage)
-                .showImageOnFail(defaultImage)
-                .considerExifParams(true)
-                .cacheOnDisk(true).cacheInMemory(true)
-                .cacheOnDisk(true).resetViewBeforeLoading(true)
-                .imageScaleType(ImageScaleType.EXACTLY)
-                .displayer(new FadeInBitmapDisplayer(300)).build();
-
-        ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(mContext)
-                .defaultDisplayImageOptions(defaultOptions)
-                .memoryCache(new WeakMemoryCache())
-                .diskCacheSize(100 * 1024 * 1024).build();
-
-        return configuration;
     }
 
     /**
@@ -92,5 +73,24 @@ public class UniversalImageLoader {
                     }
                 }
         });
+    }
+
+    public ImageLoaderConfiguration getConfig(){
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.man)
+                .showImageForEmptyUri(R.drawable.man)
+                .showImageOnFail(R.drawable.man)
+                .considerExifParams(true)
+                .cacheOnDisk(true).cacheInMemory(true)
+                .cacheOnDisk(true).resetViewBeforeLoading(true)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .displayer(new FadeInBitmapDisplayer(300)).build();
+
+        ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(mContext)
+                .defaultDisplayImageOptions(defaultOptions)
+                .memoryCache(new WeakMemoryCache())
+                .diskCacheSize(100 * 1024 * 1024).build();
+
+        return configuration;
     }
 }

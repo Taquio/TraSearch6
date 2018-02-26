@@ -1,5 +1,6 @@
 package com.example.taquio.trasearch6.Utils;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.taquio.trasearch6.EditProfileActivity;
+import com.example.taquio.trasearch6.MessageActivity;
 import com.example.taquio.trasearch6.Models.Comment;
 import com.example.taquio.trasearch6.Models.Like;
 import com.example.taquio.trasearch6.Models.Photo;
@@ -37,7 +38,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,35 +50,26 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
- * Created by User on 6/29/2017.
+ * Created by Edward 2018.
  */
 
 public class ViewProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
-
-
-    /* GA HIMO UG INTERFACE INSIDE SA FRAGMENT PARA IG
-        PARA MA GAMIT SA GRID IMAGE CLICK PERO ANG
-        PAG INFLATE SA LAYOUT ADTO SA PROFILE ACTIVITY USING
-        THE PARAMETERS SUPPLIED  ARI NGA GE CALL
-    */
-    public interface OnGridImageSelectedListener{
-        void onGridImageSelected(Photo photo, int activityNumber);
-    }
-    OnGridImageSelectedListener mOnGridImageSelectedListener;
-
     private static final int ACTIVITY_NUM = 4;
     private static final int NUM_GRID_COLUMNS = 3;
-
+    OnGridImageSelectedListener mOnGridImageSelectedListener;
+    TextView name,email,phoneNo;
+    CircleImageView image;
+    ProgressDialog mProgressDialog;
+    Button vProfile_sendFriequest_btn,declineRequest;
+    FirebaseUser mCurrent_user;
+    Integer mfriend_status;
     //firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
-
-
-
     //widgets
     private TextView mName, mEmail, mPhoneNumber;
     private ProgressBar mProgressBar;
@@ -86,28 +80,41 @@ public class ViewProfileFragment extends Fragment {
     private Context mContext;
     private TextView editProfile;
     private Button message;
-
-
     //vars
     private User mUser;
     private int mFollowersCount = 0;
     private int mFollowingCount = 0;
     private int mPostsCount = 0;
-
+    private DatabaseReference mUsersDatabase
+            ,mFriendRequestDatabase
+            ,mFriendDatabase
+            ,mNotificatioonDatabase
+            ,mRootRef;
+    private String user_id;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_viewprofile, container, false);
+        final View view = inflater.inflate(R.layout.fragment_viewprofile, container, false);
 
+
+        mfriend_status = 0;
+        mProgressDialog = new ProgressDialog(view.getContext());
+        mProgressDialog.setTitle("Loading");
+        mProgressDialog.setMessage("Please wait while we load User Data");
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
+        
         mName = view.findViewById(R.id.viewedName);
         mEmail = view.findViewById(R.id.viewedEmail);
         mPhoneNumber = view.findViewById(R.id.viewedNumber);
         mProfilePhoto = view.findViewById(R.id.viewedProfile);
         message = view.findViewById(R.id.btnMessage);
+        vProfile_sendFriequest_btn = view.findViewById(R.id.vProfile_sendFriequest_btn);
+        declineRequest = view.findViewById(R.id.declineRequest);
 
-        gridView = (GridView) view.findViewById(R.id.gridView);
-        bottomNavigationView = (BottomNavigationViewEx) view.findViewById(R.id.bottomNavViewBar);
+        gridView = view.findViewById(R.id.gridView);
+        bottomNavigationView = view.findViewById(R.id.bottomNavViewBar);
 
         mContext = getActivity();
         Log.d(TAG, "onCreateView: stared.");
@@ -121,9 +128,271 @@ public class ViewProfileFragment extends Fragment {
             Toast.makeText(mContext, "something went wrong", Toast.LENGTH_SHORT).show();
             getActivity().getSupportFragmentManager().popBackStack();
         }
-
         setupBottomNavigationView();
         setupFirebaseAuth();
+        mUsersDatabase= FirebaseDatabase.getInstance().getReference().child("Users").child(mUser.getUserID());
+        mFriendRequestDatabase = FirebaseDatabase.getInstance().getReference().child("friend_request");
+        mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
+        mCurrent_user = FirebaseAuth.getInstance().getCurrentUser();
+        mNotificatioonDatabase = FirebaseDatabase.getInstance().getReference().child("Notifications");
+        mRootRef = FirebaseDatabase.getInstance().getReference();
+
+
+
+        mUsersDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange: Check Database");
+                mFriendRequestDatabase
+                        .child(mCurrent_user.getUid())
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                if(dataSnapshot.hasChild(user_id))
+                                {
+                                    Log.d(TAG, "onDataChange: user found in FriendRequest Database");
+                                    String req_type = dataSnapshot.
+                                            child(user_id)
+                                            .child("request_type")
+                                            .getValue()
+                                            .toString();
+
+                                    if(req_type.equals("received"))
+                                    {
+                                        Log.d(TAG, "onDataChange: Request type: Received");
+                                        mfriend_status = 2;
+                                        vProfile_sendFriequest_btn.setText("Accept Friend Request");
+                                        declineRequest.setVisibility(View.VISIBLE);
+                                        declineRequest.setEnabled(true);
+                                    }
+                                    else if(req_type.equals("sent"))
+                                    {
+                                        Log.d(TAG, "onDataChange: Request type: Sent");
+                                        mfriend_status = 1;
+                                        vProfile_sendFriequest_btn.setText("Cancel Friend Request");
+                                        declineRequest.setVisibility(View.INVISIBLE);
+                                        declineRequest.setEnabled(false);
+                                    }
+                                    mProgressDialog.dismiss();
+
+                                }else{
+                                    mFriendDatabase.child(mCurrent_user.getUid())
+                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    if(dataSnapshot.hasChild(user_id))
+                                                    {
+                                                        vProfile_sendFriequest_btn.setEnabled(true);
+                                                        mfriend_status = 3;
+                                                        vProfile_sendFriequest_btn.setText("Unfriend this Person");
+                                                        declineRequest.setVisibility(View.INVISIBLE);
+                                                        declineRequest.setEnabled(false);
+                                                    }
+                                                    mProgressDialog.dismiss();
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+                                                    mProgressDialog.dismiss();
+
+                                                }
+                                            });
+                                }
+                                mProgressDialog.dismiss();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        vProfile_sendFriequest_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                vProfile_sendFriequest_btn.setEnabled(false);
+                //mFriend_status cheat codes:
+                // 0 = not friends
+                // 1 = req send
+                // 2 = req recv
+                // 3 = friends
+
+                if(mfriend_status == 0)
+                {
+                    DatabaseReference newNotificationref = mRootRef.child("Notifications").child(user_id).push();
+                    String newNotificationID = newNotificationref.getKey();
+
+                    Map notificationData = new HashMap();
+                    notificationData.put("from", mCurrent_user.getUid());
+                    notificationData.put("type","request");
+
+                    Map requestMap = new HashMap();
+                    requestMap.put("friend_request/"+mCurrent_user.getUid()+"/"+user_id+"/request_type","sent");
+                    requestMap.put("friend_request/"+user_id+"/"+mCurrent_user.getUid()+"/request_type","received");
+                    requestMap.put("Notifications/"+user_id+"/"+newNotificationID,notificationData);
+
+                    mRootRef.updateChildren(requestMap, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            if(databaseError!=null)
+                            {
+                                String error = databaseError.getMessage();
+                                Toast.makeText(view.getContext()
+                                        ,error
+                                        ,Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+
+                            vProfile_sendFriequest_btn.setEnabled(true);
+                            mfriend_status = 1;
+                            vProfile_sendFriequest_btn.setText("Cancel Friend Request");
+                        }
+                    });
+                }
+                else if (mfriend_status==1)
+                {
+                    Log.d(TAG, "onClick: Cancel friend request Started");
+                    Map cancelReqMap = new HashMap();
+
+                    cancelReqMap.put("friend_request/"+mCurrent_user.getUid()+"/"+user_id,null);
+                    cancelReqMap.put("friend_request/"+user_id+"/"+mCurrent_user.getUid(),null);
+
+                    mRootRef.updateChildren(cancelReqMap, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            if(databaseError==null)
+                            {
+                                vProfile_sendFriequest_btn.setText("Send Friend Request");
+                                vProfile_sendFriequest_btn.setEnabled(true);
+                                declineRequest.setVisibility(View.INVISIBLE);
+                                declineRequest.setEnabled(false);
+                                mfriend_status = 0;
+                            }
+                            else
+                            {
+                                String error = databaseError.getMessage();
+                                Toast.makeText(view.getContext()
+                                        ,error
+                                        ,Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                        }
+                    });
+
+
+                }
+                else if(mfriend_status==2)
+                {
+                    final String current_date = DateFormat.getDateInstance().format(new Date());
+
+                    Map friendMap = new HashMap();
+
+                    friendMap.put("Friends/"+mCurrent_user.getUid()+"/"+user_id+"/date",current_date);
+                    friendMap.put("Friends/"+user_id+"/"+mCurrent_user.getUid()+"/date",current_date);
+
+                    friendMap.put("friend_request/"+mCurrent_user.getUid()+"/"+user_id,null);
+                    friendMap.put("friend_request/"+user_id+"/"+mCurrent_user.getUid(),null);
+
+                    mRootRef.updateChildren(friendMap, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            if(databaseError==null)
+                            {
+                                vProfile_sendFriequest_btn.setEnabled(true);
+                                mfriend_status = 3;
+                                vProfile_sendFriequest_btn.setText("Unfriend this Person");
+
+                                declineRequest.setVisibility(View.INVISIBLE);
+                                declineRequest.setEnabled(false);
+                            }
+                            else
+                            {
+                                String error = databaseError.getMessage();
+                                Toast.makeText(view.getContext()
+                                        ,error
+                                        ,Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                        }
+                    });
+                }
+                else if(mfriend_status==3)
+                {
+                    Map unfriendMap = new HashMap();
+
+                    unfriendMap.put("Friends/"+mCurrent_user.getUid()+"/"+user_id,null);
+                    unfriendMap.put("Friends/"+user_id+"/"+mCurrent_user.getUid(),null);
+
+                    mRootRef.updateChildren(unfriendMap, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            if(databaseError==null)
+                            {
+                                vProfile_sendFriequest_btn.setEnabled(true);
+                                mfriend_status = 0;
+                                vProfile_sendFriequest_btn.setText("Send Friend Request");
+
+                                declineRequest.setVisibility(View.INVISIBLE);
+                                declineRequest.setEnabled(false);
+                            }
+                            else
+                            {
+                                String error = databaseError.getMessage();
+                                Toast.makeText(view.getContext()
+                                        ,error
+                                        ,Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        declineRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: Decline Friend Request Clicked");
+
+                Map declineMap = new HashMap();
+
+                declineMap.put("friend_request/"+mCurrent_user.getUid()+user_id,null);
+                declineMap.put("friend_request/"+user_id+mCurrent_user.getUid(),null);
+
+                mRootRef.updateChildren(declineMap, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        if(databaseError==null)
+                        {
+                            vProfile_sendFriequest_btn.setText("Send Friend Request");
+                            declineRequest.setVisibility(View.INVISIBLE);
+                            declineRequest.setEnabled(false);
+                            mfriend_status = 0;
+                        }
+                        else
+                        {
+                            String error = databaseError.getMessage();
+                            Toast.makeText(view.getContext()
+                                    ,error
+                                    ,Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
+                });
+
+            }
+        });
+
 
 //        isFollowing();
 //        getFollowingCount();
@@ -181,6 +450,7 @@ public class ViewProfileFragment extends Fragment {
 
         return view;
     }
+
     private User getUserFromBundle(){
         Log.d(TAG, "getUserFromBundle: arguments: " + getArguments());
 
@@ -191,12 +461,13 @@ public class ViewProfileFragment extends Fragment {
             return null;
         }
     }
+
     private void init(){
 
         //set the profile widgets
         DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference();
         Query query1 = reference1.child("Users")
-                .orderByKey().equalTo(mUser.getUserID());
+                .orderByChild("userID").equalTo(mUser.getUserID());
         query1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -205,6 +476,7 @@ public class ViewProfileFragment extends Fragment {
 
                     UserSettings settings = new UserSettings();
                     settings.setUser(mUser);
+                    user_id = settings.getUser().getUserID();
                     setProfileWidgets(settings);
                 }
             }
@@ -233,10 +505,8 @@ public class ViewProfileFragment extends Fragment {
                 ArrayList<Photo> photos = new ArrayList<Photo>();
                 for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
 
+                    Log.d(TAG, "onDataChange: CHECKING >>>" + singleSnapshot.getValue().toString());
                     Photo photo = new Photo();
-                    /*GE CONVERT TO HASHMAP ANG DATASNAPSHOTS.
-                    NGA GIKAN SA DATABASE NGA DATA. THEN GIBUTANG ANG VALUE
-                    SA PHOTO NGA OBJECT TO SET */
                     Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
                     photo.setCaption(objectMap.get(getString(R.string.field_caption)).toString());
@@ -279,121 +549,6 @@ public class ViewProfileFragment extends Fragment {
         });
     }
 
-//    private void isFollowing(){
-//        Log.d(TAG, "isFollowing: checking if following this users.");
-//        setUnfollowing();
-//
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-//        Query query = reference.child(getString(R.string.dbname_following))
-//                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-//                .orderByChild("userID").equalTo(mUser.getUserID());
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-//                    Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue());
-//
-//                    setFollowing();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
-
-//    private void getFollowersCount(){
-//        mFollowersCount = 0;
-//
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-//        Query query = reference.child(getString(R.string.dbname_followers))
-//                .child(mUser.getUserID());
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-//                    Log.d(TAG, "onDataChange: found follower:" + singleSnapshot.getValue());
-//                    mFollowersCount++;
-//                }
-//                mFollowers.setText(String.valueOf(mFollowersCount));
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
-//
-//    private void getFollowingCount(){
-//        mFollowingCount = 0;
-//
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-//        Query query = reference.child(getString(R.string.dbname_following))
-//                .child(mUser.getUserID());
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-//                    Log.d(TAG, "onDataChange: found following user:" + singleSnapshot.getValue());
-//                    mFollowingCount++;
-//                }
-//                mFollowing.setText(String.valueOf(mFollowingCount));
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
-
-//    private void getPostsCount(){
-//        mPostsCount = 0;
-//
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-//        Query query = reference.child(getString(R.string.dbname_user_photos))
-//                .child(mUser.getUserID());
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-//                    Log.d(TAG, "onDataChange: found post:" + singleSnapshot.getValue());
-//                    mPostsCount++;
-//                }
-//                mPosts.setText(String.valueOf(mPostsCount));
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
-
-//    private void setFollowing(){
-//        Log.d(TAG, "setFollowing: updating UI for following this user");
-//        mFollow.setVisibility(View.GONE);
-//        mUnfollow.setVisibility(View.VISIBLE);
-//        editProfile.setVisibility(View.GONE);
-//    }
-//
-//    private void setUnfollowing(){
-//        Log.d(TAG, "setFollowing: updating UI for unfollowing this user");
-//        mFollow.setVisibility(View.VISIBLE);
-//        mUnfollow.setVisibility(View.GONE);
-//        editProfile.setVisibility(View.GONE);
-//    }
-//
-//    private void setCurrentUsersProfile(){
-//        Log.d(TAG, "setFollowing: updating UI for showing this user their own profile");
-//        mFollow.setVisibility(View.GONE);
-//        mUnfollow.setVisibility(View.GONE);
-//        editProfile.setVisibility(View.VISIBLE);
-//    }
-
     private void setupImageGrid(final ArrayList<Photo> photos){
         //setup our image grid
         int gridWidth = getResources().getDisplayMetrics().widthPixels;
@@ -417,7 +572,6 @@ public class ViewProfileFragment extends Fragment {
     }
 
 
-
     @Override
     public void onAttach(Context context) {
         try{
@@ -428,7 +582,6 @@ public class ViewProfileFragment extends Fragment {
         super.onAttach(context);
     }
 
-
     private void setProfileWidgets(UserSettings userSettings){
         //Log.d(TAG, "setProfileWidgets: setting widgets with data retrieving from firebase database: " + userSettings.toString());
         //Log.d(TAG, "setProfileWidgets: setting widgets with data retrieving from firebase database: " + userSettings.getSettings().getUsername());
@@ -436,14 +589,24 @@ public class ViewProfileFragment extends Fragment {
 
         //User user = userSettings.getUser();
         User user = userSettings.getUser();
-
+        user_id = user.getUserID();
         UniversalImageLoader.setImage(user.getImage(), mProfilePhoto, null, "");
 
+        final String nuser = user.getUserID();
+        final String name = user.getUserName();
         mName.setText(user.getUserName());
         mEmail.setText(user.getEmail());
         mPhoneNumber.setText(user.getPhoneNumber());
 
-
+            message.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(mContext, MessageActivity.class);
+                    i.putExtra("user_id",nuser );
+                    i.putExtra("user_name", name);
+                    mContext.startActivity(i);
+                }
+            });
 //        mBackArrow.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -454,7 +617,6 @@ public class ViewProfileFragment extends Fragment {
 //        });
 
     }
-
 
         /**
      * BottomNavigationView setup
@@ -467,10 +629,6 @@ public class ViewProfileFragment extends Fragment {
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
-
-      /*
-    ------------------------------------ Firebase ---------------------------------------------
-     */
 
     /**
      * Setup the firebase auth object
@@ -501,6 +659,9 @@ public class ViewProfileFragment extends Fragment {
 
     }
 
+      /*
+    ------------------------------------ Firebase ---------------------------------------------
+     */
 
     @Override
     public void onStart() {
@@ -514,5 +675,14 @@ public class ViewProfileFragment extends Fragment {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    /* GA HIMO UG INTERFACE INSIDE SA FRAGMENT PARA IG
+        PARA MA GAMIT SA GRID IMAGE CLICK PERO ANG
+        PAG INFLATE SA LAYOUT ADTO SA PROFILE ACTIVITY USING
+        THE PARAMETERS SUPPLIED  ARI NGA GE CALL
+    */
+    public interface OnGridImageSelectedListener{
+        void onGridImageSelected(Photo photo, int activityNumber);
     }
 }

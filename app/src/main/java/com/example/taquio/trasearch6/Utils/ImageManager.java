@@ -11,13 +11,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * Created by User on 7/29/2017.
+ * Created by Edward 2018.
  */
 
 public class ImageManager {
 
-    private static final String TAG = "ImageManager";
     public static final int IMAGE_SAVE_QUALITY = 90;
+    private static final String TAG = "ImageManager";
 
     public static Bitmap getBitmap(String imgUrl){
         File imageFile = new File(imgUrl);

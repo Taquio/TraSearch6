@@ -1,7 +1,7 @@
 package com.example.taquio.trasearch6.Models;
 
 /**
- * Created by User on 8/21/2017.
+ * Created by Edward on 2018.
  */
 
 public class Like {
