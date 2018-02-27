@@ -71,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                 regProgress.setTitle("Registering");
                 regProgress.setMessage("Please wait while we verify your data");
                 regProgress.show();
-                
+
                 final String pass = field_password.getText().toString(),
                         cPass = field_cPassword.getText().toString();
 
@@ -81,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this,"Please check your Registration Details",Toast.LENGTH_SHORT).show();
                     regProgress.dismiss();
                 }
-                
+
                 else if (!(pass.equals(cPass)))
                 {
                     field_password.setError("Password didn't match");
@@ -121,7 +121,9 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
                 }
-            }
+//                startActivity(new Intent(RegisterActivity.this,ForVerification.class));
+//                finish();
+           }
         });
     }
 
@@ -231,7 +233,7 @@ public class RegisterActivity extends AppCompatActivity {
                     {
                         regProgress.dismiss();
                         Toast.makeText(RegisterActivity.this,"Welcome",Toast.LENGTH_SHORT).show();
-                        Intent startActivityIntent = new Intent(RegisterActivity.this, HomeActivity2.class);
+                        Intent startActivityIntent = new Intent(RegisterActivity.this, ForVerification.class);
                         startActivity(startActivityIntent);
                         finish();
                     }

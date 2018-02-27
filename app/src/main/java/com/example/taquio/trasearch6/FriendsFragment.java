@@ -152,8 +152,6 @@ public class FriendsFragment extends Fragment {
                                 builder.show();
                             }
                         });
-
-
                     }
 
                     @Override

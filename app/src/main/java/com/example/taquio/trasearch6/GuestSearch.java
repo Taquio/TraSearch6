@@ -123,15 +123,8 @@ public class GuestSearch extends AppCompatActivity {
 
                     }
                 });
-
-
-
-
-
             }
         });
-
-
     }
 
     @Override
@@ -145,10 +138,40 @@ public class GuestSearch extends AppCompatActivity {
     private void updateUI(FirebaseUser user){
         if(user !=null)
         {
-            Toast.makeText(GuestSearch.this,"Welcome",Toast.LENGTH_SHORT).show();
-            Intent startActivityIntent = new Intent(GuestSearch.this, HomeActivity2.class);
-            startActivity(startActivityIntent);
-            GuestSearch.this.finish();
+            DatabaseReference userType = FirebaseDatabase.getInstance().getReference().child("Users")
+                    .child(mAuth.getCurrentUser().getUid());
+
+            userType.child("userType").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    if (dataSnapshot.hasChild("userType"))
+//                    {
+                        String userType = dataSnapshot.getValue().toString();
+                        if(userType.equals("free"))
+                        {
+                            startActivity(new Intent(GuestSearch.this,HomeActivity2.class));
+                            finish();
+                        }
+                        else if(userType.equals("admin"))
+                        {
+                            startActivity(new Intent(GuestSearch.this,AdminActivity.class));
+                            finish();
+                        }
+                        else if(userType.equals("business"))
+                        {
+                            startActivity(new Intent(GuestSearch.this,BusinessProfileActivity.class));
+                            finish();
+                        }else{
+                            Toast.makeText(GuestSearch.this,"UserType is null",Toast.LENGTH_LONG).show();
+                        }
+//                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 

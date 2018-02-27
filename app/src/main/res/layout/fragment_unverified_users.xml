@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.taquio.trasearch6.AllUsersFragment">
+    tools:context="com.example.taquio.trasearch6.UnverifiedUsers">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/userList"
+        android:id="@+id/unverifiedList"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
