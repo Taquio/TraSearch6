@@ -1,16 +1,8 @@
-package com.example.taquio.trasearch6.Utils;
+package com.example.taquio.trasearch6;
 
-import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.GridView;
 
 import com.eschao.android.widget.elasticlistview.ElasticListView;
 import com.eschao.android.widget.elasticlistview.LoadFooter;
@@ -18,8 +10,7 @@ import com.eschao.android.widget.elasticlistview.OnLoadListener;
 import com.eschao.android.widget.elasticlistview.OnUpdateListener;
 import com.example.taquio.trasearch6.Models.Comment;
 import com.example.taquio.trasearch6.Models.Photo;
-import com.example.taquio.trasearch6.Models.User;
-import com.example.taquio.trasearch6.R;
+import com.example.taquio.trasearch6.Utils.MainFeedListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,36 +24,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+public class SaveItemActivity extends AppCompatActivity implements OnUpdateListener, OnLoadListener {
+    private static final String TAG = "SaveItemActivity";
 
-/**
- * Created by Edward on 2/7/2018.
- */
-
-public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoadListener {
-
-    private static final String TAG = "HomeFragment";
-    //vars
+    private ElasticListView mListView;
+    private SaveListAdapter adapter;
+    private ArrayList<String> msaveUserId;
     private ArrayList<Photo> mPhotos;
     private ArrayList<Photo> mPaginatedPhotos;
-    private ArrayList<String> mFollowing;
-    private ArrayList<String> mAllUsers;
-    private ArrayList<User> mUserAccountSettings;
-    private ElasticListView mListView;
     private int resultsCount = 0;
-    private MainFeedListAdapter adapter;
-    private int ACTIVITY_NUM = 0;
-    private EditText openSearch;
-    private Context mContext = getActivity();
-    private Toolbar toolbar;
-    private GridView mgridView;
 
     @Override
     public void onUpdate() {
-        Log.d(TAG, "ElasticListView: updating list view...");
-
-        getKeys();
+        getSaveItems();
     }
-
     @Override
     public void onLoad() {
         Log.d(TAG, "ElasticListView: loading...");
@@ -71,19 +46,17 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
         mListView.notifyLoaded();
     }
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_items, container, false);
-        mListView = view.findViewById(R.id.listView);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_save_item);
 
-        toolbar = view.findViewById(R.id.profileToolBar);
+        mListView = findViewById(R.id.listView);
+
         initListViewRefresh();
-        getKeys();
-
-        return view;
+        getSaveItems();
     }
-
     private void initListViewRefresh(){
         mListView.setHorizontalFadingEdgeEnabled(true);
         mListView.setAdapter(adapter);
@@ -93,13 +66,13 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
                 .setOnLoadListener(this);
 //        mListView.requestUpdate();
     }
-    private void getKeys() {
+    private void getSaveItems() {
         Log.d(TAG, "getKeys: searching for following");
 
         clearAll();
 
         Query query = FirebaseDatabase.getInstance().getReference()
-                .child("Users_Photos")
+                .child("Bookmarks")
                 .orderByKey();
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -108,9 +81,7 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
                     Log.d(TAG, "getKeys: found user: " + singleSnapshot
                             .getChildren());
 
-//                    mFollowing.add(singleSnapshot
-//                            .child(getString(R.string.field_user_id)).getValue().toString());
-                    mAllUsers.add(singleSnapshot.getKey());
+                    msaveUserId.add(singleSnapshot.getKey());
                 }
 
                 getPhotos();
@@ -124,16 +95,21 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
         });
 
     }
+    private void clearAll(){
+        mPhotos = new ArrayList<>();
+        mPaginatedPhotos = new ArrayList<>();
+        msaveUserId = new ArrayList<>();
+    }
     private void getPhotos(){
         Log.d(TAG, "getPhotos: getting list of photos");
 
-        for(int i = 0; i < mAllUsers.size(); i++){
+        for(int i = 0; i < msaveUserId.size(); i++){
             final int count = i;
             Query query = FirebaseDatabase.getInstance().getReference()
                     .child("Users_Photos")
-                    .child(mAllUsers.get(i))
+                    .child(msaveUserId.get(i))
                     .orderByChild("user_id")
-                    .equalTo(mAllUsers.get(i));
+                    .equalTo(msaveUserId.get(i));
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -149,21 +125,10 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
                         newPhoto.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
                         newPhoto.setImage_path(objectMap.get(getString(R.string.field_image_path)).toString());
 
-                        Log.d(TAG, "getPhotos: photo: " + newPhoto.getPhoto_id());
-                        List<Comment> commentsList = new ArrayList<Comment>();
-                        for (DataSnapshot dSnapshot : singleSnapshot
-                                .child(getString(R.string.field_comments)).getChildren()){
-                            Map<String, Object> object_map = (HashMap<String, Object>) dSnapshot.getValue();
-                            Comment comment = new Comment();
-                            comment.setUser_id(object_map.get(getString(R.string.field_user_id)).toString());
-                            comment.setComment(object_map.get(getString(R.string.field_comment)).toString());
-                            comment.setDate_created(object_map.get(getString(R.string.field_date_created)).toString());
-                            commentsList.add(comment);
-                        }
-                        newPhoto.setComments(commentsList);
+
                         mPhotos.add(newPhoto);
                     }
-                    if(count >= mAllUsers.size() - 1){
+                    if(count >= msaveUserId.size() - 1){
                         //display the photos
                         displayPhotos();
                     }
@@ -178,32 +143,6 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
 
         }
     }
-
-    private void clearAll(){
-        if(mFollowing != null){
-            mFollowing.clear();
-        }
-        if(mPhotos != null){
-            mPhotos.clear();
-            if(adapter != null){
-                adapter.clear();
-                adapter.notifyDataSetChanged();
-            }
-        }
-        if(mUserAccountSettings != null){
-            mUserAccountSettings.clear();
-        }
-        if(mPaginatedPhotos != null){
-            mPaginatedPhotos.clear();
-        }
-        mFollowing = new ArrayList<>();
-        mPhotos = new ArrayList<>();
-        mPaginatedPhotos = new ArrayList<>();
-        mUserAccountSettings = new ArrayList<>();
-        mAllUsers = new ArrayList<>();
-    }
-
-
     private void displayPhotos(){
         if(mPhotos != null){
 
@@ -228,7 +167,7 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
                     resultsCount++;
                     Log.d(TAG, "displayPhotos: adding a photo to paginated list: " + mPhotos.get(i).getPhoto_id());
                 }
-                adapter = new MainFeedListAdapter(getActivity(), R.layout.layout_mainfeed_listitem, mPaginatedPhotos);
+                adapter = new SaveListAdapter(this, R.layout.layout_save_items, mPaginatedPhotos);
                 mListView.setAdapter(adapter);
 
                 // Notify update is done

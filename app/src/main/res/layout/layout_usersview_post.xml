@@ -140,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/image_likes"
                     android:layout_marginTop="15dp"
-                    android:text="mitch.tabian moutains #earthporn #mountains"
+                    android:text="a sample description..."
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
 

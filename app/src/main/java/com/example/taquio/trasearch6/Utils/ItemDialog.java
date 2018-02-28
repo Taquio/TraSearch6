@@ -42,32 +42,32 @@ public class ItemDialog extends DialogFragment {
 
         Log.d(TAG, "onCreateView: started.");
 
-
-        TextView confirmMark = view.findViewById(R.id.dialogMark);
-        confirmMark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checker = true;
-                mOnDelete.onConfirmDelete(true);
-            }
-        });
-        TextView confirmDelete = (TextView) view.findViewById(R.id.dialogDelete);
-        confirmDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checker = true;
-                mOnMark.onConfirmMark(true);
-            }
-        });
-
-        TextView cancelDialog = (TextView) view.findViewById(R.id.dialogCancel);
-        cancelDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: closing the dialog");
-                getDialog().dismiss();
-            }
-        });
+//
+//        TextView confirmMark = view.findViewById(R.id.dialogMark);
+//        confirmMark.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                checker = true;
+//                mOnDelete.onConfirmDelete(true);
+//            }
+//        });
+//        TextView confirmDelete = (TextView) view.findViewById(R.id.dialogDelete);
+//        confirmDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                checker = true;
+//                mOnMark.onConfirmMark(true);
+//            }
+//        });
+//
+//        TextView cancelDialog = (TextView) view.findViewById(R.id.dialogCancel);
+//        cancelDialog.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: closing the dialog");
+//                getDialog().dismiss();
+//            }
+//        });
 
 
         return view;

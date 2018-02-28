@@ -509,8 +509,8 @@ public class ViewProfileFragment extends Fragment {
                     Photo photo = new Photo();
                     Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
-                    photo.setCaption(objectMap.get(getString(R.string.field_caption)).toString());
-                    photo.setTags(objectMap.get(getString(R.string.field_tags)).toString());
+                    photo.setPhoto_description(objectMap.get(getString(R.string.field_caption)).toString());
+                    photo.setQuantity(objectMap.get(getString(R.string.field_tags)).toString());
                     photo.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
                     photo.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
                     photo.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
@@ -590,8 +590,12 @@ public class ViewProfileFragment extends Fragment {
         //User user = userSettings.getUser();
         User user = userSettings.getUser();
         user_id = user.getUserID();
-        UniversalImageLoader.setImage(user.getImage(), mProfilePhoto, null, "");
-
+        if(user.getImage().equals("default"))
+        {
+            UniversalImageLoader.setImage(user.getImage(), mProfilePhoto, null, "drawable://" );
+        }else {
+            UniversalImageLoader.setImage(user.getImage(), mProfilePhoto, null, "");
+        }
         final String nuser = user.getUserID();
         final String name = user.getUserName();
         mName.setText(user.getUserName());

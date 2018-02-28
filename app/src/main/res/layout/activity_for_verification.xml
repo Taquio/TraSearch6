@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="50dp"
+        android:paddingTop="0dp"
         android:weightSum="10">
         <Button
             android:id="@+id/ver_IDbtn"
@@ -60,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="50dp"
+        android:paddingTop="0dp"
         android:weightSum="10">
         <Button
             android:id="@+id/ver_UploadExec"

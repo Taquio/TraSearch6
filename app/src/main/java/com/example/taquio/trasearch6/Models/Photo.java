@@ -22,12 +22,12 @@ public class Photo implements Parcelable {
             return new Photo[size];
         }
     };
-    private String caption;
+    private String photo_description;
     private String date_created;
     private String image_path;
     private String photo_id;
     private String user_id;
-    private String tags;
+    private String quantity;
     private List<Like> likes;
     private List<Comment> comments;
 
@@ -35,25 +35,25 @@ public class Photo implements Parcelable {
 
     }
 
-    public Photo(String caption, String date_created, String image_path, String photo_id,
-                 String user_id, String tags, List<Like> likes, List<Comment> comments) {
-        this.caption = caption;
+    public Photo(String photo_description, String date_created, String image_path, String photo_id,
+                 String user_id, String quantity, List<Like> likes, List<Comment> comments) {
+        this.photo_description = photo_description;
         this.date_created = date_created;
         this.image_path = image_path;
         this.photo_id = photo_id;
         this.user_id = user_id;
-        this.tags = tags;
+        this.quantity = quantity;
         this.likes = likes;
         this.comments = comments;
     }
 
     protected Photo(Parcel in) {
-        caption = in.readString();
+        photo_description = in.readString();
         date_created = in.readString();
         image_path = in.readString();
         photo_id = in.readString();
         user_id = in.readString();
-        tags = in.readString();
+        quantity = in.readString();
     }
 
     public static Creator<Photo> getCREATOR() {
@@ -62,12 +62,12 @@ public class Photo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(caption);
+        dest.writeString(photo_description);
         dest.writeString(date_created);
         dest.writeString(image_path);
         dest.writeString(photo_id);
         dest.writeString(user_id);
-        dest.writeString(tags);
+        dest.writeString(quantity);
     }
 
     @Override
@@ -83,12 +83,12 @@ public class Photo implements Parcelable {
         this.comments = comments;
     }
 
-    public String getCaption() {
-        return caption;
+    public String getPhoto_description() {
+        return photo_description;
     }
 
-    public void setCaption(String caption) {
-        this.caption = caption;
+    public void setPhoto_description(String photo_description) {
+        this.photo_description = photo_description;
     }
 
     public String getDate_created() {
@@ -123,12 +123,12 @@ public class Photo implements Parcelable {
         this.user_id = user_id;
     }
 
-    public String getTags() {
-        return tags;
+    public String getQuantity() {
+        return quantity;
     }
 
-    public void setTags(String tags) {
-        this.tags = tags;
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
     public List<Like> getLikes() {
@@ -142,12 +142,12 @@ public class Photo implements Parcelable {
     @Override
     public String toString() {
         return "Photo{" +
-                "caption='" + caption + '\'' +
+                "photo_description='" + photo_description + '\'' +
                 ", date_created='" + date_created + '\'' +
                 ", image_path='" + image_path + '\'' +
                 ", photo_id='" + photo_id + '\'' +
                 ", user_id='" + user_id + '\'' +
-                ", tags='" + tags + '\'' +
+                ", quantity='" + quantity + '\'' +
                 ", likes=" + likes +
                 '}';
     }
