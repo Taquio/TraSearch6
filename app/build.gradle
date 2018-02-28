@@ -43,6 +43,8 @@ dependencies {
     //paypall
     compile 'com.paypal.sdk:paypal-android-sdk:2.16.0'
 
+    //addmob
+    compile 'com.google.android.gms:play-services-ads:11.8.0'
 
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.android.support:support-v4:27.0.2'

@@ -14,6 +14,7 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".Trasearch"
@@ -138,13 +139,16 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".HomeActivity2" />
         <activity android:name=".Utils.Donate" />
+        <activity android:name=".Utils.PaymentDetails"/>
         <activity
             android:name=".ViewProfile"
             android:parentActivityName=".Profile.ProfileActivity" />
         <activity
             android:name=".Messages.MessagesActivity"
             android:parentActivityName=".HomeActivity2" />
-        <activity android:name=".GuestSearch" />
+        <activity android:name=".GuestSearch">
+
+        </activity>
         <activity
             android:name=".ChooseLayout"
             android:parentActivityName=".GuestSearch" />
@@ -152,14 +156,15 @@
         <activity android:name=".EditProfileActivity"
             android:parentActivityName=".MyProfileActivity"/>
         <activity android:name=".BusinessHome.BusinessHome">
-
         </activity>
         <activity android:name=".BusinessMessages.BusinessMessages">
         </activity>
-        <activity android:name=".BusinessProfile.BusinessProfile"/>
+        <activity android:name=".BusinessProfile.BusinessProfile">
+        </activity>
         <activity android:name=".BusinessRegActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -6,12 +6,10 @@ package com.example.taquio.trasearch6.BusinessProfile;
 
 public class Material {
 
-    String name = null;
-    boolean selected = false;
+    String name;
 
-    public Material(String name, boolean selected) {
+    public Material(String name) {
         this.name = name;
-        this.selected = selected;
     }
 
     public String getName() {
@@ -20,14 +18,6 @@ public class Material {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean selected) {
-        this.selected = selected;
     }
 
 }
