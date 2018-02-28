@@ -4,6 +4,7 @@ package com.example.taquio.trasearch6.Utils;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.taquio.trasearch6.EditPostItem;
 import com.example.taquio.trasearch6.HomeActivity2;
 import com.example.taquio.trasearch6.Models.Comment;
 import com.example.taquio.trasearch6.Models.Like;
@@ -52,7 +54,7 @@ import java.util.TimeZone;
  * Created by Edward 2018.
  */
 
-public class ViewPostFragment extends Fragment {
+public class ViewPostFragment extends Fragment{
 
     private static final String TAG = "ViewPostFragment";
     OnCommentThreadSelectedListener mOnCommentThreadSelectedListener;
@@ -66,7 +68,7 @@ public class ViewPostFragment extends Fragment {
     private SquareImageView mPostImage;
     private BottomNavigationViewEx bottomNavigationView;
     private TextView mBackLabel, mCaption, mUsername, mTimestamp, mLikes, mComments;
-    private ImageView mBackArrow, mEllipses, mHeartRed, mHeartWhite, mProfileImage, mComment;
+    private ImageView mBackArrow, mEllipses, mHeartRed, mHeartWhite, mProfileImage, mComment, markAsTaken;
     //vars
     private Photo mPhoto;
     private int mActivityNumber = 0;
@@ -77,18 +79,18 @@ public class ViewPostFragment extends Fragment {
     private Boolean mLikedByCurrentUser;
     private StringBuilder mUsers;
     private String mLikesString = "";
-    private User mCurrentUser;
+    private User mCurrentUser, thisUser;
     private Context mContext = getActivity();
     public ViewPostFragment(){
         super();
         setArguments(new Bundle());
     }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_post, container, false);
 
+        markAsTaken = view.findViewById(R.id.ivtaken);
         mPostImage = view.findViewById(R.id.post_image);
         bottomNavigationView = view.findViewById(R.id.bottomNavViewBar);
         mBackArrow = view.findViewById(R.id.backArrow);
@@ -101,7 +103,7 @@ public class ViewPostFragment extends Fragment {
         mHeartWhite = view.findViewById(R.id.image_heart);
         mProfileImage = view.findViewById(R.id.profile_photo);
         mLikes = view.findViewById(R.id.image_likes);
-        mComment = view.findViewById(R.id.speech_bubble);
+//        mComment = view.findViewById(R.id.speech_bubble);
         mComments = view.findViewById(R.id.image_comments_link);
 
         mHeart = new Likes(mHeartWhite, mHeartRed);
@@ -110,6 +112,7 @@ public class ViewPostFragment extends Fragment {
         mEllipses.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 displayAlertDialog();
             }
         });
@@ -120,68 +123,97 @@ public class ViewPostFragment extends Fragment {
     }
     private void displayAlertDialog() {
 
-        Context context = getActivity();
-        String title = "";
-        String message = "Choose an action.";
-        final String button1String = "Mark Item";
-        String button2String = "Delete Item";
-        String button3String = "Cancel";
-
-       AlertDialog.Builder ad = new AlertDialog.Builder(context);
-        ad.setTitle(title);
-        ad.setMessage(message);
-
-        ad.setPositiveButton(
-                button1String,
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//        builder.setTitle("CHOOSE AN ACTION");
+        builder.setItems(new CharSequence[]
+                        {"Edit", "Delete"},
                 new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int arg1) {
-                       // eatenByGrue();
+                    public void onClick(DialogInterface dialog, int which) {
+                        // The 'which' argument contains the index position
+                        // of the selected item
+                        switch (which) {
+                            case 0:
+                                Query query1 = myRef.child("Users")
+                                                .orderByChild("userID")
+                                                .equalTo(mPhoto.getUser_id());
+                                query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
 
-                    }
-                }
-        );
-        ad.setPositiveButton(button2String, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+                                            thisUser = singleSnapshot.getValue(User.class);
 
+                                            Intent i = new Intent(getContext(), EditPostItem.class);
+                                            i.putExtra("user", thisUser);
+                                            i.putExtra("photo", mPhoto);
+                                            getContext().startActivity(i);
+                                        }
+                                    }
 
-                Query query = myRef.child("Photos").child(mPhoto.getPhoto_id());
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for(DataSnapshot snap : dataSnapshot.getChildren()){
-                            myRef.child("Photos")
-                                    .child(mPhoto.getPhoto_id())
-                                    .removeValue();
-                            myRef.child("Users_Photos")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .child(mPhoto.getPhoto_id())
-                                    .removeValue();
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
 
+                                    }
+                                });
+                                break;
+                            case 1:
+                                Query query = myRef.child("Photos").child(mPhoto.getPhoto_id());
+                                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot snap : dataSnapshot.getChildren()){
+                                            myRef.child("Photos")
+                                                    .child(mPhoto.getPhoto_id())
+                                                    .removeValue();
+                                            myRef.child("Users_Photos")
+                                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                    .child(mPhoto.getPhoto_id())
+                                                    .removeValue();
+
+                                        }
+                                        startActivity(new Intent(getContext(), HomeActivity2.class));
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                                break;
+//                            case 2:
+//                                Query query2 = myRef.child("Photos").child(mPhoto.getPhoto_id());
+//                                query2.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                    @Override
+//                                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                                        for(DataSnapshot snap : dataSnapshot.getChildren()){
+//                                            markAsTaken.setVisibility(View.VISIBLE);
+//                                            myRef.child("Photos")
+//                                                    .child(mPhoto.getPhoto_id())
+//                                                    .child("item_status")
+//                                                    .setValue(true);
+//                                            myRef.child("Users_Photos")
+//                                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//                                                    .child(mPhoto.getPhoto_id())
+//                                                    .child("item_status")
+//                                                    .setValue(true);
+//
+//                                        }
+//                                        startActivity(new Intent(getContext(), HomeActivity2.class));
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(DatabaseError databaseError) {
+//
+//                                    }
+//                                });
+//                                break;
+//                            case 3:
+//                                dialog.dismiss();
+//                                break;
                         }
-                        startActivity(new Intent(getContext(), HomeActivity2.class));
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
                     }
                 });
-            }
-        });
-        ad.setNegativeButton(
-                button3String,
-                new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int arg1) {
-                        // do nothing
-
-                            dialog.dismiss();
-                    }
-                }
-        );
-
-        //
-        ad.show();
+        builder.create().show();
     }
     private void init(){
         try{
@@ -204,8 +236,8 @@ public class ViewPostFragment extends Fragment {
                         Photo newPhoto = new Photo();
                         Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
-                        newPhoto.setCaption(objectMap.get(getString(R.string.field_caption)).toString());
-                        newPhoto.setTags(objectMap.get(getString(R.string.field_tags)).toString());
+                        newPhoto.setPhoto_description(objectMap.get(getString(R.string.field_caption)).toString());
+                        newPhoto.setQuantity(objectMap.get(getString(R.string.field_tags)).toString());
                         newPhoto.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
                         newPhoto.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
                         newPhoto.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
@@ -297,7 +329,7 @@ public class ViewPostFragment extends Fragment {
                             mLikedByCurrentUser = mUsers.toString().contains(mCurrentUser.getUserName() + ",");
 
                             int length = splitUsers.length;
-                            mLikesString = ""+length;
+                            mLikesString = ""+length + " interested!";
 //                            if(length == 1){
 //                                mLikesString = "Liked by " + splitUsers[0];
 //                            }
@@ -389,6 +421,12 @@ public class ViewPostFragment extends Fragment {
                 .child(getString(R.string.field_likes))
                 .child(newLikeID)
                 .setValue(like);
+        myRef.child("AllLikes")
+                .child(mPhoto.getUser_id())
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .setValue(mPhoto.getPhoto_id());
+
+
 
         mHeart.toggleLike();
         getLikesString();
@@ -425,12 +463,16 @@ public class ViewPostFragment extends Fragment {
         }else{
             mTimestamp.setText("TODAY");
         }
-        UniversalImageLoader.setImage(mCurrentUser.getImage(), mProfileImage, null, "");
-        mUsername.setText(mCurrentUser.getUserName());
-        mLikes.setText(mLikesString);
-        mCaption.setText(mPhoto.getCaption());
-
-        mComments.setText("#" + mPhoto.getComments().size());
+        if(mCurrentUser.getImage().equals("default"))
+        {
+            UniversalImageLoader.setImage(mCurrentUser.getImage(), mProfileImage, null, "drawable://" );
+        }else {
+            UniversalImageLoader.setImage(mCurrentUser.getImage(), mProfileImage, null, "");
+            mUsername.setText(mCurrentUser.getUserName());
+            mLikes.setText(mLikesString);
+            mCaption.setText(mPhoto.getPhoto_description());
+        }
+//        mComments.setText("#" + mPhoto.getComments().size());
 //        if(mPhoto.getComments().size() > 0){
 //            mComments.setText("View all " + mPhoto.getComments().size() + " comments");
 //        }else if(mPhoto.getComments().size() == 0){
@@ -619,6 +661,7 @@ public class ViewPostFragment extends Fragment {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+
     public interface OnCommentThreadSelectedListener{
         void onCommentThreadSelectedListener(Photo photo);
     }
@@ -661,6 +704,9 @@ public class ViewPostFragment extends Fragment {
                                     .child(mPhoto.getPhoto_id())
                                     .child(getString(R.string.field_likes))
                                     .child(keyID)
+                                    .removeValue();
+                            myRef.child("AllLikes")
+                                    .child(mPhoto.getUser_id())
                                     .removeValue();
 
                             mHeart.toggleLike();

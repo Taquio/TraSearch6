@@ -12,10 +12,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.theartofdev.edmodo.cropper.CropImageView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,6 +42,8 @@ public class GuestSearch extends AppCompatActivity {
     private Button signIn, reg,searchExec;
     private EditText searchText;
     private DatabaseReference searchItem;
+    private Button signIn, reg;
+    AdView mAdView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +56,10 @@ public class GuestSearch extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
 
+        MobileAds.initialize(GuestSearch.this, "ca-app-pub-3940256099942544~3347511713");
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+        mAdView.loadAd(adRequest);
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

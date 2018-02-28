@@ -7,9 +7,12 @@ import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,10 +36,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.ArrayList;
 
 public class HomeActivity2 extends AppCompatActivity implements
         MainFeedListAdapter.OnLoadMoreItemsListener{
@@ -45,7 +51,8 @@ public class HomeActivity2 extends AppCompatActivity implements
     private static final int ACTIVITY_NUM = 0;
     private static final int HOME_FRAGMENT = 1;
     private Context mContext = HomeActivity2.this;
-    //Firebase
+
+    private DatabaseReference mUserRef;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     //widgets
@@ -53,14 +60,18 @@ public class HomeActivity2 extends AppCompatActivity implements
     private FrameLayout mFrameLayout;
     private RelativeLayout mRelativeLayout;
     private DatabaseReference mUserDatabase;
-  private  TextView notifications_badgeText;
+    private  TextView notifications_badgeText;
+    private ArrayList<String> myLikes;
 
+    TextView textCartItemCount;
+    int theLikes = 0;
+    int displayLikes = 0;
 
     @Override
     public void onLoadMoreItems() {
         Log.d(TAG, "onLoadMoreItems: displaying more photos");
 
-        ItemsFragment fragment = (ItemsFragment)getSupportFragmentManager()
+        ItemsFragment fragment = (ItemsFragment) getSupportFragmentManager()
                 .findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
         if(fragment != null){
             fragment.displayMorePhotos();
@@ -75,12 +86,95 @@ public class HomeActivity2 extends AppCompatActivity implements
         mViewPager = findViewById(R.id.container);
         mFrameLayout = findViewById(R.id.frame_container);
         mRelativeLayout = findViewById(R.id.relLayoutParent);
+        mAuth = FirebaseAuth.getInstance();
 
+        mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        Toolbar toolbar =  findViewById(R.id.mytoolbar);
+        setSupportActionBar(toolbar);
         setUpFirebaseAuth();
         initImageLoader();
         setupBottomNavigationView();
         setupViewPager();
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.notif_menu, menu);
+
+        final MenuItem menuItem = menu.findItem(R.id.action_notif);
+
+        View actionView = MenuItemCompat.getActionView(menuItem);
+        textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
+        myLikes = new ArrayList<>();
+
+
+        theLikes = setupBadge();
+
+        displayLikes = theLikes - displayLikes;
+        if(displayLikes != 0)
+        {
+            if (textCartItemCount != null) {
+                    textCartItemCount.setText(String.valueOf(displayLikes) );
+                    if (textCartItemCount.getVisibility() != View.VISIBLE) {
+                        textCartItemCount.setVisibility(View.VISIBLE);
+                    }
+            }
+        }else{
+            if (textCartItemCount.getVisibility() != View.GONE) {
+                textCartItemCount.setVisibility(View.GONE);
+            }
+        }
+
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onOptionsItemSelected(menuItem);
+            }
+        });
+
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.action_notif: {
+                // Do something
+                textCartItemCount.setVisibility(View.GONE);
+                return true;
+                //end
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private int setupBadge() {
+        int count = 0;
+        Query query = mUserDatabase.child("AllLikes")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+
+                    myLikes.add(singleSnapshot.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        for(int i =0; i < myLikes.size(); i++){
+
+            count++;
+        }
+        //end
+        return count;
     }
     public void onImageSelected( Photo item,  int i, final String user_id) {
 
@@ -155,19 +249,41 @@ public class HomeActivity2 extends AppCompatActivity implements
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
-
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        Log.d(TAG, "onStart: Started");
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        if(currentUser==null)
+//        {
+//            Log.d(TAG, "onStart: Calling back to start method");
+//            sendToStart();
+//        }
+//        else
+//        {
+//            Log.d(TAG, "onStart: User Online");
+//            mUserRef.child("online").setValue(true);
+//        }
+//    }
     @Override
     protected void onPause(){
         super.onPause();
         Log.d(TAG, "onPause: OnPause Started");
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-//        if(currentUser!=null) {
-//            Log.d(TAG, "onPause: User Offline");
-//            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
-//        }
+        if(currentUser!=null) {
+            Log.d(TAG, "onPause: User Offline");
+            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
+        }
     }
-    private void setupViewPager() {
+    private void sendToStart()
+    {
+        Log.d(TAG, "sendToStart: Back to login page");
+        startActivity(new Intent(HomeActivity2.this,ActivityLogin.class));
+        finish();
+    }
+
+    public void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new VideosFragment());
         adapter.addFragment(new ArticlesFragment());

@@ -15,6 +15,7 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".Trasearch"
@@ -79,6 +80,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBgBgls2M2SoakI70MhTqnKlctI6kFlIl8" />
+        <!-- <meta-data -->
+        <!-- android:name="com.google.android.maps.v2.API_KEY" -->
+        <!-- android:value="AIzaSyArgfcJtKzWU25v2loAihj62ppvrpcc0nE"/> -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -166,20 +170,22 @@
         <activity android:name=".Camera.NextActivity" />
         <activity android:name=".RegisterOptions" />
         <activity android:name=".RegisterBusinessActivity" />
-        <activity android:name=".BusinessHome.BusinessHome">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".BusinessMessages.BusinessMessages" />
+        <activity android:name=".BusinessHome.BusinessHome"></activity>
+        <activity android:name=".BusinessMessages.BusinessMessages"></activity>
         <activity android:name=".BusinessProfile.BusinessProfile" />
+        <activity android:name=".BusinessRegActivity2" />
+        <activity android:name=".BusinessProfile.BusinessBuy" />
+        <activity android:name=".BusinessProfile.BusinessSell" />
+        <activity android:name=".BusinessProfile.BusinessPrice" />
+        <activity android:name=".BusinessProfile.BusinessSPrice" />
+        <activity android:name=".BusinessProfile.BusinessEdit"></activity>
         <activity android:name=".BusinessRegActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".AdminActivity" />
         <activity android:name=".ForVerification" />
-        <activity android:name=".AdminVerification"></activity>
+        <activity android:name=".AdminVerification" />
+        <activity android:name=".EditPostItem" />
+        <activity android:name=".SaveItemActivity"></activity>
     </application>
 
 </manifest>

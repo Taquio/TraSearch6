@@ -35,6 +35,8 @@
 
         </RelativeLayout>
 
+        <include layout="@layout/floating_button"/>
+
         <include layout="@layout/business_bottom_navigation"/>
 
     </RelativeLayout>

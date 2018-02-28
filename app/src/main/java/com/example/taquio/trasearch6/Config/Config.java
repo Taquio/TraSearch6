@@ -5,6 +5,6 @@ package com.example.taquio.trasearch6.Config;
  */
 
 public class Config {
-    public static final String PAYPAL_CLIENT_ID =  "AW-RQLYtjkSykdo_0_2PYV0p7f5NDwRHzTembuZGS8AnLzL96Ub3KQaullR881jo1b6R70hfJlMOCgIQ";
+    public static final String PAYPAL_CLIENT_ID =  "AbVbtIq40_1KXAIAaMruI6BWOsnTy1Q7tPXTgx2dQsUOI3Mv20429IiXxM1IMWEPFhBHdn74GjoWo4_y";
 
 }

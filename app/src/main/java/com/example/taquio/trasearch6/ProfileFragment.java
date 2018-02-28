@@ -71,7 +71,7 @@ public class ProfileFragment extends Fragment {
     private ImageView profileMenu;
     private BottomNavigationViewEx bottomNavigationView;
     private Context mContext;
-    private ImageView settings;
+    private ImageView settings, mybookmarks;
     //vars
     private int mFollowersCount = 0;
     private int mFollowingCount = 0;
@@ -92,7 +92,9 @@ public class ProfileFragment extends Fragment {
         toolbar = view.findViewById(R.id.profileToolBar);
         profileMenu = view.findViewById(R.id.profileMenu);
         settings = view.findViewById(R.id.accSetting);
+        mybookmarks = view.findViewById(R.id.savebookmarks);
         bottomNavigationView = view.findViewById(R.id.bottomNavViewBar);
+
         mContext = getActivity();
 
         mFirebaseMethods = new FirebaseMethods(getActivity());
@@ -118,6 +120,12 @@ public class ProfileFragment extends Fragment {
 //                intent.putExtra(getString(R.string.calling_activity), getString(R.string.profile_activity));
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
+        });
+        mybookmarks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext, SaveItemActivity.class));
             }
         });
         return view;
@@ -150,8 +158,8 @@ public class ProfileFragment extends Fragment {
                     Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
                     try {
-                        photo.setCaption(objectMap.get(getString(R.string.field_caption)).toString());
-                        photo.setTags(objectMap.get(getString(R.string.field_tags)).toString());
+                        photo.setPhoto_description(objectMap.get("photo_description").toString());
+                        photo.setQuantity(objectMap.get("quantity").toString());
                         photo.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
                         photo.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
                         photo.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
@@ -212,10 +220,6 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setProfileWidgets(final UserSettings userSettings) {
-        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getEmail() );
-        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getName() );
-        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getPhoneNumber());
-        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getImage());
 
         User user = userSettings.getUser();
         UniversalImageLoader.setImage(user.getImage(), mProfilePhoto, null, "");

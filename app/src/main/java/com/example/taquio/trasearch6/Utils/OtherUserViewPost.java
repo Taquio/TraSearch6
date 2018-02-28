@@ -94,8 +94,8 @@ public class OtherUserViewPost extends Fragment {
         mHeartWhite = view.findViewById(R.id.image_heart);
         mProfileImage = view.findViewById(R.id.profile_photo);
         mLikes = view.findViewById(R.id.image_likes);
-        mComment = view.findViewById(R.id.speech_bubble);
-        mComments = view.findViewById(R.id.image_comments_link);
+//        mComment = view.findViewById(R.id.speech_bubble);
+//        mComments = view.findViewById(R.id.image_comments_link);
 
         mHeart = new Likes(mHeartWhite, mHeartRed);
         mGestureDetector = new GestureDetector(getActivity(), new OtherUserViewPost.GestureListener());
@@ -127,8 +127,8 @@ public class OtherUserViewPost extends Fragment {
                         Photo newPhoto = new Photo();
                         Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
-                        newPhoto.setCaption(objectMap.get(getString(R.string.field_caption)).toString());
-                        newPhoto.setTags(objectMap.get(getString(R.string.field_tags)).toString());
+                        newPhoto.setPhoto_description(objectMap.get(getString(R.string.field_caption)).toString());
+                        newPhoto.setQuantity(objectMap.get(getString(R.string.field_tags)).toString());
                         newPhoto.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
                         newPhoto.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
                         newPhoto.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
@@ -350,9 +350,9 @@ public class OtherUserViewPost extends Fragment {
         UniversalImageLoader.setImage(mCurrentUser.getImage(), mProfileImage, null, "");
         mUsername.setText(mCurrentUser.getUserName());
         mLikes.setText(mLikesString);
-        mCaption.setText(mPhoto.getCaption());
+        mCaption.setText(mPhoto.getPhoto_description());
 
-        mComments.setText("#" + mPhoto.getComments().size());
+//        mComments.setText("#" + mPhoto.getComments().size());
 //        if(mPhoto.getComments().size() > 0){
 //            mComments.setText("View all " + mPhoto.getComments().size() + " comments");
 //        }else if(mPhoto.getComments().size() == 0){
