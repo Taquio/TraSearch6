@@ -4,9 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TraSearch6.iml" filepath="$PROJECT_DIR$/TraSearch6.iml" />
       <module fileurl="file://C:\Users\Del Mar\AndroidStudioProjects\New folder\TraSearch6\.idea\TraSearch6.iml" filepath="C:\Users\Del Mar\AndroidStudioProjects\New folder\TraSearch6\.idea\TraSearch6.iml" />
-      <module fileurl="file://C:\Users\Del Mar\Desktop\Edward\TraSearch6\TraSearch6.iml" filepath="C:\Users\Del Mar\Desktop\Edward\TraSearch6\TraSearch6.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\Del Mar\Desktop\Edward\TraSearch6\app\app.iml" filepath="C:\Users\Del Mar\Desktop\Edward\TraSearch6\app\app.iml" />
     </modules>
   </component>
 </project>

@@ -30,7 +30,7 @@ import com.example.taquio.trasearch6.Config.Config;
 public class Donate extends AppCompatActivity {
 
     private static final int PAYPAL_REQUEST_CODE = 7171;
-    private static PayPalConfiguration config = new PayPalConfiguration().environment(PayPalConfiguration.ENVIRONMENT_SANDBOX).clientId(Config.PAYPAL_CLIENT_ID);
+    private static PayPalConfiguration config = new PayPalConfiguration().environment(PayPalConfiguration.ENVIRONMENT_PRODUCTION).clientId(Config.PAYPAL_CLIENT_ID);
 
     Button btn;
     EditText et;
