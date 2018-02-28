@@ -1,17 +1,16 @@
 package com.example.taquio.trasearch6;
 
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -52,10 +51,9 @@ public class AllUsersFragment extends Fragment {
         mMainView = inflater
                 .inflate(R.layout.fragment_all_users,container,false);
         mFriendList = mMainView
-                .findViewById(R.id.friendsList);
+                .findViewById(R.id.userList);
         mAuth = FirebaseAuth
                 .getInstance();
-
         mCurrent_user_id = mAuth.
                 getCurrentUser()
                 .getUid();
@@ -76,82 +74,109 @@ public class AllUsersFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        final FirebaseRecyclerAdapter<Friends,AllUsersFragment.AdminViewHolder> friendRecyclerAdapter = new FirebaseRecyclerAdapter<Friends, AllUsersFragment.AdminViewHolder>(
-                Friends.class,
+        final FirebaseRecyclerAdapter<AllUsers,AdminViewHolder> allUsersRecyclerAdapter = new FirebaseRecyclerAdapter<AllUsers,AdminViewHolder>(
+                AllUsers.class,
                 R.layout.all_users,
                 AllUsersFragment.AdminViewHolder.class,
-                mFriendsDatabase
+                mUsersDatabase.orderByChild("isVerify")
         ) {
             @Override
-            protected void populateViewHolder(final AllUsersFragment.AdminViewHolder viewHolder, Friends model, int position) {
+            protected void populateViewHolder(final AdminViewHolder viewHolder, final AllUsers model, int position) {
 //                viewHolder.setDate(model.getDate());
 
                 final String list_user_Id = getRef(position).getKey();
-                mUsersDatabase.child(list_user_Id).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        final String name = dataSnapshot.child("Name").getValue().toString();
-                        if(dataSnapshot.hasChild("Image_thumb"))
-                        {
-                            String user_thumb_img = dataSnapshot.child("Image_thumb").getValue().toString();
-                            viewHolder.setProfileImage(user_thumb_img,getContext());
-                        }
 
-                        if(dataSnapshot.hasChild("online"))
-                        {
-                            String user_online = dataSnapshot.child("online").getValue().toString();
-                            if(user_online.equals("online"))
-                            {
-                                viewHolder.setuserOnline(true);
-                            }
-                            else
-                            {
-                                viewHolder.setuserOnline(false);
-                            }
-                        }
-                        viewHolder.setEmail(dataSnapshot.child("Email").getValue().toString());
-                        viewHolder.setName(name);
-                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                Log.d(TAG, "populateViewHolder: UserID: "+list_user_Id);
+
+                        mUsersDatabase.child(list_user_Id).addValueEventListener(new ValueEventListener() {
                             @Override
-                            public void onClick(View v) {
-                                CharSequence options[] = new CharSequence[]{"Open Profile","Send Message"};
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.hasChild("userType"))
+                                {
+                                    String userType = dataSnapshot.child("userType").getValue().toString();
+                                    Log.d(TAG, "onDataChange: UserType: "+userType);
+                                    if (userType.equals("admin"))
+                                    {
+                                        String email = dataSnapshot.child("Email").getValue().toString();
+                                        String Name = dataSnapshot.child("Name").getValue().toString();
+                                        String profile_thuumb = dataSnapshot.child("Image_thumb").getValue().toString();
+                                        String isOnline =  dataSnapshot.child("online").getValue().toString();
+                                        boolean isVerify = dataSnapshot.child("isVerify").getValue(Boolean.class);
+                                        viewHolder.setEmail(email);
+                                        viewHolder.setName(Name);
+                                        viewHolder.setProfileImage(profile_thuumb,getContext());
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                builder.setTitle(name+"\nSelect Options");
-                                builder.setItems(options, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                                        viewHolder.isVerify(isVerify);
 
-                                        if(which==0)
+                                        if(isOnline.equals("online"))
                                         {
-                                            startActivity(new Intent(getContext(), ViewProfile.class)
-                                                    .putExtra("user_id",list_user_Id));
+                                            viewHolder.setuserOnline(true);
+                                        }else
+                                        {
+                                            viewHolder.setuserOnline(false);
                                         }
-                                        if(which==1)
-                                        {
-                                            startActivity(new Intent(getContext(), MessageActivity.class)
-                                                    .putExtra("user_id",list_user_Id)
-                                                    .putExtra("user_Name",name));
 
+                                    }
+                                    else if (userType.equals("business"))
+                                    {
+                                        Log.d(TAG, "onDataChange: BusinessType");
+                                        String email = dataSnapshot.child("bsnEmail").getValue().toString();
+                                        String Name = dataSnapshot.child("bsnBusinessName").getValue().toString();
+                                        String profile_thuumb = dataSnapshot.child("image").getValue().toString();
+//                                        String isOnline =  dataSnapshot.child("online").getValue().toString();
+                                        boolean isVerify = dataSnapshot.child("isVerify").getValue(Boolean.class);
+                                        viewHolder.setEmail(email);
+                                        viewHolder.setName(Name);
+                                        viewHolder.setProfileImage(profile_thuumb,getContext());
+
+                                        viewHolder.isVerify(isVerify);
+
+//                                        if(isOnline.equals("online"))
+//                                        {
+//                                            viewHolder.setuserOnline(true);
+//                                        }else
+//                                        {
+//                                            viewHolder.setuserOnline(false);
+//                                        }
+                                    }
+                                    else if(userType.equals("free"))
+                                    {
+                                        Log.d(TAG, "onDataChange: Free Type");
+                                        String email = dataSnapshot.child("Email").getValue().toString();
+                                        String Name = dataSnapshot.child("Name").getValue().toString();
+                                        String profile_thuumb = dataSnapshot.child("Image_thumb").getValue().toString();
+                                        String isOnline =  dataSnapshot.child("online").getValue().toString();
+                                        boolean isVerify = dataSnapshot.child("isVerify").getValue(Boolean.class);
+                                        viewHolder.setEmail(email);
+                                        viewHolder.setName(Name);
+                                        viewHolder.setProfileImage(profile_thuumb,getContext());
+
+                                        viewHolder.isVerify(isVerify);
+
+                                        if(isOnline.equals("online"))
+                                        {
+                                            viewHolder.setuserOnline(true);
+                                        }else
+                                        {
+                                            viewHolder.setuserOnline(false);
                                         }
                                     }
-                                });
-                                builder.show();
+                                    else {
+                                        Log.d(TAG, "onDataChange: NoType");
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
                             }
                         });
 
 
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
             }
         };
-        mFriendList.setAdapter(friendRecyclerAdapter);
-
+        mFriendList.setAdapter(allUsersRecyclerAdapter);
 
     }
 
@@ -165,15 +190,23 @@ public class AllUsersFragment extends Fragment {
             mView = itemView;
         }
 
-        public void setEmail(String email)
+        public void setEmail(String Email)
         {
             TextView emailField = mView.findViewById(R.id.allUsersEmail);
-            emailField.setText(email);
+            emailField.setText(Email);
         }
 
         public void isVerify(Boolean verify)
         {
-            TextView userNameView  = mView.findViewById(R.id.allUsersEmail);
+            ImageView userNameView  = mView.findViewById(R.id.isVerify);
+
+            if(verify)
+            {
+                userNameView.setImageResource(R.drawable.verify);
+            }else
+            {
+                userNameView.setImageResource(R.drawable.not_verify);
+            }
         }
         public void setName (String Name)
         {

@@ -32,7 +32,7 @@ public class ChooseLayout extends AppCompatActivity {
         business.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChooseLayout.this,RegisterBusinessActivity.class)
+                startActivity(new Intent(ChooseLayout.this,BusinessRegActivity.class)
                         .putExtra("UserType","Business"));
                 finish();
 

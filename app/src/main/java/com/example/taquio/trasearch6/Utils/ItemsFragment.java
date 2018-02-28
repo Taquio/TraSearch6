@@ -78,14 +78,6 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
         mListView = view.findViewById(R.id.listView);
 
         toolbar = view.findViewById(R.id.profileToolBar);
-
-//        openSearch = view.findViewById(R.id.opensearch);
-//        openSearch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                startActivity(new Intent(mContext, SearchActivity.class));
-//            }
-//        });
         initListViewRefresh();
         getKeys();
 
@@ -150,8 +142,8 @@ public class ItemsFragment extends Fragment implements  OnUpdateListener, OnLoad
                         Photo newPhoto = new Photo();
                         Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
-                        newPhoto.setCaption(objectMap.get(getString(R.string.field_caption)).toString());
-                        newPhoto.setTags(objectMap.get(getString(R.string.field_tags)).toString());
+                        newPhoto.setPhoto_description(objectMap.get(getString(R.string.field_caption)).toString());
+                        newPhoto.setQuantity(objectMap.get(getString(R.string.field_tags)).toString());
                         newPhoto.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
                         newPhoto.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
                         newPhoto.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());

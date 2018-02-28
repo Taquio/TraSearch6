@@ -22,6 +22,7 @@ import com.example.taquio.trasearch6.R;
 import com.example.taquio.trasearch6.Utils.FilePaths;
 import com.example.taquio.trasearch6.Utils.FileSearch;
 import com.example.taquio.trasearch6.Utils.GridImageAdapter;
+import com.example.taquio.trasearch6.Utils.UniversalImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -186,7 +187,7 @@ public class GalleryFragment extends Fragment {
 
     private void setImage(String imgURL, ImageView image, String append){
         Log.d(TAG, "setImage: setting image");
-
+        UniversalImageLoader imgload = new UniversalImageLoader(getContext());
         ImageLoader imageLoader = ImageLoader.getInstance();
 
         imageLoader.displayImage(append + imgURL, image, new ImageLoadingListener() {

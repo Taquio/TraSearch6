@@ -231,7 +231,7 @@ public class ViewCommentsFragment extends Fragment {
         if(mPhoto.getComments().size() == 0){
             mComments.clear();
             Comment firstComment = new Comment();
-            firstComment.setComment(mPhoto.getCaption());
+            firstComment.setComment(mPhoto.getPhoto_description());
             firstComment.setUser_id(mPhoto.getUser_id());
             firstComment.setDate_created(mPhoto.getDate_created());
             mComments.add(firstComment);
@@ -260,8 +260,8 @@ public class ViewCommentsFragment extends Fragment {
                                     Photo photo = new Photo();
                                     Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
-                                    photo.setCaption(objectMap.get(mContext.getString(R.string.field_caption)).toString());
-                                    photo.setTags(objectMap.get(mContext.getString(R.string.field_tags)).toString());
+                                    photo.setPhoto_description(objectMap.get(mContext.getString(R.string.field_caption)).toString());
+                                    photo.setQuantity(objectMap.get(mContext.getString(R.string.field_tags)).toString());
                                     photo.setPhoto_id(objectMap.get(mContext.getString(R.string.field_photo_id)).toString());
                                     photo.setUser_id(objectMap.get(mContext.getString(R.string.field_user_id)).toString());
                                     photo.setDate_created(objectMap.get(mContext.getString(R.string.field_date_created)).toString());
@@ -270,7 +270,7 @@ public class ViewCommentsFragment extends Fragment {
 
                                     mComments.clear();
                                     Comment firstComment = new Comment();
-                                    firstComment.setComment(mPhoto.getCaption());
+                                    firstComment.setComment(mPhoto.getPhoto_description());
                                     firstComment.setUser_id(mPhoto.getUser_id());
                                     firstComment.setDate_created(mPhoto.getDate_created());
                                     mComments.add(firstComment);

@@ -47,35 +47,6 @@ public class ActivityLogin extends AppCompatActivity {
 
         refIDs();
 
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//        ActionBar actionBar = getSupportActionBar();
-//        if(actionBar != null){
-//            actionBar.hide();
-//        }
-
-//        btn_register.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick: register clicked");
-//                final String email = Lfield_email.getText().toString();
-//
-//                Intent startActivityIntent = new Intent(ActivityLogin.this, RegisterActivity.class);
-//
-//                if(email.length()<=0)
-//                {
-//                    startActivity(startActivityIntent);
-//                    ActivityLogin.this.finish();
-//                }
-//                else
-//                {
-//                    Log.d(TAG, "onClick: Passing: "+email+" to Reg Act");
-//                    startActivityIntent.putExtra("emailPass",email);
-//                    startActivity(startActivityIntent);
-//                    ActivityLogin.this.finish();
-//                }
-//            }
-//        });
-
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +68,7 @@ public class ActivityLogin extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
+                                        Log.d(TAG, "onComplete: SignIN Sucess");
                                         String current_userID = mAuth.getCurrentUser().getUid();
                                         String deviceToken = FirebaseInstanceId.getInstance().getToken();
                                         databaseReference
@@ -108,6 +80,7 @@ public class ActivityLogin extends AppCompatActivity {
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if(task.isSuccessful())
                                                 {
+                                                    Log.d(TAG, "onComplete: Device Token Success");
                                                     DatabaseReference mUserType = FirebaseDatabase.getInstance().getReference().child("Users")
                                                             .child(mAuth.getCurrentUser().getUid());
 
@@ -163,8 +136,6 @@ public class ActivityLogin extends AppCompatActivity {
             }
         });
     }
-
-
 
     private boolean hasRegError()
     {
@@ -225,10 +196,37 @@ public class ActivityLogin extends AppCompatActivity {
     private void updateUI(FirebaseUser user){
         if(user !=null)
         {
-            Toast.makeText(ActivityLogin.this,"Welcome",Toast.LENGTH_SHORT).show();
-            Intent startActivityIntent = new Intent(ActivityLogin.this, HomeActivity2.class);
-            startActivity(startActivityIntent);
-            ActivityLogin.this.finish();
+            DatabaseReference userType = FirebaseDatabase.getInstance().getReference().child("Users")
+                    .child(mAuth.getCurrentUser().getUid());
+
+            userType.child("userType").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String userType = dataSnapshot.getValue().toString();
+                    if(userType.equals("free"))
+                    {
+                        startActivity(new Intent(ActivityLogin.this,HomeActivity2.class));
+                        finish();
+                    }
+                    else if(userType.equals("admin"))
+                    {
+                        startActivity(new Intent(ActivityLogin  .this,AdminActivity.class));
+                        finish();
+                    }
+                    else if(userType.equals("business"))
+                    {
+                        startActivity(new Intent(ActivityLogin.this,BusinessProfileActivity.class));
+                        finish();
+                    }else{
+                        Toast.makeText(ActivityLogin.this,"UserType is null",Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 

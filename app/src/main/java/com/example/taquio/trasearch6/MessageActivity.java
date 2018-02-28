@@ -225,7 +225,7 @@ public class  MessageActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 //                Log.d(TAG, "onDataChange: Else" + dataSnapshot.getValue().toString());
-                if (!dataSnapshot.getValue( Boolean.class))
+                if (!dataSnapshot.getValue(Boolean.class))
                 {
                     Log.d(TAG, "onDataChange: Else");
                     Map chatAddMap = new HashMap();

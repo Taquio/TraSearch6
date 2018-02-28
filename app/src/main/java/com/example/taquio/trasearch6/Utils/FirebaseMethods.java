@@ -181,10 +181,10 @@ public class FirebaseMethods {
         String tags = StringManipulation.getTags(caption);
         String newPhotoKey = myRef.child("Photos").push().getKey();
         Photo photo = new Photo();
-        photo.setCaption(caption);
+        photo.setPhoto_description(caption);
         photo.setDate_created(getTimestamp());
         photo.setImage_path(url);
-        photo.setTags(tags);
+        photo.setQuantity(tags);
         photo.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
         photo.setPhoto_id(newPhotoKey);
 

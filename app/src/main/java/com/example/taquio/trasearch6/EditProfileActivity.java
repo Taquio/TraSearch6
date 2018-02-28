@@ -132,12 +132,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         .start(EditProfileActivity.this);
             }
         });
-
-
-
         name=false;email=false;password=false;mobile=false;image=false;
-
-
         ediProfile_saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,6 +178,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                 }
                                 else
                                 {
+
 
                                     AuthCredential credential = EmailAuthProvider
                                             .getCredential(mauthEmail, mauthPassword);
@@ -284,7 +280,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     if(task.isSuccessful())
                     {
                         Toast.makeText(EditProfileActivity.this,"Updated",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(EditProfileActivity.this,EditProfileActivity.class));
+                        startActivity(new Intent(EditProfileActivity.this,MyProfileActivity.class));
 //                        progressDialog.dismiss();
                         finish();
                     }

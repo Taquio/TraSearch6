@@ -91,7 +91,7 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        Log.d(TAG, "getView: TRYING TO GET THE  VIEW >>> " + getItem(position).getCaption().toString() );
+        Log.d(TAG, "getView: TRYING TO GET THE  VIEW >>> " + getItem(position).getPhoto_description().toString() );
         final ViewHolder holder;
 
         if(convertView == null){
@@ -130,7 +130,7 @@ public class ItemGridAdapter extends ArrayAdapter<Photo>{
         getLikesString(holder);
 
         //set the caption
-        holder.caption.setText(getItem(position).getCaption());
+        holder.caption.setText(getItem(position).getPhoto_description());
 
         //set the comment
         List<Comment> comments = getItem(position).getComments();
