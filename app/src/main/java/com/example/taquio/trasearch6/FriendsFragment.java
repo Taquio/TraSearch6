@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.annotations.NonNull;
 
 
 /**
@@ -48,12 +49,12 @@ public class FriendsFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,@NonNull ViewGroup container,
+                             @NonNull Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
         mMainView = inflater
-                .inflate(R.layout.fragment_friends,container,false);
+                .inflate(R.layout.fragment_friendslist,container,false);
         mFriendList = mMainView
                 .findViewById(R.id.friendsList);
         mAuth = FirebaseAuth
@@ -89,36 +90,47 @@ public class FriendsFragment extends Fragment {
 
         final FirebaseRecyclerAdapter<Friends,FriendsViewHolder> friendRecyclerAdapter = new FirebaseRecyclerAdapter<Friends, FriendsViewHolder>(
                 Friends.class,
-                R.layout.user_single_layout,
+                R.layout.friend,
                 FriendsViewHolder.class,
                 mFriendsDatabase
         ) {
             @Override
             protected void populateViewHolder(final FriendsViewHolder viewHolder, Friends model, int position) {
-                viewHolder.setDate(model.getDate());
+//                viewHolder.setDate(model.getDate());
 
                 final String list_user_Id = getRef(position).getKey();
                 mUsersDatabase.child(list_user_Id).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         final String name = dataSnapshot.child("Name").getValue().toString();
-                        String user_thumb_img = dataSnapshot.child("Image_thumb").getValue().toString();
+                        if(dataSnapshot.hasChild("Image_thumb"))
+                        {
+                            String user_thumb_img = dataSnapshot.child("Image_thumb").getValue().toString();
+                            viewHolder.setProfileImage(user_thumb_img,getContext());
+                        }
 
                         if(dataSnapshot.hasChild("online"))
                         {
-                            Boolean user_online = (boolean) dataSnapshot.child("online").getValue();
-                            viewHolder.setuserOnline(user_online);
-                        }
+                            String user_online = dataSnapshot.child("online").getValue().toString();
+                            if(user_online.equals("online"))
+                            {
+                                viewHolder.setuserOnline(true);
+                            }
+                            else
+                            {
+                                viewHolder.setuserOnline(false);
 
+                            }
+                        }
+                        viewHolder.setStatus(dataSnapshot.child("Email").getValue().toString());
                         viewHolder.setName(name);
-                        viewHolder.setProfileImage(user_thumb_img,getContext());
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 CharSequence options[] = new CharSequence[]{"Open Profile","Send Message"};
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                builder.setTitle("Select Options");
+                                builder.setTitle(name+"\nSelect Options");
                                 builder.setItems(options, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -133,14 +145,13 @@ public class FriendsFragment extends Fragment {
                                             startActivity(new Intent(getContext(), MessageActivity.class)
                                                     .putExtra("user_id",list_user_Id)
                                                     .putExtra("user_Name",name));
+
                                         }
                                     }
                                 });
                                 builder.show();
                             }
                         });
-
-
                     }
 
                     @Override
@@ -164,10 +175,10 @@ public class FriendsFragment extends Fragment {
             mView = itemView;
         }
 
-        public void setDate(String Date)
+        public void setStatus(String Status)
             {
                 TextView userNameView  = mView.findViewById(R.id.allUsersEmail);
-                userNameView.setText(Date);
+                userNameView.setText(Status);
             }
         public void setName (String Name)
         {

@@ -14,7 +14,6 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".Trasearch"
@@ -136,7 +135,8 @@
         -->
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".HomeActivity2" />
         <activity android:name=".Utils.Donate" />
         <activity android:name=".Utils.PaymentDetails"/>
@@ -146,28 +146,25 @@
         <activity
             android:name=".Messages.MessagesActivity"
             android:parentActivityName=".HomeActivity2" />
-        <activity android:name=".GuestSearch">
-
-        </activity>
+        <activity android:name=".GuestSearch" />
+        <activity
+            android:name=".MessageActivity"
+            android:parentActivityName=".Messages.MessagesActivity" />
         <activity
             android:name=".ChooseLayout"
             android:parentActivityName=".GuestSearch" />
         <activity android:name=".MyProfileActivity" />
-        <activity android:name=".EditProfileActivity"
-            android:parentActivityName=".MyProfileActivity"/>
+        <activity
+            android:name=".EditProfileActivity"
+            android:configChanges="keyboardHidden|orientation|screenLayout"
+            android:parentActivityName=".MyProfileActivity" />
+        <activity android:name=".Camera.NextActivity" />
         <activity android:name=".BusinessHome.BusinessHome">
+
         </activity>
         <activity android:name=".BusinessMessages.BusinessMessages">
         </activity>
-        <activity android:name=".BusinessProfile.BusinessProfile">
-        </activity>
-        <activity android:name=".BusinessRegActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".BusinessProfile.BusinessProfile"/>
         <activity android:name=".BusinessRegActivity2"/>
         <activity android:name=".BusinessProfile.BusinessBuy"/>
         <activity android:name=".BusinessProfile.BusinessSell"/>
@@ -176,6 +173,12 @@
         <activity android:name=".BusinessProfile.BusinessEdit">
         </activity>
 
+        <activity android:name=".BusinessRegActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".AdminActivity" />
+        <activity android:name=".ForVerification" />
+        <activity android:name=".AdminVerification"></activity>
+        <activity android:name=".EditPostItem"/>
     </application>
 
 </manifest>

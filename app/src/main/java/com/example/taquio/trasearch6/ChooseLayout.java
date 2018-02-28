@@ -1,5 +1,6 @@
 package com.example.taquio.trasearch6;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,15 +13,28 @@ import android.widget.Button;
 
 public class ChooseLayout extends AppCompatActivity {
 
-    Button choose_NonBusiness;
+    Button nonBusiness, business;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_layout);
 
-        choose_NonBusiness.setOnClickListener(new View.OnClickListener() {
+
+        refIDs();
+        nonBusiness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(ChooseLayout.this,RegisterActivity.class)
+                        .putExtra("UserType","NonBusiness"));
+                finish();
+            }
+        });
+        business.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ChooseLayout.this,RegisterBusinessActivity.class)
+                        .putExtra("UserType","Business"));
+                finish();
 
             }
         });
@@ -29,7 +43,10 @@ public class ChooseLayout extends AppCompatActivity {
 
     public void refIDs()
     {
-        choose_NonBusiness = findViewById(R.id.choose_NonBusiness);
+        nonBusiness = findViewById(R.id.btnNonBusiness);
+        business = findViewById(R.id.btnBusiness);
+//        choose_NonBusiness = findViewById(R.id.choose_NonBusiness);
+//        choose_Business = findViewById(R.id.choose_Business);
     }
 }
 

@@ -34,7 +34,7 @@ public class ActivityLogin extends AppCompatActivity {
     Button btn_register,btn_login;
     EditText Lfield_email,Lfield_password,traSearch_bar;
     private FirebaseAuth mAuth;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference,mUserType;
     private DatabaseReference mUserRef;
 
     @Override
@@ -46,35 +46,6 @@ public class ActivityLogin extends AppCompatActivity {
 
 
         refIDs();
-
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//        ActionBar actionBar = getSupportActionBar();
-//        if(actionBar != null){
-//            actionBar.hide();
-//        }
-
-//        btn_register.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick: register clicked");
-//                final String email = Lfield_email.getText().toString();
-//
-//                Intent startActivityIntent = new Intent(ActivityLogin.this, RegisterActivity.class);
-//
-//                if(email.length()<=0)
-//                {
-//                    startActivity(startActivityIntent);
-//                    ActivityLogin.this.finish();
-//                }
-//                else
-//                {
-//                    Log.d(TAG, "onClick: Passing: "+email+" to Reg Act");
-//                    startActivityIntent.putExtra("emailPass",email);
-//                    startActivity(startActivityIntent);
-//                    ActivityLogin.this.finish();
-//                }
-//            }
-//        });
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +68,7 @@ public class ActivityLogin extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
+                                        Log.d(TAG, "onComplete: SignIN Sucess");
                                         String current_userID = mAuth.getCurrentUser().getUid();
                                         String deviceToken = FirebaseInstanceId.getInstance().getToken();
                                         databaseReference
@@ -108,11 +80,40 @@ public class ActivityLogin extends AppCompatActivity {
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if(task.isSuccessful())
                                                 {
-                                                    mUserRef.child("online").setValue(true);
-                                                    Log.d(TAG, "signInWithEmail:success");
-                                                    mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
-                                                    checkUserExists();
+                                                    Log.d(TAG, "onComplete: Device Token Success");
+                                                    DatabaseReference mUserType = FirebaseDatabase.getInstance().getReference().child("Users")
+                                                            .child(mAuth.getCurrentUser().getUid());
 
+                                                    mUserType.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            String userType = dataSnapshot.child("userType").getValue().toString();
+                                                            Log.d(TAG, "onDataChange: UserType: "+userType);
+                                                            if(dataSnapshot.child("userType").getValue().toString().equals("free"))
+                                                            {
+                                                                Log.d(TAG, "signInWithEmail:success");
+                                                                mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+//
+                                                                Intent startActivityIntent = new Intent(ActivityLogin.this, HomeActivity2.class);
+                                                                startActivity(startActivityIntent);
+                                                                ActivityLogin.this.finish();
+                                                            }
+                                                            else if(dataSnapshot.child("userType").getValue().toString().equals("admin"))
+                                                            {
+                                                                Log.d(TAG, "signInWithEmail:success");
+                                                                mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+//
+                                                                Intent startActivityIntent = new Intent(ActivityLogin.this, AdminActivity.class);
+                                                                startActivity(startActivityIntent);
+                                                                ActivityLogin.this.finish();
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(DatabaseError databaseError) {
+
+                                                        }
+                                                    });
                                                 }else{
 
                                                 }
@@ -135,8 +136,6 @@ public class ActivityLogin extends AppCompatActivity {
             }
         });
     }
-
-
 
     private boolean hasRegError()
     {
@@ -161,30 +160,30 @@ public class ActivityLogin extends AppCompatActivity {
 
     }
 
-    public void checkUserExists()
-    {
-        Log.d(TAG, "checkUserExists: Started");
-        final String user_id = mAuth.getCurrentUser().getUid();
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(user_id))
-                {
-                    Log.d(TAG, "onDataChange: Auth Success");
-                    Toast.makeText(ActivityLogin.this, "Authentication success.",
-                            Toast.LENGTH_SHORT).show();
-//                    mUserRef.child("online").setValue(true);
-                    Intent startActivityIntent = new Intent(ActivityLogin.this, HomeActivity2.class);
-                    startActivity(startActivityIntent);
-                    ActivityLogin.this.finish();
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    public void checkUserExists()
+//    {
+//        Log.d(TAG, "checkUserExists: Started");
+//        final String user_id = mAuth.getCurrentUser().getUid();
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.hasChild(user_id))
+//                {
+//                    Log.d(TAG, "onDataChange: Auth Success");
+//                    Toast.makeText(ActivityLogin.this, "Authentication success.",
+//                            Toast.LENGTH_SHORT).show();
+////                    mUserRef.child("online").setValue(true);
+//                    Intent startActivityIntent = new Intent(ActivityLogin.this, HomeActivity2.class);
+//                    startActivity(startActivityIntent);
+//                    ActivityLogin.this.finish();
+//                }
+//            }
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     @Override
     protected void onStart() {
@@ -197,10 +196,37 @@ public class ActivityLogin extends AppCompatActivity {
     private void updateUI(FirebaseUser user){
         if(user !=null)
         {
-            Toast.makeText(ActivityLogin.this,"Welcome",Toast.LENGTH_SHORT).show();
-            Intent startActivityIntent = new Intent(ActivityLogin.this, HomeActivity2.class);
-            startActivity(startActivityIntent);
-            ActivityLogin.this.finish();
+            DatabaseReference userType = FirebaseDatabase.getInstance().getReference().child("Users")
+                    .child(mAuth.getCurrentUser().getUid());
+
+            userType.child("userType").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String userType = dataSnapshot.getValue().toString();
+                    if(userType.equals("free"))
+                    {
+                        startActivity(new Intent(ActivityLogin.this,HomeActivity2.class));
+                        finish();
+                    }
+                    else if(userType.equals("admin"))
+                    {
+                        startActivity(new Intent(ActivityLogin  .this,AdminActivity.class));
+                        finish();
+                    }
+                    else if(userType.equals("business"))
+                    {
+                        startActivity(new Intent(ActivityLogin.this,BusinessProfileActivity.class));
+                        finish();
+                    }else{
+                        Toast.makeText(ActivityLogin.this,"UserType is null",Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 

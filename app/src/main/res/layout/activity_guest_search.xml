@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_gradient_background">
+    android:background="@drawable/login_gradient">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,10 +18,15 @@
             android:layout_weight="25"
             android:gravity="center">
 
+            <!--<ImageView-->
+                <!--android:layout_width="200dp"-->
+                <!--android:layout_height="100dp"-->
+                <!--android:src="@drawable/ts"/>-->
             <ImageView
-                android:layout_width="200dp"
-                android:layout_height="100dp"
-                android:src="@drawable/ts"/>
+                android:layout_width="250dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/trash"/>
 
         </RelativeLayout>
 
@@ -35,6 +40,7 @@
             android:weightSum="100">
 
             <EditText
+                android:id="@+id/searchText"
                 android:layout_width="320dp"
                 android:layout_height="0dp"
                 android:layout_margin="6dp"
@@ -46,6 +52,11 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="5dp"
                 android:textColorHint="#000000"/>
+            <Button
+                android:id="@+id/searchExec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="search"/>
 
             <Button
                 android:id="@+id/guest_SignIn"
@@ -55,7 +66,8 @@
                 android:layout_weight="10"
                 android:background="@drawable/btn"
                 android:stateListAnimator="@null"
-                android:text="Sign In"/>
+                android:text="Sign In"
+                android:textColor="#ffff"/>
 
             <Button
                 android:id="@+id/guest_Reg"
@@ -66,7 +78,8 @@
                 android:layout_weight="10"
                 android:background="@drawable/btn"
                 android:stateListAnimator="@null"
-                android:text="Register"/>
+                android:text="Register"
+                android:textColor="#ffff"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -74,7 +87,7 @@
                 android:layout_weight="10"
                 android:gravity="center"
                 android:text="OR"
-                android:textColor="#000000"/>
+                android:textColor="#ffff"/>
 
             <Button
                 android:layout_width="250dp"

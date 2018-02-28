@@ -10,9 +10,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.taquio.trasearch6.FriendsFragment;
 import com.example.taquio.trasearch6.R;
 import com.example.taquio.trasearch6.SectionsPagerAdapter;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 /**
@@ -23,12 +28,13 @@ public class MessagesActivity extends AppCompatActivity {
     private static final String TAG = "MessagesActivity";
     private static final int ACTIVITY_NUM = 1;
     private Context mContext = MessagesActivity.this;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages);
-
         setupBottomNavigationView();
         setupViewPager();
 
@@ -37,11 +43,11 @@ public class MessagesActivity extends AppCompatActivity {
     private void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new InboxFragment());
-        adapter.addFragment(new FriendsListFragment());
-        ViewPager viewPager = (ViewPager) findViewById(R.id.messageContainer);
+        adapter.addFragment(new FriendsFragment());
+        ViewPager viewPager = findViewById(R.id.messageContainer);
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.messageTabLayout);
+        TabLayout tabLayout = findViewById(R.id.messageTabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setText("Inbox");
@@ -50,12 +56,35 @@ public class MessagesActivity extends AppCompatActivity {
 
     private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(mContext,this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue("online");
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue(ServerValue.TIMESTAMP);
+        }
+    }
 }

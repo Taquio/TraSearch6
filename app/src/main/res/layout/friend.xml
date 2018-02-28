@@ -7,23 +7,23 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FAFAFA"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:background="#FAFAFA">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/allUsersImg"
             android:layout_width="75dp"
             android:layout_height="75dp"
+            android:layout_centerVertical="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/images"
-            android:layout_centerVertical="true"/>
+            android:src="@drawable/images"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/allUsersImg"
-            android:orientation="vertical"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/allUsersName"
@@ -47,6 +47,21 @@
                 android:textSize="13sp"/>
 
         </LinearLayout>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/stat_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/online_stat"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/ic_ellipse"
+            />
 
     </RelativeLayout>
 

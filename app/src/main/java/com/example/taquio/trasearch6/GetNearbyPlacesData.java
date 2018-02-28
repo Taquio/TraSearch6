@@ -16,15 +16,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-/**
- * @author Priyanka
- */
 
 class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
+    String url;
     private String googlePlacesData;
     private GoogleMap mMap;
-    String url;
 
     @Override
     protected String doInBackground(Object... objects){

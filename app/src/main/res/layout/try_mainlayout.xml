@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <GridView
+        android:id="@+id/stagrecview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="2"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:orientation="vertical"
+        android:dividerHeight="1px"
+        android:background="@null"
+        android:cacheColorHint="#00000000"
+        android:listSelector="#00000000"
+        android:scrollbars="none"
+        android:overScrollMode="never"
+        android:fadingEdge="none"
+        android:divider="@null">
+
+    </GridView>
+    <!--android:background="#d6d6c2"-->
+</android.support.constraint.ConstraintLayout>
