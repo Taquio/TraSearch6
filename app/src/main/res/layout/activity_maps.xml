@@ -1,10 +1,10 @@
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    >
+    android:layout_width="match_parent">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    <fragment
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,25 +13,9 @@
         tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-    <android.support.v4.widget.NestedScrollView
+    <include
+        layout="@layout/layout_bottom_navigation_view"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
-        >
-
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.RecyclerView>
-
-    </android.support.v4.widget.NestedScrollView>
-    <RelativeLayout
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content">
-
-        <include layout="@layout/layout_bottom_navigation_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"/>
-    </RelativeLayout>
-
-</android.support.design.widget.CoordinatorLayout>
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

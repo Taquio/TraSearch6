@@ -79,12 +79,14 @@ public class UnverifiedUsers extends Fragment {
     public void onStart() {
         super.onStart();
 
-        final FirebaseRecyclerAdapter<AllUsers,unverifiedUsersViewHolder> allUsersRecyclerAdapter = new FirebaseRecyclerAdapter<AllUsers,unverifiedUsersViewHolder>(
+        final FirebaseRecyclerAdapter<AllUsers,unverifiedUsersViewHolder> allUsersRecyclerAdapter = new FirebaseRecyclerAdapter<AllUsers,unverifiedUsersViewHolder>
+        (
                 AllUsers.class,
                 R.layout.unverifiedusers,
                 unverifiedUsersViewHolder.class,
                 mUsersDatabase.orderByChild("isVerify").equalTo(false)
-        ) {
+        )
+        {
             @Override
             protected void populateViewHolder(final unverifiedUsersViewHolder viewHolder, final AllUsers model, int position) {
 //                viewHolder.setDate(model.getDate());

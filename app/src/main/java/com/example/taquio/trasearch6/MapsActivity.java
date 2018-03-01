@@ -3,6 +3,8 @@ package com.example.taquio.trasearch6;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,14 +26,24 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by ARVN 02-16-2018.
@@ -39,15 +51,14 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks{
+        GoogleApiClient.ConnectionCallbacks {
 
     private static final String TAG = "MapActivity";
 
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final String FINE_LOCATION = android.Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String COURSE_LOCATION = android.Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 13f;
-    private static final int PLACE_PICKER_REQUEST = 1;
 
     //    for the bottom navigation
     private Context mContext = MapsActivity.this;
@@ -59,16 +70,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private GoogleApiClient mGoogleClient; // for loading all the recycling center
-    public static final int REQUEST_LOCATION_CODE = 99;
     int PROXIMITY_RADIUS = 10000;
     double latitude, longitude;
 
     //add Firebase Database stuff
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+    private ChildEventListener mChildEventListener;
     private DatabaseReference refDatabase;
-    private String userID;
+    Marker marker;
 
     /*
     *   Necessary methods that is needed
@@ -93,13 +103,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMap = googleMap;
 
+        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
+        getLocationFirebase();
+
         if (mLocationPermissionsGranted) {
             getDeviceLocation();
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            {
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             mMap.setMyLocationEnabled(true);
@@ -124,16 +137,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-        refDatabase = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-
         //buttom navigation method
         setupBottomNavigationView();
 
         getLocationPermission();
 
         initMap();
+
+        ChildEventListener mChildEventListener;
+
+        refDatabase = FirebaseDatabase.getInstance().getReference("Users");
+        mAuth = FirebaseAuth.getInstance();
+        refDatabase.push().setValue(marker);
+
+
+
     }//end onCreate
 
     //permission require to use Internet, Gps, etc...
@@ -159,6 +177,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d(TAG, "onRequestPermissionsResult: called.");
@@ -177,8 +196,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                                     != PackageManager.PERMISSION_GRANTED
                                     && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                                    != PackageManager.PERMISSION_GRANTED)
-                            {
+                                    != PackageManager.PERMISSION_GRANTED) {
                                 return;
                             }
                             mMap.setMyLocationEnabled(true);
@@ -204,12 +222,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //getting device location to show on first load
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
-
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
         try {
             if (mLocationPermissionsGranted) {
-
                 final Task location = mFusedLocationProviderClient.getLastLocation();
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
@@ -218,15 +233,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
 
-//                            latitude = currentLocation.getLatitude();
-//                            longitude = currentLocation.getLongitude();
-
-
-//                            loadRecyclingCenters();
-
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM,
-                                    "My Location");
+                                    "My Location", "trying some stuff");
+
                             mMap.setMyLocationEnabled(true);
 
                         } else {
@@ -242,46 +252,100 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     //move camer with a specific zoom and animaiton
-    private void moveCamera(LatLng latLng, float zoom, String title) {
+    private void moveCamera(LatLng latLng, float zoom, String title, String details) {
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
         MarkerOptions options = new MarkerOptions()
                 .position(latLng)
-                .title(title);
+                .title(title)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .snippet(details);
         mMap.addMarker(options);
+    }
 
+    private void getLocationFirebase() {
+        for (int i = 0; i < refDatabase.getKey().length(); i++) {
+            final String list_user_Id = refDatabase.getKey();
+            refDatabase.child(list_user_Id).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild("userType")) {
+                        String userType = dataSnapshot.child("userType").getValue().toString();
+                        Log.d(TAG, "onDataChange: UserType: " + userType);
+                        if (userType.equals("business")) {
+                            Log.d(TAG, "onDataChange: BusinessType");
+                            String Name = dataSnapshot.child("bsnBusinessName").getValue().toString();
+                            String Phone = dataSnapshot.child("bsnMobile").getValue().toString();
+                            String Location = dataSnapshot.child("bsnLocation").getValue().toString();
+                            boolean isVerify = dataSnapshot.child("isVerify").getValue(Boolean.class);
+
+                            convertStringToLatLng(Location, Name, Phone);//LatLng;
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+//convert address to latlng
+    private void convertStringToLatLng(String location, String Name, String Phone) {
+        double lat = 0.00, lng = 0.00;
+
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        String result = null;
+
+        List addressList = null;
+        try {
+            addressList = geocoder.getFromLocationName(location, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addressList != null && addressList.size() > 0) {
+            Address address = (Address) addressList.get(0);
+            StringBuilder sb = new StringBuilder();
+            lat = address.getLatitude();
+            lng = address.getLongitude();
+            sb.append(address.getLatitude()).append("\n");
+            sb.append(address.getLongitude()).append("\n");
+            result = sb.toString();
+        }
+
+        Toast.makeText(this, "LatLng: " + result, Toast.LENGTH_SHORT).show();
+        moveCamera(new LatLng(lat,lng), 15f, Name, (""+Phone+""+location));
     }
 
     //method to load all Recycling Center within a radius
-    private void loadRecyclingCenters()
-    {
+    private void loadRecyclingCenters() {
         Object dataTransfer[] = new Object[2];
         getNearbyPlacesData = new GetNearbyPlacesData();
 
         String recyclingCenter = "recycling+center";
         String url = getUrl(latitude, longitude, recyclingCenter);
-        Toast.makeText(this, "Check lat: "+latitude+"long: "+longitude, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Check lat: " + latitude + "long: " + longitude, Toast.LENGTH_SHORT).show();
         dataTransfer[0] = mMap;
         dataTransfer[1] = url;
 
         getNearbyPlacesData.execute(dataTransfer);
     }
-    private String getUrl(double latitude , double longitude , String nearbyPlace)
-    {
+
+    private String getUrl(double latitude, double longitude, String nearbyPlace) {
 
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/textsearch/json?");
-        googlePlaceUrl.append("query="+nearbyPlace);
-        googlePlaceUrl.append("&location="+latitude+","+longitude);
+        googlePlaceUrl.append("query=" + nearbyPlace);
+        googlePlaceUrl.append("&location=" + latitude + "," + longitude);
         googlePlaceUrl.append("&radius=5000");
-        googlePlaceUrl.append("&key="+"AIzaSyArgfcJtKzWU25v2loAihj62ppvrpcc0nE");
-       // AIzaSyDvsia0V9CUml-qj5BIhEiOtnMdT27EhMs
+        googlePlaceUrl.append("&key=" + "AIzaSyArgfcJtKzWU25v2loAihj62ppvrpcc0nE");
+        // AIzaSyDvsia0V9CUml-qj5BIhEiOtnMdT27EhMs
         // AIzaSyCnoXov8X_8xXBLY-_gDOxnfko3zHSw6fs
-       // AIzaSyBgBgls2M2SoakI70MhTqnKlctI6kFlIl8
+        // AIzaSyBgBgls2M2SoakI70MhTqnKlctI6kFlIl8
         // AIzaSyDvsia0V9CUml-qj5BIhEiOtnMdT27EhMs
         //AIzaSyArgfcJtKzWU25v2loAihj62ppvrpcc0nE*
-        Log.d("MapsActivity", "url = "+googlePlaceUrl.toString());
+        Log.d("MapsActivity", "url = " + googlePlaceUrl.toString());
 
         return googlePlaceUrl.toString();
     }
@@ -315,15 +379,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     /*
     * bottom navigation
     * */
-    private void setupBottomNavigationView()
-    {
+    private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
         BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext,this, bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(mContext, this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
+
+
+
+
 
 }
