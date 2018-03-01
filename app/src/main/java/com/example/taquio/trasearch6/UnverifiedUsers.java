@@ -16,14 +16,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.taquio.trasearch6.Models.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -43,7 +47,7 @@ public class UnverifiedUsers extends Fragment {
     private String mCurrent_user_id;
 
     private View mMainView;
-
+    private User muser;
     public UnverifiedUsers() {
         // Required empty public constructor
     }
@@ -72,6 +76,7 @@ public class UnverifiedUsers extends Fragment {
                 .setHasFixedSize(true);
         mFriendList
                 .setLayoutManager(new LinearLayoutManager(getContext()));
+
         return mMainView;
     }
 
@@ -83,8 +88,8 @@ public class UnverifiedUsers extends Fragment {
                 AllUsers.class,
                 R.layout.unverifiedusers,
                 unverifiedUsersViewHolder.class,
-                mUsersDatabase.orderByChild("isVerify").equalTo(false)
-        ) {
+                mUsersDatabase.orderByChild("isVerify").equalTo(false)) {
+
             @Override
             protected void populateViewHolder(final unverifiedUsersViewHolder viewHolder, final AllUsers model, int position) {
 //                viewHolder.setDate(model.getDate());
@@ -118,8 +123,8 @@ public class UnverifiedUsers extends Fragment {
 //                                                    startActivity(new Intent(getContext(), ViewProfile.class)
 //                                                            .putExtra("user_id",list_user_Id));
                                                     Intent i = new Intent(getContext(), MyProfileActivity.class);
-                                                    i.putExtra("calling_activity", "UnverifiedUsers");
-                                                    i.putExtra("intent_user", list_user_Id);
+                                                    i.putExtra("viewprofile", "UnverifiedUsers");
+                                                    i.putExtra("intent_userid", list_user_Id);
                                                     getContext().startActivity(i);
                                                 }
                                                 if(which==1)

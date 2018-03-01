@@ -15,9 +15,17 @@ import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
 import com.example.taquio.trasearch6.Utils.ViewPostFragment;
 import com.example.taquio.trasearch6.Utils.ViewProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -38,6 +46,8 @@ public class MyProfileActivity extends AppCompatActivity implements
     private FirebaseDatabase mfirebaseDatabase;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DatabaseReference mDatabase;
+    private ArrayList<Photo> mPhotos;
+    private User muser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +91,71 @@ public class MyProfileActivity extends AppCompatActivity implements
     }
     private void init(){
         Log.d(TAG, "init: PAG INFLATE SA FRAGMENT NGA PROFILE " + getString(R.string.profile_fragment));
-
         Intent intent = getIntent();
+        if(intent.hasExtra("viewprofile")){
+            String strkey = intent.getStringExtra("intent_userid");
+//            Query query = FirebaseDatabase.getInstance().getReference()
+//                    .child("Users_Photos")
+//                    .child(strkey)
+//                    .orderByChild("user_id")
+//                    .equalTo(strkey);
+//
+//            query.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()) {
+//
+//                        Photo newPhoto = new Photo();
+//                        Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
+//
+//                        newPhoto.setPhoto_description(objectMap.get(getString(R.string.field_caption)).toString());
+//                        newPhoto.setQuantity(objectMap.get(getString(R.string.field_tags)).toString());
+//                        newPhoto.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
+//                        newPhoto.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
+//                        newPhoto.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
+//                        newPhoto.setImage_path(objectMap.get(getString(R.string.field_image_path)).toString());
+//
+//                        mPhotos.add(newPhoto);
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+            Query query1 = FirebaseDatabase.getInstance().getReference()
+                    .child("Users")
+                    .orderByChild("userID")
+                    .equalTo(strkey);
+            query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+
+                        muser = singleSnapshot.getValue(User.class);
+                        ViewProfileFragment fragment = new ViewProfileFragment();
+                        Bundle args = new Bundle();
+                        args.putParcelable("intent_user",muser);
+
+                        fragment.setArguments(args);
+
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.container, fragment);
+                        transaction.addToBackStack(getString(R.string.view_profile_fragment));
+                        transaction.commit();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+        }
+
         if(intent.hasExtra(getString(R.string.calling_activity))){
             Log.d(TAG, "init: searching for user object attached as intent extra"  );
             if(intent.hasExtra(getString(R.string.intent_user))){
@@ -105,7 +178,7 @@ public class MyProfileActivity extends AppCompatActivity implements
                 }else{
 
                      /* IF ANG CURRENT USER GAGAMIT
-                     IT MEAN ANG E INFLATE NGA LAYOUT KAY
+                     IT MEANs ANG E INFLATE NGA LAYOUT KAY
                      IYAHANG PROFILE VIEW
                     */
                     Log.d(TAG, "init: inflating Profile");
@@ -127,6 +200,7 @@ public class MyProfileActivity extends AppCompatActivity implements
             transaction.addToBackStack(getString(R.string.profile_fragment));
             transaction.commit();
         }
+
     }
 
 
