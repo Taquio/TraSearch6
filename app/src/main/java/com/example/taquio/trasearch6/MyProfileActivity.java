@@ -16,6 +16,8 @@ import com.example.taquio.trasearch6.Utils.ViewPostFragment;
 import com.example.taquio.trasearch6.Utils.ViewProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -33,18 +35,17 @@ public class MyProfileActivity extends AppCompatActivity implements
     private Context mContext = MyProfileActivity.this;
     private ProgressBar mProgressbar;
     private CircleImageView profilePhoto;
-    private DatabaseReference mUserDatabase;
-    private FirebaseAuth mAuth;
+    private FirebaseDatabase mfirebaseDatabase;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         init();
-        // ---------------------- Setting up Profile Image --------------------- //
         profilePhoto = findViewById(R.id.myProfile_image);
 
-        // ---------------------- End of Setting up Profile Image --------------------- //
 
     }
     @Override
@@ -87,18 +88,13 @@ public class MyProfileActivity extends AppCompatActivity implements
             if(intent.hasExtra(getString(R.string.intent_user))){
                 User user = intent.getParcelableExtra(getString(R.string.intent_user));
                 Log.d(TAG, "init: THIS IS A TEST FOR " +intent.getParcelableExtra(getString(R.string.intent_user)) );
-                /* IF DI EQUAL SA USER NGA GA GAMIT ANG ID
-                    IT MEANS LAIN NGA USERS VIEW ANG E INFLATE
-                    PARA SA VIEW PROFILE
-                */
+
                 if(!user.getUserID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
                     Log.d(TAG, "init: inflating view profile");
                     ViewProfileFragment fragment = new ViewProfileFragment();
                     Bundle args = new Bundle();
                     args.putParcelable(getString(R.string.intent_user),
                             intent.getParcelableExtra(getString(R.string.intent_user)));
-
-
 
                     fragment.setArguments(args);
 
@@ -138,6 +134,31 @@ public class MyProfileActivity extends AppCompatActivity implements
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mfirebaseDatabase = FirebaseDatabase.getInstance();
+//        mDatabase = FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+        mDatabase = mfirebaseDatabase.getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue("online");
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mDatabase = mfirebaseDatabase.getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue(ServerValue.TIMESTAMP);
+        }
     }
 
 }

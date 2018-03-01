@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by User on 10/29/2017.
+ * Created by Edward 2018.
  */
 
 public class RotateBitmap {

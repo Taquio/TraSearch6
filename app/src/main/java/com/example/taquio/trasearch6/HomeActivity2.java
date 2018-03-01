@@ -4,62 +4,79 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.taquio.trasearch6.Models.Photo;
-import com.example.taquio.trasearch6.SampleTry.ItemGridAdapter;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.Utils.ItemsFragment;
+import com.example.taquio.trasearch6.Utils.MainFeedListAdapter;
+import com.example.taquio.trasearch6.Utils.OtherUserViewPost;
 import com.example.taquio.trasearch6.Utils.UniversalImageLoader;
 import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
+import com.example.taquio.trasearch6.Utils.ViewPostFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.ArrayList;
+
 public class HomeActivity2 extends AppCompatActivity implements
-        ItemGridAdapter.OnLoadMoreItemsListener{
+        MainFeedListAdapter.OnLoadMoreItemsListener{
+
+    private static final String TAG = "HomeActivity2";
+    private static final int ACTIVITY_NUM = 0;
+    private static final int HOME_FRAGMENT = 1;
+    private Context mContext = HomeActivity2.this;
+
+    private DatabaseReference mUserRef;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    //widgets
+    private ViewPager mViewPager;
+    private FrameLayout mFrameLayout;
+    private RelativeLayout mRelativeLayout;
+    private DatabaseReference mUserDatabase;
+    private  TextView notifications_badgeText;
+    private ArrayList<String> myLikes;
+
+    TextView textCartItemCount;
+    int theLikes = 0;
+    int displayLikes = 0;
 
     @Override
     public void onLoadMoreItems() {
         Log.d(TAG, "onLoadMoreItems: displaying more photos");
-        ItemsFragment fragment = (ItemsFragment)getSupportFragmentManager()
+
+        ItemsFragment fragment = (ItemsFragment) getSupportFragmentManager()
                 .findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
         if(fragment != null){
             fragment.displayMorePhotos();
         }
     }
-    private static final String TAG = "HomeActivity";
-    private Context mContext = HomeActivity2.this;
-    private static final int ACTIVITY_NUM = 0;
-    private static final int HOME_FRAGMENT = 1;
-    private static final int RESULT_ADD_NEW_STORY = 7891;
-    private final static int CAMERA_RQ = 6969;
-    private static final int REQUEST_ADD_NEW_STORY = 8719;
-
-    //Firebase
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
-
-    //widgets
-    private ViewPager mViewPager;
-    private FrameLayout mFrameLayout;
-    private RelativeLayout mRelativeLayout;
-
-    private DatabaseReference mUserDatabase;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,26 +84,133 @@ public class HomeActivity2 extends AppCompatActivity implements
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting.");
         mViewPager = findViewById(R.id.container);
-//        mFrameLayout = findViewById(R.id.frame_container);
+        mFrameLayout = findViewById(R.id.frame_container);
         mRelativeLayout = findViewById(R.id.relLayoutParent);
+        mAuth = FirebaseAuth.getInstance();
+
+        mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        Toolbar toolbar =  findViewById(R.id.mytoolbar);
+        setSupportActionBar(toolbar);
         setUpFirebaseAuth();
         initImageLoader();
         setupBottomNavigationView();
         setupViewPager();
 
     }
-//    public void openNewStoryActivity(){
-//        Intent intent = new Intent(this, NewStoryActivity.class);
-//        startActivityForResult(intent, REQUEST_ADD_NEW_STORY);
-//    }
-//
-//    public void showAddToStoryDialog(){
-//        Log.d(TAG, "showAddToStoryDialog: showing add to story dialog.");
-//        AddToStoryDialog dialog = new AddToStoryDialog();
-//        dialog.show(getFragmentManager(), getString(R.string.dialog_add_to_story));
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.notif_menu, menu);
+
+        final MenuItem menuItem = menu.findItem(R.id.action_notif);
+
+        View actionView = MenuItemCompat.getActionView(menuItem);
+        textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
+        myLikes = new ArrayList<>();
 
 
+        theLikes = setupBadge();
+
+        displayLikes = theLikes - displayLikes;
+        if(displayLikes != 0)
+        {
+            if (textCartItemCount != null) {
+                    textCartItemCount.setText(String.valueOf(displayLikes) );
+                    if (textCartItemCount.getVisibility() != View.VISIBLE) {
+                        textCartItemCount.setVisibility(View.VISIBLE);
+                    }
+            }
+        }else{
+            if (textCartItemCount.getVisibility() != View.GONE) {
+                textCartItemCount.setVisibility(View.GONE);
+            }
+        }
+
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onOptionsItemSelected(menuItem);
+            }
+        });
+
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.action_notif: {
+                // Do something
+                textCartItemCount.setVisibility(View.GONE);
+                return true;
+                //end
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private int setupBadge() {
+        int count = 0;
+        Query query = mUserDatabase.child("AllLikes")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+
+                    myLikes.add(singleSnapshot.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        for(int i =0; i < myLikes.size(); i++){
+
+            count++;
+        }
+        //end
+        return count;
+    }
+    public void onImageSelected( Photo item,  int i, final String user_id) {
+
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if(user_id.equals(currentUser.getUid())) {
+
+            ViewPostFragment fragment = new ViewPostFragment();
+            Bundle args = new Bundle();
+            args.putParcelable(getString(R.string.photo), item);
+            args.putInt(getString(R.string.activity_number), i);
+
+            fragment.setArguments(args);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frame_container, fragment);
+            transaction.addToBackStack("View Post");
+            transaction.commit();
+        }else{
+            OtherUserViewPost fragment = new OtherUserViewPost();
+            Bundle args = new Bundle();
+            args.putParcelable(getString(R.string.photo), item);
+            args.putInt(getString(R.string.activity_number), i);
+
+            fragment.setArguments(args);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frame_container, fragment);
+            transaction.addToBackStack("View Post");
+            transaction.commit();
+        }
+
+
+
+    }
     public void onCommentThreadSelected(Photo photo, String callingActivity){
         Log.d(TAG, "onCommentThreadSelected: selected a coemment thread");
 
@@ -102,7 +226,6 @@ public class HomeActivity2 extends AppCompatActivity implements
         transaction.commit();
 
     }
-
     public void hideLayout(){
         Log.d(TAG, "hideLayout: hiding layout");
         mRelativeLayout.setVisibility(View.GONE);
@@ -122,54 +245,45 @@ public class HomeActivity2 extends AppCompatActivity implements
             showLayout();
         }
     }
-
-
-    //    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Log.d(TAG, "onActivityResult: incoming result.");
-//        // Received recording or error from MaterialCamera
-//
-//        if (requestCode == REQUEST_ADD_NEW_STORY) {
-//            Log.d(TAG, "onActivityResult: incoming new story.");
-//            if (resultCode == RESULT_ADD_NEW_STORY) {
-//                Log.d(TAG, "onActivityResult: got the new story.");
-//                Log.d(TAG, "onActivityResult: data type: " + data.getType());
-//
-//                final ItemsFragment fragment = (ItemsFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager_container + ":" + 1);
-//                if (fragment != null) {
-//
-//                    FirebaseMethods firebaseMethods = new FirebaseMethods(this);
-//                    firebaseMethods.uploadNewStory(data, fragment);
-//
-//                }
-//                else{
-//                    Log.d(TAG, "onActivityResult: could not communicate with home fragment.");
-//                }
-//
-//
-//
-//            }
-//        }
-//    }
-
     private void initImageLoader() {
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
-
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        Log.d(TAG, "onStart: Started");
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        if(currentUser==null)
+//        {
+//            Log.d(TAG, "onStart: Calling back to start method");
+//            sendToStart();
+//        }
+//        else
+//        {
+//            Log.d(TAG, "onStart: User Online");
+//            mUserRef.child("online").setValue(true);
+//        }
+//    }
     @Override
     protected void onPause(){
         super.onPause();
         Log.d(TAG, "onPause: OnPause Started");
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-//        if(currentUser!=null) {
-//            Log.d(TAG, "onPause: User Offline");
-//            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
-//        }
+        if(currentUser!=null) {
+            Log.d(TAG, "onPause: User Offline");
+            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
+        }
     }
-    private void setupViewPager() {
+    private void sendToStart()
+    {
+        Log.d(TAG, "sendToStart: Back to login page");
+        startActivity(new Intent(HomeActivity2.this,ActivityLogin.class));
+        finish();
+    }
+
+    public void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new VideosFragment());
         adapter.addFragment(new ArticlesFragment());
@@ -196,7 +310,59 @@ public class HomeActivity2 extends AppCompatActivity implements
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
+
+        Log.d(TAG, "setupBottomNavigationView: Start Notification Badge");
+        BottomNavigationMenuView bottomNavigationMenuView =
+                (BottomNavigationMenuView) bottomNavigationViewEx.getChildAt(0);
+        View v = bottomNavigationMenuView.getChildAt(1);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) v;
+
+        View badge = LayoutInflater.from(this)
+                .inflate(R.layout.notlayout, bottomNavigationMenuView, false);
+        DatabaseReference mSeen = FirebaseDatabase.getInstance().getReference().child("Chat").child(mAuth.getCurrentUser().getUid());
+        Log.d(TAG, "setupBottomNavigationView: Start Counting....");
+
+        mSeen.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int resultCount =0;
+                notifications_badgeText = findViewById(R.id.notifications_badgeText);
+
+                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+//                    Log.d(TAG, "" + childDataSnapshot.getValue()); //displays the key for the node
+                    Log.d(TAG, "" + childDataSnapshot.child("seen").getValue());//gives the value for given keyname
+                    if (childDataSnapshot.child("seen").getValue().toString().equals("false"))
+                    {
+                        Log.d(TAG, "onDataChange: RESULT IS FALSE");
+                        resultCount++;
+                    }
+                }
+                if(resultCount>0)
+                {
+                    notifications_badgeText.setText((resultCount++)+"");
+                    notifications_badgeText.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    notifications_badgeText.setVisibility(View.INVISIBLE);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+        itemView.addView(badge);
+
+
     }
+
+
 
     //  ---------------------- F I R E B A S E -------------------------
     private void checkCurrentUser(FirebaseUser user){
@@ -254,4 +420,5 @@ public class HomeActivity2 extends AppCompatActivity implements
             mUserDatabase.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
+
 }

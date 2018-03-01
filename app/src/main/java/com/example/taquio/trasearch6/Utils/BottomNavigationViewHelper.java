@@ -17,7 +17,7 @@ import com.example.taquio.trasearch6.R;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 /**
- * Created by Del Mar on 2/7/2018.
+ * Created by Edward 2018.
  */
 
 public class BottomNavigationViewHelper {

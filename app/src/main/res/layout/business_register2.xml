@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_gradient">
+
+    <!--<ImageView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:src="@drawable/reg2_gradient_background" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:weightSum="100">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/trash" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_below="@+id/relativeLayout1"
+            android:layout_weight="85"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:weightSum="100">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="15"
+                android:textColor="@color/white"
+                android:paddingLeft="5dp"
+                android:text="For security purposes every business owner is required to submit a photo of his/her business permit along with a valid ID."/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="15"
+                android:textColor="#ff0000"
+                android:paddingLeft="5dp"
+                android:text="Optionally, you can skip this step for now. However you won't be displayed as a verified business owner in order to protect other users."
+                />
+
+            <ImageView
+                android:id="@+id/imagePermit"
+                android:layout_width="250dp"
+                android:layout_height="0dp"
+                android:layout_weight="40"
+                android:src="@drawable/imagebackground"/>
+
+            <Button
+                android:id="@+id/busUpload"
+                android:layout_marginTop="10dp"
+                android:layout_width="150dp"
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:drawableLeft="@drawable/ic_cam"
+                android:paddingLeft="10dp"
+                android:paddingRight="35dp"
+                android:text="Upload"
+                android:textColor="@color/white"
+                android:background="@drawable/btn"/>
+
+            <Button
+                android:id="@+id/registerBtn1"
+                android:layout_width="200dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="10"
+                android:background="@drawable/btn"
+                android:stateListAnimator="@null"
+                android:layout_marginTop="10dp"
+                android:text="Register"
+                android:textColor="@color/white"/>
+            //comment
+            <TextView
+                android:id="@+id/regSkip"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:text="Skip"
+                android:layout_weight="10"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

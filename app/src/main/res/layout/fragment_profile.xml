@@ -24,11 +24,26 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_below="@+id/linearLayout1"
-            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="-50dp"
             android:background="@drawable/background"
             android:src="@drawable/images" />
-
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/accSetting"
+            android:src="@drawable/user_settings"/>
+        <ImageView
+            android:id="@+id/savebookmarks"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/bookmark"/>
         <LinearLayout
             android:id="@+id/relLog"
             android:layout_width="match_parent"

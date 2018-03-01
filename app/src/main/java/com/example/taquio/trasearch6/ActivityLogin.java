@@ -16,8 +16,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 /**
@@ -31,7 +34,7 @@ public class ActivityLogin extends AppCompatActivity {
     Button btn_register,btn_login;
     EditText Lfield_email,Lfield_password,traSearch_bar;
     private FirebaseAuth mAuth;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference,mUserType;
     private DatabaseReference mUserRef;
 
     @Override
@@ -43,35 +46,6 @@ public class ActivityLogin extends AppCompatActivity {
 
 
         refIDs();
-
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//        ActionBar actionBar = getSupportActionBar();
-//        if(actionBar != null){
-//            actionBar.hide();
-//        }
-
-//        btn_register.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick: register clicked");
-//                final String email = Lfield_email.getText().toString();
-//
-//                Intent startActivityIntent = new Intent(ActivityLogin.this, RegisterActivity.class);
-//
-//                if(email.length()<=0)
-//                {
-//                    startActivity(startActivityIntent);
-//                    ActivityLogin.this.finish();
-//                }
-//                else
-//                {
-//                    Log.d(TAG, "onClick: Passing: "+email+" to Reg Act");
-//                    startActivityIntent.putExtra("emailPass",email);
-//                    startActivity(startActivityIntent);
-//                    ActivityLogin.this.finish();
-//                }
-//            }
-//        });
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +68,7 @@ public class ActivityLogin extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
+                                        Log.d(TAG, "onComplete: SignIN Sucess");
                                         String current_userID = mAuth.getCurrentUser().getUid();
                                         String deviceToken = FirebaseInstanceId.getInstance().getToken();
                                         databaseReference
@@ -105,14 +80,40 @@ public class ActivityLogin extends AppCompatActivity {
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if(task.isSuccessful())
                                                 {
-//                                                    mUserRef.child("online").setValue(true);
-                                                    Log.d(TAG, "signInWithEmail:success");
-                                                    mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
-//                                                    checkUserExists();
-                                                    Intent startActivityIntent = new Intent(ActivityLogin.this, HomeActivity2.class);
-                                                    startActivity(startActivityIntent);
-                                                    ActivityLogin.this.finish();
+                                                    Log.d(TAG, "onComplete: Device Token Success");
+                                                    DatabaseReference mUserType = FirebaseDatabase.getInstance().getReference().child("Users")
+                                                            .child(mAuth.getCurrentUser().getUid());
 
+                                                    mUserType.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            String userType = dataSnapshot.child("userType").getValue().toString();
+                                                            Log.d(TAG, "onDataChange: UserType: "+userType);
+                                                            if(dataSnapshot.child("userType").getValue().toString().equals("free"))
+                                                            {
+                                                                Log.d(TAG, "signInWithEmail:success");
+                                                                mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+//
+                                                                Intent startActivityIntent = new Intent(ActivityLogin.this, HomeActivity2.class);
+                                                                startActivity(startActivityIntent);
+                                                                ActivityLogin.this.finish();
+                                                            }
+                                                            else if(dataSnapshot.child("userType").getValue().toString().equals("admin"))
+                                                            {
+                                                                Log.d(TAG, "signInWithEmail:success");
+                                                                mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+//
+                                                                Intent startActivityIntent = new Intent(ActivityLogin.this, AdminActivity.class);
+                                                                startActivity(startActivityIntent);
+                                                                ActivityLogin.this.finish();
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(DatabaseError databaseError) {
+
+                                                        }
+                                                    });
                                                 }else{
 
                                                 }
@@ -135,8 +136,6 @@ public class ActivityLogin extends AppCompatActivity {
             }
         });
     }
-
-
 
     private boolean hasRegError()
     {
@@ -197,10 +196,37 @@ public class ActivityLogin extends AppCompatActivity {
     private void updateUI(FirebaseUser user){
         if(user !=null)
         {
-            Toast.makeText(ActivityLogin.this,"Welcome",Toast.LENGTH_SHORT).show();
-            Intent startActivityIntent = new Intent(ActivityLogin.this, HomeActivity2.class);
-            startActivity(startActivityIntent);
-            ActivityLogin.this.finish();
+            DatabaseReference userType = FirebaseDatabase.getInstance().getReference().child("Users")
+                    .child(mAuth.getCurrentUser().getUid());
+
+            userType.child("userType").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String userType = dataSnapshot.getValue().toString();
+                    if(userType.equals("free"))
+                    {
+                        startActivity(new Intent(ActivityLogin.this,HomeActivity2.class));
+                        finish();
+                    }
+                    else if(userType.equals("admin"))
+                    {
+                        startActivity(new Intent(ActivityLogin  .this,AdminActivity.class));
+                        finish();
+                    }
+                    else if(userType.equals("business"))
+                    {
+                        startActivity(new Intent(ActivityLogin.this,BusinessProfileActivity.class));
+                        finish();
+                    }else{
+                        Toast.makeText(ActivityLogin.this,"UserType is null",Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 

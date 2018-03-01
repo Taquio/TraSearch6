@@ -12,12 +12,12 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MapFragmentRecyclingCenter.OnFragmentInteractionListener} interface
+ * {@link MapsFragmentJunkyard.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MapFragmentRecyclingCenter#newInstance} factory method to
+ * Use the {@link MapsFragmentJunkyard#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapFragmentRecyclingCenter extends Fragment {
+public class MapsFragmentJunkyard extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,7 +29,7 @@ public class MapFragmentRecyclingCenter extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public MapFragmentRecyclingCenter() {
+    public MapsFragmentJunkyard() {
         // Required empty public constructor
     }
 
@@ -39,11 +39,11 @@ public class MapFragmentRecyclingCenter extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MapFragmentRecyclingCenter.
+     * @return A new instance of fragment MapsFragmentJunkyard.
      */
     // TODO: Rename and change types and number of parameters
-    public static MapFragmentRecyclingCenter newInstance(String param1, String param2) {
-        MapFragmentRecyclingCenter fragment = new MapFragmentRecyclingCenter();
+    public static MapsFragmentJunkyard newInstance(String param1, String param2) {
+        MapsFragmentJunkyard fragment = new MapsFragmentJunkyard();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,7 +64,7 @@ public class MapFragmentRecyclingCenter extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map_fragment_recycling_center, container, false);
+        return inflater.inflate(R.layout.maps_fragment_junkyard, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

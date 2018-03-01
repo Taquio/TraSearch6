@@ -20,7 +20,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 
 /**
- * Created by User on 6/4/2017.
+ * Created by Edward 2018.
  */
 
 public class UniversalImageLoader {
@@ -77,9 +77,9 @@ public class UniversalImageLoader {
 
     public ImageLoaderConfiguration getConfig(){
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(defaultImage)
-                .showImageForEmptyUri(defaultImage)
-                .showImageOnFail(defaultImage)
+                .showImageOnLoading(R.drawable.man)
+                .showImageForEmptyUri(R.drawable.man)
+                .showImageOnFail(R.drawable.man)
                 .considerExifParams(true)
                 .cacheOnDisk(true).cacheInMemory(true)
                 .cacheOnDisk(true).resetViewBeforeLoading(true)

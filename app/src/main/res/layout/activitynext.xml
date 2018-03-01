@@ -50,9 +50,20 @@
                     android:hint="Write a description..."
                     />
 
+
             </RelativeLayout>
 
-
+            <EditText
+                android:id="@+id/qty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="350dp"
+                android:layout_marginRight="80dp"
+                android:layout_alignParentRight="true"
+                android:background="@null"
+                android:hint="Write item quantity..."
+                />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

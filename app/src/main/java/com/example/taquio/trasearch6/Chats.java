@@ -8,16 +8,16 @@ public class Chats {
 
     private String message,type;
     private long time;
-    private boolean seened;
+    private boolean seen;
     private String from;
 
     public Chats(){}
 
-    public Chats(String message, String type, long time, boolean seened, String from) {
+    public Chats(String message, String type, long time, boolean seen, String from) {
         this.message = message;
         this.type = type;
         this.time = time;
-        this.seened = seened;
+        this.seen = seen;
         this.from = from;
     }
 
@@ -53,11 +53,11 @@ public class Chats {
         this.time = time;
     }
 
-    public boolean isSeened() {
-        return seened;
+    public boolean isSeen() {
+        return seen;
     }
 
-    public void setSeened(boolean seened) {
-        this.seened = seened;
+    public void setSeen(boolean seen) {
+        this.seen = seen;
     }
 }

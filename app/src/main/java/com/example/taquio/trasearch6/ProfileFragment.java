@@ -28,6 +28,7 @@ import com.example.taquio.trasearch6.Models.UserSettings;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
 import com.example.taquio.trasearch6.Utils.FirebaseMethods;
 import com.example.taquio.trasearch6.Utils.GridImageAdapter;
+import com.example.taquio.trasearch6.Utils.UniversalImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,9 +38,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,7 +71,7 @@ public class ProfileFragment extends Fragment {
     private ImageView profileMenu;
     private BottomNavigationViewEx bottomNavigationView;
     private Context mContext;
-    private TextView signOut;
+    private ImageView settings, mybookmarks;
     //vars
     private int mFollowersCount = 0;
     private int mFollowingCount = 0;
@@ -93,8 +91,10 @@ public class ProfileFragment extends Fragment {
         gridView = view.findViewById(R.id.gridView);
         toolbar = view.findViewById(R.id.profileToolBar);
         profileMenu = view.findViewById(R.id.profileMenu);
-//        signOut = view.findViewById(R.id.cmdSignout);
+        settings = view.findViewById(R.id.accSetting);
+        mybookmarks = view.findViewById(R.id.savebookmarks);
         bottomNavigationView = view.findViewById(R.id.bottomNavViewBar);
+
         mContext = getActivity();
 
         mFirebaseMethods = new FirebaseMethods(getActivity());
@@ -105,14 +105,12 @@ public class ProfileFragment extends Fragment {
         setupFirebaseAuth();
         setupGridView();
 
-
-//        signOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mAuth.signOut();
-//                getActivity().finish();
-//            }
-//        });
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext, SettingsActivity.class));
+            }
+        });
         Button editProfile = view.findViewById(R.id.myProfile_editBtn);
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +120,12 @@ public class ProfileFragment extends Fragment {
 //                intent.putExtra(getString(R.string.calling_activity), getString(R.string.profile_activity));
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
+        });
+        mybookmarks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext, SaveItemActivity.class));
             }
         });
         return view;
@@ -154,8 +158,8 @@ public class ProfileFragment extends Fragment {
                     Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
                     try {
-                        photo.setCaption(objectMap.get(getString(R.string.field_caption)).toString());
-                        photo.setTags(objectMap.get(getString(R.string.field_tags)).toString());
+                        photo.setPhoto_description(objectMap.get("photo_description").toString());
+                        photo.setQuantity(objectMap.get("quantity").toString());
                         photo.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
                         photo.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
                         photo.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
@@ -216,32 +220,12 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setProfileWidgets(final UserSettings userSettings) {
-        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getEmail() );
-        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getName() );
-        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getPhoneNumber());
-        Log.d(TAG, "setProfileWidgets: GETTTTINNNGGG >>>>> "+ userSettings.getUser().getImage());
 
         User user = userSettings.getUser();
-
+        UniversalImageLoader.setImage(user.getImage(), mProfilePhoto, null, "");
         mName.setText(user.getName());
         mEmail.setText(user.getEmail());
         mPhone.setText(user.getPhoneNumber());
-
-        Picasso.with(mContext).load(userSettings.getUser().getImage())
-                .networkPolicy(NetworkPolicy.OFFLINE)
-                .placeholder(R.drawable.man)
-                .into(mProfilePhoto, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                    }
-                    @Override
-                    public void onError() {
-                        Picasso.with(mContext)
-                                .load(userSettings.getUser().getImage())
-                                .placeholder(R.drawable.man)
-                                .into(mProfilePhoto);
-                    }
-                });
     }
 
     /**
@@ -289,32 +273,8 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onDataChange: GETTING DATA FROM DATABASE >>>>>>>>>");
-                //GE RETRIEVE ANG DATA SA USERS GAMIT ANG SNAPSHOT SA DATABASE
 
                 setProfileWidgets(mFirebaseMethods.getUserSettings(dataSnapshot));
-//                Log.d(TAG, "onDataChange: GETTTINGGGG >>>> PICTURE" + dataSnapshot.child("Users").child(mUser.getUid()).child("Image").getValue().toString() );
-//            Picasso.with(mContext).load(dataSnapshot.child("Users")
-//                    .child(uid)
-//                    .child("Image")
-//                    .getValue().toString())
-//            .networkPolicy(NetworkPolicy.OFFLINE)
-//            .placeholder(R.drawable.man)
-//            .into(mProfilePhoto, new Callback() {
-//                @Override
-//                public void onSuccess() {
-//
-//                }
-//
-//                @Override
-//                public void onError() {
-//                    Picasso.with(mContext)
-//                            .load(dataSnapshot.child("Users")
-//                                    .child(mUser.getUid()).child("Image")
-//                                    .getValue().toString())
-//                            .placeholder(R.drawable.man)
-//                            .into(mProfilePhoto);
-//                }
-//            });
             }
 
             @Override
@@ -323,10 +283,6 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-
-      /*
-    ------------------------------------ Firebase ---------------------------------------------
-     */
 
     @Override
     public void onStart() {
@@ -345,4 +301,6 @@ public class ProfileFragment extends Fragment {
     public interface OnGridImageSelectedListener{
         void onGridImageSelected(Photo photo, int activityNumber);
     }
+
+
 }

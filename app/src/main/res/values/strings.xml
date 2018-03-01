@@ -19,6 +19,10 @@
     <!--web services api key-->
     <string name="web_services">AIzaSyDvsia0V9CUml-qj5BIhEiOtnMdT27EhMs</string>
 
+    <!--tabs in MapsActivity Bottom Sheet-->
+    <string name="maps_tab_recycling">Recycling Centers</string>
+    <string name="maps_tab_junkyard">Junkyards</string>
+
     <string name="menu_profile">Profile</string>
     <string name="menu_chat">Chat</string>
     <string name="menu_contact">Contact</string>
@@ -92,10 +96,10 @@
     <string name="field_phone_number">phone_number</string>
     <string name="field_user_id">user_id</string>
     <string name="field_likes">likes</string>
-    <string name="field_caption">caption</string>
+    <string name="field_caption">photo_description</string>
     <string name="field_date_created">date_created</string>
     <string name="field_photo_id">photo_id</string>
-    <string name="field_tags">tags</string>
+    <string name="field_tags">quantity</string>
     <string name="field_image_path">image_path</string>
     <string name="field_comments">comments</string>
     <string name="field_comment">comment</string>
@@ -188,5 +192,6 @@
     <string name="mcam_file_size_limit_reached">You\'ve reached the maximum file size!</string>
     <string name="mcam_image_preview_error_title">Image preview error</string>
     <string name="mcam_image_preview_error_message">Could not decode bitmap</string>
+    <string name="ok_button">OK</string>
 
 </resources>

@@ -22,6 +22,7 @@ import com.example.taquio.trasearch6.R;
 import com.example.taquio.trasearch6.Utils.FilePaths;
 import com.example.taquio.trasearch6.Utils.FileSearch;
 import com.example.taquio.trasearch6.Utils.GridImageAdapter;
+import com.example.taquio.trasearch6.Utils.UniversalImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 
 
 /**
- * Created by User on 5/28/2017.
+ * Created by Edward on 2018.
  */
 
 public class GalleryFragment extends Fragment {
@@ -160,8 +161,13 @@ public class GalleryFragment extends Fragment {
 
         //set the first image to be displayed when the activity fragment view is inflated
         try{
-            setImage(imgURLs.get(0), galleryImage, mAppend);
-            mSelectedImage = imgURLs.get(0);
+            if(imgURLs.isEmpty()){
+                setImage(getResources().getDrawable(R.drawable.man).toString(), galleryImage, mAppend);
+                mSelectedImage = getResources().getDrawable(R.drawable.man).toString();
+            }else {
+                setImage(imgURLs.get(0), galleryImage, mAppend);
+                mSelectedImage = imgURLs.get(0);
+            }
         }catch (ArrayIndexOutOfBoundsException e){
             Log.e(TAG, "setupGridView: ArrayIndexOutOfBoundsException: " +e.getMessage() );
         }
@@ -181,7 +187,7 @@ public class GalleryFragment extends Fragment {
 
     private void setImage(String imgURL, ImageView image, String append){
         Log.d(TAG, "setImage: setting image");
-
+        UniversalImageLoader imgload = new UniversalImageLoader(getContext());
         ImageLoader imageLoader = ImageLoader.getInstance();
 
         imageLoader.displayImage(append + imgURL, image, new ImageLoadingListener() {

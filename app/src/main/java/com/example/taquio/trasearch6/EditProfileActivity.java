@@ -30,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -65,6 +66,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private Uri resultUri;
     private String newName,newEmail,newPassword,newMobile,mauthEmail,mauthPassword;
     private ImageView ediProfile_saveChanges;
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
 
     private Boolean name,email,password,mobile,image;
 
@@ -129,12 +132,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         .start(EditProfileActivity.this);
             }
         });
-
-
-
         name=false;email=false;password=false;mobile=false;image=false;
-
-
         ediProfile_saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,6 +178,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                 }
                                 else
                                 {
+
 
                                     AuthCredential credential = EmailAuthProvider
                                             .getCredential(mauthEmail, mauthPassword);
@@ -281,7 +280,8 @@ public class EditProfileActivity extends AppCompatActivity {
                     if(task.isSuccessful())
                     {
                         Toast.makeText(EditProfileActivity.this,"Updated",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(EditProfileActivity.this,EditProfileActivity.class));
+                        startActivity(new Intent(EditProfileActivity.this,MyProfileActivity.class));
+//                        progressDialog.dismiss();
                         finish();
                     }
                 }
@@ -289,11 +289,11 @@ public class EditProfileActivity extends AppCompatActivity {
             if (Thisimage) {
                 Log.d(TAG, "uploadData: Will Update Image");
 
-                progressDialog = new ProgressDialog(EditProfileActivity.this);
-                progressDialog.setTitle("Uploading Image...");
-                progressDialog.setMessage("Please wait while we upload the your beautiful image");
-                progressDialog.show();
-                progressDialog.setCanceledOnTouchOutside(false);
+//                progressDialog = new ProgressDialog(EditProfileActivity.this);
+//                progressDialog.setTitle("Uploading Image...");
+//                progressDialog.setMessage("Please wait while we upload the your beautiful image");
+//                progressDialog.show();
+//                progressDialog.setCanceledOnTouchOutside(false);
                 File image_path = new File(resultUri.getPath());
                 final Bitmap thumbBitmap;
                 try {
@@ -310,6 +310,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             child(mCurrentUser.getUid()).
                             child("ProfilePhoto").
                             child("profile_image");
+
                     final StorageReference thumbFilePath = mImageStorage.
                             child("Photos").
                             child(mCurrentUser.getUid()).
@@ -335,11 +336,11 @@ public class EditProfileActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task task) {
                                                 if (task.isSuccessful()) {
-                                                    progressDialog.dismiss();
+//                                                    progressDialog.dismiss();
 
                                                 } else {
                                                     Toast.makeText(EditProfileActivity.this, "Failed to retrive image", Toast.LENGTH_SHORT).show();
-                                                    progressDialog.dismiss();
+//                                                    progressDialog.dismiss();
                                                 }
                                             }
                                         });
@@ -347,7 +348,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                 });
                             } else {
                                 Toast.makeText(EditProfileActivity.this, "Error Uploading Profile Picture", Toast.LENGTH_SHORT).show();
-                                progressDialog.dismiss();
+//                                progressDialog.dismiss();
                             }
                         }
                     });
@@ -388,4 +389,37 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue("online");
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mDatabase.child("online").setValue(ServerValue.TIMESTAMP);
+        }
+    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//
+//        if ((progressDialog != null) && progressDialog.isShowing())
+//            progressDialog.dismiss();
+//        progressDialog = null;
+//    }
+
 }

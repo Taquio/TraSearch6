@@ -71,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                 regProgress.setTitle("Registering");
                 regProgress.setMessage("Please wait while we verify your data");
                 regProgress.show();
-                
+
                 final String pass = field_password.getText().toString(),
                         cPass = field_cPassword.getText().toString();
 
@@ -81,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this,"Please check your Registration Details",Toast.LENGTH_SHORT).show();
                     regProgress.dismiss();
                 }
-                
+
                 else if (!(pass.equals(cPass)))
                 {
                     field_password.setError("Password didn't match");
@@ -121,7 +121,9 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
                 }
-            }
+//                startActivity(new Intent(RegisterActivity.this,ForVerification.class));
+//                finish();
+           }
         });
     }
 
@@ -195,9 +197,7 @@ public class RegisterActivity extends AppCompatActivity {
         {
             flag=false;
         }
-
         return flag;
-
     }
 
     private void updateUI(FirebaseUser user)
@@ -205,7 +205,6 @@ public class RegisterActivity extends AppCompatActivity {
         if(user !=null)
         {
             Log.d(TAG, "updateUI: Adding User Details to Database");
-
 
             final String username = field_username.getText().toString();
             final String name = field_name.getText().toString().toUpperCase();
@@ -220,10 +219,12 @@ public class RegisterActivity extends AppCompatActivity {
             userDetails.put("Name",name);
             userDetails.put("UserName",username);
             userDetails.put("Image","default");
+            userDetails.put("Image_thumb","default");
             userDetails.put("device_token",deviceToken);
             userDetails.put("PhoneNumber",phonenumber);
             userDetails.put("userID",mAuth.getCurrentUser().getUid());
-
+            userDetails.put("userType","free");
+            userDetails.put("isVerify",false);
 
             current_user_db.setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -232,7 +233,7 @@ public class RegisterActivity extends AppCompatActivity {
                     {
                         regProgress.dismiss();
                         Toast.makeText(RegisterActivity.this,"Welcome",Toast.LENGTH_SHORT).show();
-                        Intent startActivityIntent = new Intent(RegisterActivity.this, HomeActivity2.class);
+                        Intent startActivityIntent = new Intent(RegisterActivity.this, ForVerification.class);
                         startActivity(startActivityIntent);
                         finish();
                     }

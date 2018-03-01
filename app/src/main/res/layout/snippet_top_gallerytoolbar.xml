@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
@@ -8,46 +9,46 @@
         >
 
         <android.support.v7.widget.Toolbar
-            android:background="#009688"
+            android:id="@+id/profileToolBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/profileToolBar">
+            android:background="#009688">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <ImageView
+                    android:id="@+id/ivCloseShare"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginEnd="20dp"
                     android:layout_centerVertical="true"
-                    android:id="@+id/ivCloseShare"
-                    android:src="@drawable/close_gallery"
-                    android:layout_marginRight="20dp" />
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/close_gallery" />
 
                 <Spinner
+                    android:id="@+id/spinnerDirectory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/ivCloseShare"
-                    android:id="@+id/spinnerDirectory"
-                    android:textSize="20sp"
-                    android:textColor="#ffff"
-                    android:text="Gallery"
                     android:layout_centerVertical="true"
-                    android:gravity="center_vertical">
+                    android:layout_toRightOf="@+id/ivCloseShare"
+                    android:gravity="center_vertical"
+                    android:text="Gallery"
+                    android:textColor="#ffff"
+                    android:textSize="20sp">
                 </Spinner>
 
                 <TextView
+                    android:id="@+id/tvNext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/string_next"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
-                    android:textSize="20sp"
-                    android:textColor="#ffff"
                     android:layout_centerVertical="true"
-                    android:id="@+id/tvNext"
+                    android:layout_marginRight="15dp"
+                    android:text="@string/string_next"
+                    android:textColor="#ffff"
+                    android:textSize="20sp"
                     />
 
 
