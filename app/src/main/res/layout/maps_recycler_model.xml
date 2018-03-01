@@ -2,15 +2,21 @@
 <LinearLayout
     android:id="@+id/llrecyclermodel"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <TextView
         android:id="@+id/businessname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="25dp"
+        android:text="Business Name"
         android:textStyle="bold"
         />
 
@@ -18,13 +24,23 @@
         android:id="@+id/businessadd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
+        android:text="Business Address"
+        android:textSize="20dp"
         />
 
     <TextView
         android:id="@+id/businessphone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="09239455913"
         android:textSize="15dp"
         />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bsncall"
+        android:layout_marginLeft="110dp"
+        android:layout_width="70dp"
+        android:layout_height="80dp"
+        android:background="@drawable/ic_action_call"/>
 </LinearLayout>
