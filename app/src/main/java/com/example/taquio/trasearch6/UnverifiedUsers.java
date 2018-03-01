@@ -115,8 +115,12 @@ public class UnverifiedUsers extends Fragment {
 
                                                 if(which==0)
                                                 {
-                                                    startActivity(new Intent(getContext(), ViewProfile.class)
-                                                            .putExtra("user_id",list_user_Id));
+//                                                    startActivity(new Intent(getContext(), ViewProfile.class)
+//                                                            .putExtra("user_id",list_user_Id));
+                                                    Intent i = new Intent(getContext(), MyProfileActivity.class);
+                                                    i.putExtra("calling_activity", "UnverifiedUsers");
+                                                    i.putExtra("intent_user", list_user_Id);
+                                                    getContext().startActivity(i);
                                                 }
                                                 if(which==1)
                                                 {

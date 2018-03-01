@@ -78,8 +78,7 @@ public class AllUsersFragment extends Fragment {
                 AllUsers.class,
                 R.layout.all_users,
                 AllUsersFragment.AdminViewHolder.class,
-                mUsersDatabase.orderByChild("isVerify")
-        ) {
+                mUsersDatabase.orderByChild("isVerify")) {
             @Override
             protected void populateViewHolder(final AdminViewHolder viewHolder, final AllUsers model, int position) {
 //                viewHolder.setDate(model.getDate());

@@ -42,7 +42,6 @@ public class GuestSearch extends AppCompatActivity {
     private Button signIn, reg,searchExec;
     private EditText searchText;
     private DatabaseReference searchItem;
-    private Button signIn, reg;
     AdView mAdView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
