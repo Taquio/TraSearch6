@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
+import com.example.taquio.trasearch6.Utils.Donate;
 import com.example.taquio.trasearch6.Utils.ItemsFragment;
 import com.example.taquio.trasearch6.Utils.MainFeedListAdapter;
 import com.example.taquio.trasearch6.Utils.OtherUserViewPost;
@@ -66,6 +68,7 @@ public class HomeActivity2 extends AppCompatActivity implements
     TextView textCartItemCount;
     int theLikes = 0;
     int displayLikes = 0;
+    FloatingActionButton floatBtn;
 
     @Override
     public void onLoadMoreItems() {
@@ -96,6 +99,15 @@ public class HomeActivity2 extends AppCompatActivity implements
         setupBottomNavigationView();
         setupViewPager();
 
+        floatBtn = findViewById(R.id.floatingButton);
+
+        floatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, Donate.class);
+                startActivity(intent);
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

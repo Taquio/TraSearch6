@@ -23,7 +23,7 @@ public class BusinessRegActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.business_register1);
+        setContentView(R.layout.business_register);
 
         bsnMail = (EditText) findViewById(R.id.bsnMail);
         bsnPass = (EditText) findViewById(R.id.bsnPass);
@@ -32,7 +32,7 @@ public class BusinessRegActivity extends AppCompatActivity{
         bsnLocation = (EditText) findViewById(R.id.bsnLocation);
         bsnPhone = (EditText) findViewById(R.id.bsnPhone);
         bsnMobile = (EditText) findViewById(R.id.bsnMobile);
-        //comment
+
         busContinue = findViewById(R.id.registerCont);
         busContinue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,21 +47,16 @@ public class BusinessRegActivity extends AppCompatActivity{
                 if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(pass) && !TextUtils.isEmpty(conpass) && !TextUtils.isEmpty(businessname)
                         && !TextUtils.isEmpty(location) && !TextUtils.isEmpty(phone) && !TextUtils.isEmpty(mobile)) {
 
-                    if(pass.equals(conpass)) {
-                        Intent i = new Intent (mContext, BusinessRegActivity2.class);
-                        i.putExtra("EMAIL",email);
-                        i.putExtra("PASS",pass);
-                        i.putExtra("BUSINESSNAME",businessname);
-                        i.putExtra("LOCATION",location);
-                        i.putExtra("PHONE",phone);
-                        i.putExtra("MOBILE",mobile);
-                        startActivity(i);
-                        BusinessRegActivity.this.finish();
-                    }else {
-                        Toast.makeText(mContext, "Password does not match.", Toast.LENGTH_SHORT).show();
-                    }
+                    Intent i = new Intent (mContext, BusinessRegActivity2.class);
+                    i.putExtra("EMAIL",email);
+                    i.putExtra("PASS",pass);
+                    i.putExtra("BUSINESSNAME",businessname);
+                    i.putExtra("LOCATION",location);
+                    i.putExtra("PHONE",phone);
+                    i.putExtra("MOBILE",mobile);
+                    startActivity(i);
                 }else {
-                    Toast.makeText(mContext, "Please fill up all fields.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Please fill up all fields!", Toast.LENGTH_SHORT).show();
                 }
 
             }

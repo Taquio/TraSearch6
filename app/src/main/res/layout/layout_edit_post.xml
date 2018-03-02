@@ -69,12 +69,21 @@
                 android:padding="20dp">
 
                 <EditText
-                    android:id="@+id/image_caption"
+                android:id="@+id/image_caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_likes"
+                android:layout_marginTop="15dp"
+                android:text="sample description ...."
+                android:textColor="@color/black"
+                android:textSize="18sp"/>
+                <EditText
+                    android:id="@+id/item_qty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/image_likes"
-                    android:layout_marginTop="15dp"
-                    android:text="mitch.tabian moutains #earthporn #mountains"
+                    android:layout_marginTop="60dp"
+                    android:text="10101001010"
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
 
