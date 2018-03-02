@@ -42,7 +42,7 @@
             android:gravity="center"
             android:orientation="vertical"
             android:weightSum="100">
-            //comment
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -117,41 +117,21 @@
                 android:textColorHint="#ffffff"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/bsnLocation"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_margin="10dp"
                 android:layout_weight="10"
-                android:weightSum="100"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/bsnLocation"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="70"
-                    android:background="@drawable/border"
-                    android:drawableRight="@drawable/ic_loc"
-                    android:hint="Location"
-                    android:inputType="text"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="10dp"
-                    android:textColor="#ffffff"
-                    android:textColorHint="#ffffff"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/btnLoc"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="30"
-                    android:background="@drawable/btn"
-                    android:text="Set"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginRight="10dp"/>
-
-            </LinearLayout>
+                android:background="@drawable/border"
+                android:drawableRight="@drawable/ic_loc"
+                android:hint="Location"
+                android:inputType="text"
+                android:paddingLeft="15dp"
+                android:paddingRight="10dp"
+                android:textColor="#ffffff"
+                android:textColorHint="#ffffff"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/bsnPhone"
