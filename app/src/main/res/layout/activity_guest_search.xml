@@ -121,6 +121,7 @@
 
     </LinearLayout>
 
+    <include layout="@layout/floating_button"/>
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
