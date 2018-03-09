@@ -70,20 +70,26 @@
 
                 <EditText
                 android:id="@+id/image_caption"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/image_likes"
-                android:layout_marginTop="15dp"
-                android:text="sample description ...."
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:hint="Description"
+                android:layout_marginTop="5dp"
+                android:padding="10dp"
+                android:background="@drawable/share_input_outline"
                 android:textColor="@color/black"
                 android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/item_qty"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/image_likes"
-                    android:layout_marginTop="60dp"
-                    android:text="10101001010"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="50dp"
+                    android:hint="Item Quantity"
+                    android:background="@drawable/share_input_outline"
+                    android:padding="10dp"
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
 
@@ -92,9 +98,6 @@
         </LinearLayout>
 
     </ScrollView>
-
-    <include layout="@layout/layout_bottom_navigation_view"/>
-
 </RelativeLayout>
 
 

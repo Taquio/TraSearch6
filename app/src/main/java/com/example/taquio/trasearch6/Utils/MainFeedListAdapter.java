@@ -295,7 +295,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
 
         if(holder.photo.getUser_id().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
             final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//        builder.setTitle("CHOOSE AN ACTION");
+
             builder.setItems(new CharSequence[]
                             {"Update", "Delete"},
                     new DialogInterface.OnClickListener() {
@@ -309,30 +309,30 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                                     i.putExtra("photo", holder.photo);
                                     getContext().startActivity(i);
                                     break;
-                                case 1:
-                                    Query query = mReference.child("Photos").child(holder.photo.getPhoto_id());
-                                    query.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            for(DataSnapshot snap : dataSnapshot.getChildren()){
-
-                                                mReference.child("Photos")
-                                                        .child(holder.photo.getPhoto_id())
-                                                        .removeValue();
-                                                mReference.child("Users_Photos")
-                                                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                        .child(holder.photo.getPhoto_id())
-                                                        .removeValue();
-                                            }
-                                            getContext().startActivity(new Intent(getContext(), HomeActivity2.class));
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-
-                                        }
-                                    });
-                                    break;
+//                                case 1:
+//                                    Query query = mReference.child("Photos").child(holder.photo.getPhoto_id());
+//                                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                        @Override
+//                                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                                            for(DataSnapshot snap : dataSnapshot.getChildren()){
+//
+//                                                mReference.child("Photos")
+//                                                        .child(holder.photo.getPhoto_id())
+//                                                        .removeValue();
+//                                                mReference.child("Users_Photos")
+//                                                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//                                                        .child(holder.photo.getPhoto_id())
+//                                                        .removeValue();
+//                                            }
+//                                            getContext().startActivity(new Intent(getContext(), HomeActivity2.class));
+//                                        }
+//
+//                                        @Override
+//                                        public void onCancelled(DatabaseError databaseError) {
+//
+//                                        }
+//                                    });
+//                                    break;
                             }
                         }
                     });
@@ -422,10 +422,12 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                 .child(mContext.getString(R.string.field_likes))
                 .child(newLikeID)
                 .setValue(like);
-        mReference.child("AllLikes")
+        mReference.child("Likes")
                 .child(holder.photo.getUser_id())
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .setValue(holder.photo.getPhoto_id());
+                .child(newLikeID)
+                .child(holder.photo.getPhoto_id())
+                .child("user_id")
+                .setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
 
         holder.liker.toggleLike();
@@ -680,8 +682,9 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                                     .child(mContext.getString(R.string.field_likes))
                                     .child(keyID)
                                     .removeValue();
-                            mReference.child("AllLikes")
+                            mReference.child("Likes")
                                     .child(mHolder.photo.getUser_id())
+                                    .child(keyID)
                                     .removeValue();
 
 

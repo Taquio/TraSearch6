@@ -4,12 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Camera.NextActivity">
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -23,47 +17,64 @@
                 <include layout="@layout/snippet_top_nexttoolbar"/>
 
             </RelativeLayout>
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/relLayout1">
             <RelativeLayout
                 android:id="@+id/relLayout2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/relLayout1">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/imageShare"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginBottom="40dp"
-                    android:layout_marginLeft="20dp"
-                    android:scaleType="centerCrop"/>
-
-                <EditText
-                    android:id="@+id/caption"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="200dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@+id/imageShare"
-                    android:background="@null"
-                    android:hint="Write a description..."
-                    />
-
+                    android:scaleType="centerCrop"/>
 
             </RelativeLayout>
 
-            <EditText
-                android:id="@+id/qty"
-                android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="41dp"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/share_input_outline"
+                        android:padding="10dp"
+                        android:hint="Write a description..." />
+
+                    <EditText
+                        android:id="@+id/qty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/caption"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/share_input_outline"
+                        android:padding="10dp"
+                        android:hint="Write item quantity..." />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnshare"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="350dp"
-                android:layout_marginRight="80dp"
-                android:layout_alignParentRight="true"
-                android:background="@null"
-                android:hint="Write item quantity..."
-                />
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="Submit Post"
+                android:textColor="@color/white"
+                android:background="#009688"/>
+
+
         </RelativeLayout>
-    </ScrollView>
 </RelativeLayout>

@@ -162,8 +162,6 @@
             android:parentActivityName=".MyProfileActivity" />
         <activity android:name=".Camera.CameraActivity" />
         <activity android:name=".Camera.NextActivity" />
-        <activity android:name=".RegisterOptions" />
-        <activity android:name=".RegisterBusinessActivity"></activity>
         <activity android:name=".BusinessHome.BusinessHome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -177,6 +175,11 @@
         <activity android:name=".BusinessRegActivity"/>
         <activity android:name=".BusinessRegActivity2"
             android:parentActivityName=".BusinessRegActivity"/>
+
+        <activity android:name=".SaveItemActivity"/>
+        <activity android:name=".EditPostItem"/>
+        <activity android:name=".SettingsActivity"/>
+        <activity android:name=".ForVerification"/>
 
     </application>
 

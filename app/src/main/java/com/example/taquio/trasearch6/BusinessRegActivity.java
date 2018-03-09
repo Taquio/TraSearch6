@@ -23,7 +23,7 @@ public class BusinessRegActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.business_register);
+        setContentView(R.layout.business_register1);
 
         bsnMail = (EditText) findViewById(R.id.bsnMail);
         bsnPass = (EditText) findViewById(R.id.bsnPass);

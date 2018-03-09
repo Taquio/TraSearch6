@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.Models.User;
-import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
 import com.example.taquio.trasearch6.Utils.ViewPostFragment;
 import com.example.taquio.trasearch6.Utils.ViewProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,7 +27,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyProfileActivity extends AppCompatActivity implements
         ProfileFragment.OnGridImageSelectedListener ,
-        ViewPostFragment.OnCommentThreadSelectedListener,
         ViewProfileFragment.OnGridImageSelectedListener{
 
     private static final String TAG = "ProfileActivity";
@@ -64,20 +62,6 @@ public class MyProfileActivity extends AppCompatActivity implements
         transaction.addToBackStack(getString(R.string.view_post_fragment));
         transaction.commit();
 
-    }
-    @Override
-    public void onCommentThreadSelectedListener(Photo photo) {
-        Log.d(TAG, "onCommentThreadSelectedListener:  selected a comment thread");
-
-        ViewCommentsFragment fragment = new ViewCommentsFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(getString(R.string.photo), photo);
-        fragment.setArguments(args);
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment);
-        transaction.addToBackStack(getString(R.string.view_comments_fragment));
-        transaction.commit();
     }
     private void init(){
         Log.d(TAG, "init: PAG INFLATE SA FRAGMENT NGA PROFILE " + getString(R.string.profile_fragment));

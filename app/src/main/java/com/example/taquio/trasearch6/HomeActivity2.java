@@ -2,13 +2,15 @@ package com.example.taquio.trasearch6;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -19,9 +21,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.taquio.trasearch6.Models.Photo;
 import com.example.taquio.trasearch6.Utils.BottomNavigationViewHelper;
@@ -30,7 +34,6 @@ import com.example.taquio.trasearch6.Utils.ItemsFragment;
 import com.example.taquio.trasearch6.Utils.MainFeedListAdapter;
 import com.example.taquio.trasearch6.Utils.OtherUserViewPost;
 import com.example.taquio.trasearch6.Utils.UniversalImageLoader;
-import com.example.taquio.trasearch6.Utils.ViewCommentsFragment;
 import com.example.taquio.trasearch6.Utils.ViewPostFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -65,9 +68,11 @@ public class HomeActivity2 extends AppCompatActivity implements
     private  TextView notifications_badgeText;
     private ArrayList<String> myLikes;
 
-    TextView textCartItemCount;
+    TextView textNotificationCount;
     int theLikes = 0;
     int displayLikes = 0;
+    View counterTextPanel;
+    int count = 0;
     FloatingActionButton floatBtn;
 
     @Override
@@ -86,20 +91,36 @@ public class HomeActivity2 extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting.");
+
         mViewPager = findViewById(R.id.container);
         mFrameLayout = findViewById(R.id.frame_container);
         mRelativeLayout = findViewById(R.id.relLayoutParent);
         mAuth = FirebaseAuth.getInstance();
 
+
+        floatBtn = findViewById(R.id.floatingButton);
+        myLikes = new ArrayList<>();
+
         mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
         Toolbar toolbar =  findViewById(R.id.mytoolbar);
+
         setSupportActionBar(toolbar);
         setUpFirebaseAuth();
         initImageLoader();
         setupBottomNavigationView();
         setupViewPager();
 
-        floatBtn = findViewById(R.id.floatingButton);
+//        Button increaseButton = (Button) findViewById(R.id.increaseButton);
+//        increaseButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                doIncrease();
+//            }
+//        });
+
+        doIncrease();
+
 
         floatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,66 +133,84 @@ public class HomeActivity2 extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.notif_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        final MenuItem menuItem = menu.findItem(R.id.action_notif);
+        final MenuItem menuItem = menu.findItem(R.id.testAction);
+//        View actionView = MenuItemCompat.getActionView(menuItem);
+//        actionView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                onOptionsItemSelected(menuItem);
+//
+//                Toast.makeText(getApplicationContext(), "You are notified!", Toast.LENGTH_LONG).show();
+//            }
+//        });
 
-        View actionView = MenuItemCompat.getActionView(menuItem);
-        textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
-        myLikes = new ArrayList<>();
+
+        menuItem.setIcon(buildCounterDrawable(count, R.drawable.ic_bell));
+
+//        textNotificationCount = (TextView) findViewById(R.id.cart_badge);
+//        textNotificationCount.setText(String.valueOf(setNotification()));
+//        textNotificationCount.setVisibility(View.VISIBLE);
 
 
-        theLikes = setupBadge();
-
-        displayLikes = theLikes - displayLikes;
-        if(displayLikes != 0)
-        {
-            if (textCartItemCount != null) {
-                    textCartItemCount.setText(String.valueOf(displayLikes) );
-                    if (textCartItemCount.getVisibility() != View.VISIBLE) {
-                        textCartItemCount.setVisibility(View.VISIBLE);
-                    }
-            }
-        }else{
-            if (textCartItemCount.getVisibility() != View.GONE) {
-                textCartItemCount.setVisibility(View.GONE);
-            }
-        }
-
-        actionView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                onOptionsItemSelected(menuItem);
-            }
-        });
-
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-
-            case R.id.action_notif: {
-                // Do something
-                textCartItemCount.setVisibility(View.GONE);
+        switch (item.getItemId()){
+            case R.id.testAction: {
+                counterTextPanel.setVisibility(View.GONE);
                 return true;
-                //end
             }
         }
         return super.onOptionsItemSelected(item);
     }
+    private Drawable buildCounterDrawable(int count, int backgroundImageId) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.counter_menuitem_layout, null);
+        view.setBackgroundResource(backgroundImageId);
 
-    private int setupBadge() {
-        int count = 0;
-        Query query = mUserDatabase.child("AllLikes")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        query.addValueEventListener(new ValueEventListener() {
+
+        if (count == 0) {
+
+             counterTextPanel = view.findViewById(R.id.counterValuePanel);
+            counterTextPanel.setVisibility(View.GONE);
+        } else {
+
+            TextView textView = (TextView) view.findViewById(R.id.count);
+            textView.setText("" + count);
+        }
+
+        view.measure(
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+
+        view.setDrawingCacheEnabled(true);
+        view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(false);
+
+        return new BitmapDrawable(getResources(), bitmap);
+    }
+    private void doIncrease() {
+        count = setNotification();
+        invalidateOptionsMenu();
+    }
+    private int setNotification(){
+         int val = 0;
+        Query query =  FirebaseDatabase.getInstance().getReference()
+                .child("Likes")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .orderByKey();
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                     myLikes.add(singleSnapshot.getKey());
                 }
             }
@@ -181,13 +220,10 @@ public class HomeActivity2 extends AppCompatActivity implements
 
             }
         });
-        for(int i =0; i < myLikes.size(); i++){
-
-            count++;
-        }
-        //end
-        return count;
+        val = myLikes.size();
+       return val;
     }
+
     public void onImageSelected( Photo item,  int i, final String user_id) {
 
 
@@ -223,21 +259,6 @@ public class HomeActivity2 extends AppCompatActivity implements
 
 
     }
-    public void onCommentThreadSelected(Photo photo, String callingActivity){
-        Log.d(TAG, "onCommentThreadSelected: selected a coemment thread");
-
-        ViewCommentsFragment fragment  = new ViewCommentsFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(getString(R.string.photo), photo);
-        args.putString(getString(R.string.home_activity), getString(R.string.home_activity));
-        fragment.setArguments(args);
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment);
-        transaction.addToBackStack(getString(R.string.view_comments_fragment));
-        transaction.commit();
-
-    }
     public void hideLayout(){
         Log.d(TAG, "hideLayout: hiding layout");
         mRelativeLayout.setVisibility(View.GONE);
@@ -261,22 +282,6 @@ public class HomeActivity2 extends AppCompatActivity implements
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        Log.d(TAG, "onStart: Started");
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if(currentUser==null)
-//        {
-//            Log.d(TAG, "onStart: Calling back to start method");
-//            sendToStart();
-//        }
-//        else
-//        {
-//            Log.d(TAG, "onStart: User Online");
-//            mUserRef.child("online").setValue(true);
-//        }
-//    }
     @Override
     protected void onPause(){
         super.onPause();
@@ -407,11 +412,11 @@ public class HomeActivity2 extends AppCompatActivity implements
         super.onStart();
         Log.d(TAG, "onStart: Started");
         FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if(currentUser==null)
-//        {
-//            Log.d(TAG, "onStart: Calling back to start method");
-//            sendToStart();
-//        }
+        if(currentUser==null)
+        {
+            Log.d(TAG, "onStart: Calling back to start method");
+            sendToStart();
+        }
 //        else
 //        {
 //            Log.d(TAG, "onStart: User Online");

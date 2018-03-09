@@ -133,17 +133,17 @@ public class OtherUserViewPost extends Fragment {
                         newPhoto.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
                         newPhoto.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
                         newPhoto.setImage_path(objectMap.get(getString(R.string.field_image_path)).toString());
-
-                        List<Comment> commentsList = new ArrayList<Comment>();
-                        for (DataSnapshot dSnapshot : singleSnapshot
-                                .child(getString(R.string.field_comments)).getChildren()){
-                            Comment comment = new Comment();
-                            comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
-                            comment.setComment(dSnapshot.getValue(Comment.class).getComment());
-                            comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
-                            commentsList.add(comment);
-                        }
-                        newPhoto.setComments(commentsList);
+//
+//                        List<Comment> commentsList = new ArrayList<Comment>();
+//                        for (DataSnapshot dSnapshot : singleSnapshot
+//                                .child(getString(R.string.field_comments)).getChildren()){
+//                            Comment comment = new Comment();
+//                            comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
+//                            comment.setComment(dSnapshot.getValue(Comment.class).getComment());
+//                            comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
+//                            commentsList.add(comment);
+//                        }
+//                        newPhoto.setComments(commentsList);
 
                         mPhoto = newPhoto;
 
@@ -220,31 +220,32 @@ public class OtherUserViewPost extends Fragment {
                             mLikedByCurrentUser = mUsers.toString().contains(mCurrentUser.getUserName() + ",");
 
                             int length = splitUsers.length;
-                            if(length == 1){
-                                mLikesString = "Liked by " + splitUsers[0];
-                            }
-                            else if(length == 2){
-                                mLikesString = "Liked by " + splitUsers[0]
-                                        + " and " + splitUsers[1];
-                            }
-                            else if(length == 3){
-                                mLikesString = "Liked by " + splitUsers[0]
-                                        + ", " + splitUsers[1]
-                                        + " and " + splitUsers[2];
-
-                            }
-                            else if(length == 4){
-                                mLikesString = "Liked by " + splitUsers[0]
-                                        + ", " + splitUsers[1]
-                                        + ", " + splitUsers[2]
-                                        + " and " + splitUsers[3];
-                            }
-                            else if(length > 4){
-                                mLikesString = "Liked by " + splitUsers[0]
-                                        + ", " + splitUsers[1]
-                                        + ", " + splitUsers[2]
-                                        + " and " + (splitUsers.length - 3) + " others";
-                            }
+                            mLikesString = ""+length + " interested!";
+//                            if(length == 1){
+//                                mLikesString = "Liked by " + splitUsers[0];
+//                            }
+//                            else if(length == 2){
+//                                mLikesString = "Liked by " + splitUsers[0]
+//                                        + " and " + splitUsers[1];
+//                            }
+//                            else if(length == 3){
+//                                mLikesString = "Liked by " + splitUsers[0]
+//                                        + ", " + splitUsers[1]
+//                                        + " and " + splitUsers[2];
+//
+//                            }
+//                            else if(length == 4){
+//                                mLikesString = "Liked by " + splitUsers[0]
+//                                        + ", " + splitUsers[1]
+//                                        + ", " + splitUsers[2]
+//                                        + " and " + splitUsers[3];
+//                            }
+//                            else if(length > 4){
+//                                mLikesString = "Liked by " + splitUsers[0]
+//                                        + ", " + splitUsers[1]
+//                                        + ", " + splitUsers[2]
+//                                        + " and " + (splitUsers.length - 3) + " others";
+//                            }
                             Log.d(TAG, "onDataChange: likes string: " + mLikesString);
                             setupWidgets();
                         }
@@ -311,6 +312,13 @@ public class OtherUserViewPost extends Fragment {
                 .child(getString(R.string.field_likes))
                 .child(newLikeID)
                 .setValue(like);
+
+        myRef.child("Likes")
+                .child(mPhoto.getUser_id())
+                .child(newLikeID)
+                .child(mPhoto.getPhoto_id())
+                .child("user_id")
+                .setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         mHeart.toggleLike();
         getLikesString();
@@ -573,6 +581,10 @@ public class OtherUserViewPost extends Fragment {
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .child(mPhoto.getPhoto_id())
                                     .child(getString(R.string.field_likes))
+                                    .child(keyID)
+                                    .removeValue();
+                            myRef.child("Likes")
+                                    .child(mPhoto.getUser_id())
                                     .child(keyID)
                                     .removeValue();
 
