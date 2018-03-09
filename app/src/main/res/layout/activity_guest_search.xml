@@ -42,7 +42,7 @@
             <EditText
                 android:id="@+id/searchText"
                 android:layout_width="320dp"
-                android:layout_height="0dp"
+                android:layout_height="10dp"
                 android:layout_margin="6dp"
                 android:layout_weight="9"
                 android:background="@drawable/border"
@@ -61,7 +61,7 @@
             <Button
                 android:id="@+id/guest_SignIn"
                 android:layout_width="250dp"
-                android:layout_height="0dp"
+                android:layout_height="10dp"
                 android:layout_marginTop="50dp"
                 android:layout_weight="10"
                 android:background="@drawable/btn"
@@ -72,7 +72,7 @@
             <Button
                 android:id="@+id/guest_Reg"
                 android:layout_width="250dp"
-                android:layout_height="0dp"
+                android:layout_height="10dp"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="10"
@@ -80,42 +80,6 @@
                 android:stateListAnimator="@null"
                 android:text="Register"
                 android:textColor="#ffff"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="10"
-                android:gravity="center"
-                android:text="OR"
-                android:textColor="#ffff"/>
-
-            <Button
-                android:layout_width="250dp"
-                android:layout_height="0dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                android:layout_weight="10"
-                android:background="@drawable/btnfacebook"
-                android:drawableLeft="@drawable/facebook"
-                android:paddingRight="20dp"
-                android:stateListAnimator="@null"
-                android:text="Sign in with Facebook"
-                android:textColor="@color/white"/>
-
-            <Button
-                android:id="@+id/registerBtn1"
-                android:layout_width="250dp"
-                android:layout_height="0dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_weight="10"
-                android:background="@drawable/btngoogle"
-                android:drawableLeft="@drawable/gg"
-                android:paddingLeft="19dp"
-                android:paddingRight="30dp"
-                android:stateListAnimator="@null"
-                android:text="Sign in with Google"
-                android:textColor="@color/white"/>
 
         </LinearLayout>
 

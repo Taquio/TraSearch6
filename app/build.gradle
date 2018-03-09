@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.taquio.trasearch6"
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -30,48 +30,49 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     //firebase
-    compile 'com.google.firebase:firebase-storage:11.8.0'
-    compile 'com.google.firebase:firebase-auth:11.8.0'
-    compile 'com.google.firebase:firebase-database:11.8.0'
-    compile 'com.firebaseui:firebase-ui-database:0.4.4'
+    implementation 'com.google.firebase:firebase-storage:11.8.0'
+    implementation 'com.google.firebase:firebase-auth:11.8.0'
+    implementation 'com.google.firebase:firebase-database:11.8.0'
+    implementation 'com.firebaseui:firebase-ui-database:0.4.4'
 
     //don't update!
-    compile 'com.firebase:firebase-client-android:2.5.2'
-    compile 'com.google.firebase:firebase-messaging:11.8.0'
+    implementation 'com.firebase:firebase-client-android:2.5.2'
+    implementation 'com.google.firebase:firebase-messaging:11.8.0'
+    implementation 'com.google.firebase:firebase-core:11.8.0'
 
     //paypall
-    compile 'com.paypal.sdk:paypal-android-sdk:2.16.0'
-    compile 'de.hdodenhof:circleimageview:2.2.0'
-    compile 'com.android.support:support-v4:26.1.0'
-    compile 'com.intuit.sdp:sdp-android:1.0.3'
-    compile 'com.android.support:support-core-utils:26.1.0'
-    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.android.support:support-v4:27.0.2'
+    implementation 'com.intuit.sdp:sdp-android:1.0.3'
+    implementation 'com.android.support:support-core-utils:27.0.2'
+    implementation 'com.android.support:recyclerview-v7:27.0.2'
     implementation 'com.google.android.gms:play-services-location:11.8.0'
-    compile 'com.github.Mariovc:ImagePicker:1.2.0'
+    implementation 'com.github.Mariovc:ImagePicker:1.2.0'
 
     //cardview
-    compile 'com.android.support:cardview-v7:26.1.0'
+    implementation 'com.android.support:cardview-v7:27.0.2'
 
     //pusher
-    compile 'com.pusher:pusher-java-client:1.5.0'
+    implementation 'com.pusher:pusher-java-client:1.5.0'
 
     //okhttp
-    compile 'com.squareup.okhttp3:okhttp:3.9.1'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
     //event bus
     compile 'org.greenrobot:eventbus:3.0.0'
-    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:design:27.0.2'
 
     //ExifInterface support
-    implementation 'com.android.support:exifinterface:26.1.0'
+    implementation 'com.android.support:exifinterface:27.0.2'
 
     //Exo Player
     implementation 'com.google.android.exoplayer:exoplayer:2.6.0'
 
     //BottomNavigationViewEx library
     implementation 'com.github.ittianyu:BottomNavigationViewEx:1.1.9'
-    compile 'q.rorbin:badgeview:1.1.0'
+    implementation 'q.rorbin:badgeview:1.1.0'
 
     //Circle ImageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
@@ -88,28 +89,25 @@ dependencies {
 
     //Universal image loader
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-    compile 'com.google.firebase:firebase-core:11.8.0'
 
     //arvin add for maps
-    compile 'com.android.support:support-core-utils:26.1.0'
-    compile 'com.google.android.gms:play-services:11.8.0'
+    implementation 'com.google.android.gms:play-services:11.8.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile 'com.github.TreesAreOP:android-swipe-actions:+'
+    implementation 'com.github.TreesAreOP:android-swipe-actions:+'
 
     //image cropper
-    compile 'com.theartofdev.edmodo:android-image-cropper:2.6.0'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.6.0'
 
     //picasso
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
 
     //SiliCompresor
-    compile 'id.zelory:compressor:2.1.0'
-    compile 'com.android.support:multidex:1.0.2'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'id.zelory:compressor:2.1.0'
+    implementation 'com.android.support:multidex:1.0.2'
 
-    compile 'com.aurelhubert:ahbottomnavigation:2.1.0'
+    implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
 
 }
 apply plugin: 'com.google.gms.google-services'

@@ -13,56 +13,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
-            <RelativeLayout
-                android:id="@+id/relLayout1"
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profile_photo"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginTop="20dp"
-                    app:civ_border_color="@color/black"
-                    app:civ_border_width="0.5dp"/>
-
-
-                <TextView
-                    android:id="@+id/username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/profile_photo"
-                    android:text="mitch.tabian"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    />
-
-                <TextView
-                    android:id="@+id/image_time_posted"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/username"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="15dp"
-                    android:text="3 DAYS AGO"
-                    android:textColor="@color/grey"
-                    android:textSize="18sp"/>
-                <ImageView
-                    android:id="@+id/ivEllipses"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp"
-                    android:src="@drawable/ic_ellipses"/>
-
-            </RelativeLayout>
-
             <com.example.taquio.trasearch6.Utils.SquareImageView
                 android:id="@+id/post_image"
                 android:layout_width="match_parent"
@@ -70,18 +20,6 @@
                 android:layout_below="@id/relLayout1"
                 android:scaleType="centerCrop"/>
 
-            <RelativeLayout
-                android:labelFor="@+id/post_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/ivtaken"
-                    android:layout_width="300dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="0dp"
-                    android:visibility="invisible"
-                    android:src="@drawable/taken"/>
-            </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/relLayout2"
                 android:layout_width="match_parent"
@@ -113,7 +51,24 @@
                         android:visibility="visible"/>
 
                 </RelativeLayout>
-
+                <TextView
+                    android:id="@+id/image_time_posted"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="70dp"
+                    android:layout_marginTop="15dp"
+                    android:text="3 DAYS AGO"
+                    android:textColor="@color/grey"
+                    android:textSize="18sp"/>
+                <ImageView
+                    android:id="@+id/ivEllipses"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_ellipses"/>
 
             </RelativeLayout>
 
@@ -123,8 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relLayout2"
                 android:layout_marginBottom="50dp"
-                android:background="@color/white"
-                android:padding="20dp">
+                android:background="@color/white">
 
                 <TextView
                     android:id="@+id/image_likes"
@@ -132,7 +86,8 @@
                     android:layout_height="wrap_content"
                     android:text="#123 likes"
                     android:textColor="#00ff3c"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp"
+                    android:layout_margin="10dp"/>
 
                 <TextView
                     android:id="@+id/image_caption"
@@ -140,6 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/image_likes"
                     android:layout_marginTop="15dp"
+                    android:layout_margin="10dp"
                     android:text="a sample description..."
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
@@ -153,7 +109,53 @@
                     <!--android:text="View all 3 comments"-->
                     <!--android:textColor="@color/grey"-->
                     <!--android:textSize="18sp"/>-->
+                <android.support.v4.widget.Space
+                    android:id="@+id/space"
+                    android:layout_below="@+id/image_caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
+                <RelativeLayout
+                    android:id="@+id/blank"
+                    android:background="@color/grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/space"
+                    android:padding="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="MEET THE SELLER"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/relLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/blank">
 
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_photo"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="20dp"
+                        app:civ_border_color="@color/black"
+                        app:civ_border_width="0.5dp"/>
+
+
+                    <TextView
+                        android:id="@+id/username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/profile_photo"
+                        android:text="juan dela cruz"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        />
+
+                </RelativeLayout>
             </RelativeLayout>
 
         </LinearLayout>

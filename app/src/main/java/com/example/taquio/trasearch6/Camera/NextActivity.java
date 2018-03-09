@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -71,7 +72,7 @@ public class NextActivity extends AppCompatActivity {
         });
 
 
-        final TextView share = findViewById(R.id.tvShare);
+        final Button share = findViewById(R.id.btnshare);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -76,14 +76,14 @@ public class GuestSearch extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(GuestSearch.this,ActivityLogin.class));
-                finish();
+
             }
         });
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(GuestSearch.this,ChooseLayout.class));
-                finish();
+
             }
         });
         searchExec.setOnClickListener(new View.OnClickListener() {

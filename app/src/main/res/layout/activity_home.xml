@@ -35,8 +35,14 @@
             android:layout_below="@id/relatLayout1">
 
             <include layout="@layout/layout_top_tabs"/>
-        </RelativeLayout>
 
+        </RelativeLayout>
+        <Button
+            android:layout_marginTop="120dp"
+            android:id="@+id/increaseButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Increase Counter" />
         <RelativeLayout
             android:id="@+id/relatLayout3"
             android:layout_width="match_parent"

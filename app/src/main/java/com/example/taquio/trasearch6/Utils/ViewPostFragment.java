@@ -68,7 +68,7 @@ public class ViewPostFragment extends Fragment{
     private SquareImageView mPostImage;
     private BottomNavigationViewEx bottomNavigationView;
     private TextView mBackLabel, mCaption, mUsername, mTimestamp, mLikes, mComments;
-    private ImageView mBackArrow, mEllipses, mHeartRed, mHeartWhite, mProfileImage, mComment, markAsTaken;
+    private ImageView mBackArrow, mEllipses, mHeartRed, mHeartWhite, mProfileImage, mComment;
     //vars
     private Photo mPhoto;
     private int mActivityNumber = 0;
@@ -90,7 +90,6 @@ public class ViewPostFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_post, container, false);
 
-        markAsTaken = view.findViewById(R.id.ivtaken);
         mPostImage = view.findViewById(R.id.post_image);
         bottomNavigationView = view.findViewById(R.id.bottomNavViewBar);
         mBackArrow = view.findViewById(R.id.backArrow);
@@ -126,7 +125,7 @@ public class ViewPostFragment extends Fragment{
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 //        builder.setTitle("CHOOSE AN ACTION");
         builder.setItems(new CharSequence[]
-                        {"Edit", "Delete"},
+                        {"Update"},
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // The 'which' argument contains the index position
@@ -156,46 +155,19 @@ public class ViewPostFragment extends Fragment{
                                     }
                                 });
                                 break;
-                            case 1:
-                                Query query = myRef.child("Photos").child(mPhoto.getPhoto_id());
-                                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        for(DataSnapshot snap : dataSnapshot.getChildren()){
-                                            myRef.child("Photos")
-                                                    .child(mPhoto.getPhoto_id())
-                                                    .removeValue();
-                                            myRef.child("Users_Photos")
-                                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                    .child(mPhoto.getPhoto_id())
-                                                    .removeValue();
-
-                                        }
-                                        startActivity(new Intent(getContext(), HomeActivity2.class));
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-                                break;
-//                            case 2:
-//                                Query query2 = myRef.child("Photos").child(mPhoto.getPhoto_id());
-//                                query2.addListenerForSingleValueEvent(new ValueEventListener() {
+//                            case 1:
+//                                Query query = myRef.child("Photos").child(mPhoto.getPhoto_id());
+//                                query.addListenerForSingleValueEvent(new ValueEventListener() {
 //                                    @Override
 //                                    public void onDataChange(DataSnapshot dataSnapshot) {
 //                                        for(DataSnapshot snap : dataSnapshot.getChildren()){
-//                                            markAsTaken.setVisibility(View.VISIBLE);
 //                                            myRef.child("Photos")
 //                                                    .child(mPhoto.getPhoto_id())
-//                                                    .child("item_status")
-//                                                    .setValue(true);
+//                                                    .removeValue();
 //                                            myRef.child("Users_Photos")
 //                                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
 //                                                    .child(mPhoto.getPhoto_id())
-//                                                    .child("item_status")
-//                                                    .setValue(true);
+//                                                    .removeValue();
 //
 //                                        }
 //                                        startActivity(new Intent(getContext(), HomeActivity2.class));
@@ -206,10 +178,7 @@ public class ViewPostFragment extends Fragment{
 //
 //                                    }
 //                                });
-//                                break;
-//                            case 3:
-//                                dialog.dismiss();
-//                                break;
+//                            break;
                         }
                     }
                 });
@@ -243,16 +212,16 @@ public class ViewPostFragment extends Fragment{
                         newPhoto.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
                         newPhoto.setImage_path(objectMap.get(getString(R.string.field_image_path)).toString());
 
-                        List<Comment> commentsList = new ArrayList<Comment>();
-                        for (DataSnapshot dSnapshot : singleSnapshot
-                                .child(getString(R.string.field_comments)).getChildren()){
-                            Comment comment = new Comment();
-                            comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
-                            comment.setComment(dSnapshot.getValue(Comment.class).getComment());
-                            comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
-                            commentsList.add(comment);
-                        }
-                        newPhoto.setComments(commentsList);
+//                        List<Comment> commentsList = new ArrayList<Comment>();
+//                        for (DataSnapshot dSnapshot : singleSnapshot
+//                                .child(getString(R.string.field_comments)).getChildren()){
+//                            Comment comment = new Comment();
+//                            comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
+//                            comment.setComment(dSnapshot.getValue(Comment.class).getComment());
+//                            comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
+//                            commentsList.add(comment);
+//                        }
+//                        newPhoto.setComments(commentsList);
 
                         mPhoto = newPhoto;
 
@@ -421,11 +390,12 @@ public class ViewPostFragment extends Fragment{
                 .child(getString(R.string.field_likes))
                 .child(newLikeID)
                 .setValue(like);
-        myRef.child("AllLikes")
+        myRef.child("Likes")
                 .child(mPhoto.getUser_id())
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .setValue(mPhoto.getPhoto_id());
-
+                .child(newLikeID)
+                .child(mPhoto.getPhoto_id())
+                .child("user_id")
+                .setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
 
         mHeart.toggleLike();
@@ -491,17 +461,6 @@ public class ViewPostFragment extends Fragment{
 //            }
 //        });
 
-
-//        mComments.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick: navigating to comments thread");
-//
-//                mOnCommentThreadSelectedListener.onCommentThreadSelectedListener(mPhoto);
-//
-//            }
-//        });
-
         mBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -509,15 +468,6 @@ public class ViewPostFragment extends Fragment{
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
-
-//        mComment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick: navigating back");
-//                mOnCommentThreadSelectedListener.onCommentThreadSelectedListener(mPhoto);
-//
-//            }
-//        });
 
         if(mLikedByCurrentUser){
             mHeartWhite.setVisibility(View.GONE);
@@ -705,8 +655,9 @@ public class ViewPostFragment extends Fragment{
                                     .child(getString(R.string.field_likes))
                                     .child(keyID)
                                     .removeValue();
-                            myRef.child("AllLikes")
+                            myRef.child("Likes")
                                     .child(mPhoto.getUser_id())
+                                    .child(keyID)
                                     .removeValue();
 
                             mHeart.toggleLike();

@@ -178,7 +178,8 @@ public class FirebaseMethods {
     private void addPhotoToDatabase(String caption, String url){
         Log.d(TAG, "addPhotoToDatabase: adding photo to database.");
 
-        String tags = StringManipulation.getTags(caption);
+//        String tags = StringManipulation.getTags(caption);
+        String tags = caption;
         String newPhotoKey = myRef.child("Photos").push().getKey();
         Photo photo = new Photo();
         photo.setPhoto_description(caption);
