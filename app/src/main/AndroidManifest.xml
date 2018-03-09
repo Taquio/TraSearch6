@@ -180,6 +180,7 @@
         <activity android:name=".EditPostItem"/>
         <activity android:name=".SettingsActivity"/>
         <activity android:name=".ForVerification"/>
+        <activity android:name=".GalleryActivity"/>
 
     </application>
 
